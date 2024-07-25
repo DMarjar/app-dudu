@@ -62,10 +62,10 @@
         <br />
         <div class="lower-links">
           <div>
-            <a href="#">Join the community</a>
+            <a href="/sign-up">Join the community</a>
           </div>
           <div>
-            <a href="#">Forgot your password?</a>
+            <a href="/forgot-password">Forgot your password?</a>
           </div>
         </div>
       </div>
@@ -75,7 +75,7 @@
 
 <script>
 import { extend } from "vee-validate";
-import { required, email } from "vee-validate/dist/rules";
+import { required } from "vee-validate/dist/rules";
 import axios from "axios";
 
 extend("required", {
@@ -137,195 +137,4 @@ export default {
 };
 </script>
 
-<style>
-@import "~@flaticon/flaticon-uicons/css/all/all";
-
-.view-body {
-  width: 100%;
-  height: 100%;
-  background-image: url(../../../assets/background-dudu.png);
-  background-repeat: no-repeat;
-  background-size: cover;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.form-login {
-  padding: 50px;
-  color: white;
-  width: 25%;
-}
-
-.glass {
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.1),
-    rgba(255, 255, 255, 0)
-  );
-  backdrop-filter: blur(10px);
-  border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-}
-
-.alice-regular {
-  font-family: "Alice", serif;
-  font-weight: 400;
-  font-style: normal;
-}
-
-.playfair-display {
-  font-family: "Playfair Display", serif;
-  font-optical-sizing: auto;
-  font-weight: 800;
-  font-style: normal;
-}
-
-.title {
-  margin-bottom: 40px;
-}
-
-.lower-links {
-  display: flex;
-  font-size: 12px;
-  justify-content: space-between;
-  margin-top: 25px;
-}
-
-.lower-links a {
-  color: rgb(226, 226, 226);
-  text-decoration: underline;
-  text-underline-position: under;
-}
-
-.lower-links a:hover {
-  color: white;
-}
-
-.open-sans {
-  font-family: "Open Sans", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: 300;
-  font-style: normal;
-  font-variation-settings: "wdth" 100;
-  font-size: 18px !important;
-}
-
-.input {
-  border-radius: 13px !important;
-  display: block;
-  padding: 5px 10px 5px 50px !important;
-}
-
-.form-input {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-}
-
-.icon {
-  position: absolute;
-  left: 15px;
-  top: 0;
-  font-size: 25px;
-  color: black;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-#eye-icon {
-  position: absolute;
-  right: 15px;
-  top: 0;
-  font-size: 25px;
-  color: black;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.button-container {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-}
-
-.button {
-  color: white;
-  background-color: #7f81a4 !important;
-  width: 65%;
-}
-
-.button-icon {
-  position: absolute;
-  right: 20%;
-  top: 0;
-  margin-bottom: 25px;
-  font-size: 1.1rem;
-  color: white;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.errors {
-  color: rgb(255, 124, 124);
-}
-
-@media (min-width: 320px) {
-  .form-login {
-    width: 95%;
-  }
-}
-
-@media (min-width: 480px) {
-  .form-login {
-    width: 90%;
-  }
-}
-
-@media (min-width: 600px) {
-  .form-login {
-    width: 80%;
-  }
-}
-
-@media (min-width: 768px) {
-  .form-login {
-    width: 50%;
-  }
-}
-
-@media (min-width: 1024px) {
-  .form-login {
-    width: 25%;
-  }
-}
-
-@media (min-width: 1280px) {
-  .form-login {
-    width: 28%;
-  }
-}
-
-@media (min-width: 1440px) {
-  .form-login {
-    width: 25%;
-  }
-}
-
-@media (min-width: 1920px) {
-  .form-login {
-    width: 35%;
-  }
-}
-</style>
+<style src="@/assets/styles/auth-styles.css"></style>

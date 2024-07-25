@@ -6,6 +6,8 @@ Vue.use(VueRouter);
 
 import Login from "../modules/auth-module/views/Login.vue";
 import SignUp from "../modules/auth-module/views/SignUp.vue";
+import ForgotPassword from "../modules/auth-module/views/ForgotPassword.vue";
+import ChangePassword from "../modules/auth-module/views/ChangePassword.vue";
 import Test from "../modules/example-module/views/blocked_views/Test.vue";
 
 const routes = [
@@ -18,6 +20,16 @@ const routes = [
     path: "/sign-up",
     name: "signup",
     component: SignUp,
+  },
+  {
+    path: "/forgot-password",
+    name: "forgotPassword",
+    component: ForgotPassword,
+  },
+  {
+    path: "/change-password",
+    name: "changePassword",
+    component: ChangePassword,
   },
   {
     path: "/blocked",

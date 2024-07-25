@@ -148,7 +148,7 @@
         </ValidationObserver>
         <div class="lower-links">
           <div>
-            <a href="/log-in">Go to log in</a>
+            <a href="/">Go to log in</a>
           </div>
         </div>
       </div>

@@ -12,7 +12,7 @@ import Test from "../modules/example-module/views/blocked_views/Test.vue";
 
 const routes = [
   {
-    path: "/log-in",
+    path: "/",
     name: "login",
     component: Login,
   },
@@ -35,7 +35,7 @@ const routes = [
     path: "/blocked",
     name: "blocked",
     component: Test,
-    meta: { role: "ROLE" },
+    meta: { requiresAuth: true },
   },
 ];
 
@@ -45,59 +45,46 @@ const router = new VueRouter({
   routes,
 });
 
-// router.beforeEach((to, from, next) => {
-//   const publicPages = [
-//     "/login",
-//     "/",
-//     "/signup",
-//     "/unauthorized",
-//     "/token-confirmation",
-//     "/not-found",
-//     "/reviews",
-//   ];
-//   const authRequired = !publicPages.includes(to.path);
-//   const loggedIn = localStorage.getItem("token");
+router.beforeEach((to, from, next) => {
+  const authRequired = to.matched.some((record) => record.meta.requiresAuth);
+  const loggedIn = localStorage.getItem("access_token");
 
-//   if (to.path === "/login" && loggedIn) {
-//     const decoded = jwtDecode(loggedIn);
-//     const rol = decoded.roles[0].authority;
-//     if (rol === "ADMIN") {
-//       return next("/administrator-home");
-//     } else if (rol === "COMMON_USER") {
-//       return next("/client-home");
-//     } else {
-//       return next("/worker-home");
-//     }
-//   } else if (to.path === "/" && loggedIn) {
-//     const decoded = jwtDecode(loggedIn);
-//     const rol = decoded.roles[0].authority;
-//     if (rol === "ADMIN") {
-//       return next("/administrator-home");
-//     } else if (rol === "COMMON_USER") {
-//       return next("/client-home");
-//     } else {
-//       return next("/worker-home");
-//     }
-//   }
+  console.log(loggedIn);
 
-//   if (authRequired && !loggedIn) {
-//     return next("/login");
-//   }
+  if (authRequired && !loggedIn) {
+    return next("/");
+  }
 
-//   if (loggedIn) {
-//     try {
-//       const decoded = jwtDecode(loggedIn);
-//       const roles = decoded.roles.map((r) => r.authority);
-//       if (to.meta.role && !roles.includes(to.meta.role)) {
-//         return next("/unauthorized");
-//       }
-//     } catch (error) {
-//       console.error("Error decodificando el token: ", error);
-//       localStorage.removeItem("token");
-//       return next("/login");
-//     }
-//   }
-//   next();
-// });
+  if (loggedIn) {
+    try {
+      const decodedToken = jwtDecode(loggedIn);
+      if (!decodedToken || !decodedToken.exp) {
+        throw new Error("Invalid token");
+      }
+
+      const tokenExpired = decodedToken.exp < Date.now() / 1000;
+
+      if (tokenExpired) {
+        localStorage.removeItem("access_token");
+        return next("/");
+      }
+
+      if (
+        to.path === "/" ||
+        to.path === "/sign-up" ||
+        to.path === "/forgot-password" ||
+        to.path === "/change-password"
+      ) {
+        return next("/blocked");
+      }
+    } catch (error) {
+      console.error("Error decodificando el token: ", error);
+      localStorage.removeItem("access_token");
+      return next("/");
+    }
+  }
+
+  next();
+});
 
 export default router;

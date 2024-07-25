@@ -108,15 +108,12 @@ export default {
           }
         )
         .then((response) => {
-          // Aquí podrías almacenar el token en el local storage si es necesario
-          localStorage.setItem("token", response.data.token);
+          localStorage.setItem("access_token", response.data.access_token);
 
-          // Limpia las credenciales solo si el inicio de sesión es exitoso
           this.form.username = "";
           this.form.password = "";
           console.log(response);
 
-          // Muestra una alerta de éxito
           this.$swal({
             title: "Inicio de sesión exitoso",
             text: "Checa el local storage para verificar.",
@@ -124,7 +121,6 @@ export default {
           });
         })
         .catch((error) => {
-          // Maneja el error y muestra una alerta de error
           console.error(error);
           this.$swal({
             title: "Error de inicio de sesión",

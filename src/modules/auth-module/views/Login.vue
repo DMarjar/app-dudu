@@ -1,13 +1,13 @@
 <template>
   <div class="view-body">
-    <div class="forms glass">
+    <div class="form-login glass">
       <div class="login-container alice-regular">
         <h1 class="title playfair-display">Sign in</h1>
         <ValidationObserver v-slot="{ handleSubmit }">
           <b-form @submit.prevent="handleSubmit(login)">
             <b-form-group
               id="input-group-1"
-              label="Correo:"
+              label="Username:"
               label-for="input-1"
               style="margin-bottom: 15px"
             >
@@ -25,7 +25,7 @@
             </b-form-group>
             <b-form-group
               id="input-group-2"
-              label="Contraseña:"
+              label="Password:"
               label-for="input-2"
               class="input-with-icon"
             >
@@ -53,7 +53,7 @@
               <div class="button-container">
                 <span><i class="fi fi-ts-angle-right button-icon"></i></span>
                 <b-button class="button open-sans" type="submit"
-                  >Ingresar</b-button
+                  >Continue</b-button
                 >
               </div>
             </div>
@@ -151,7 +151,7 @@ export default {
   justify-content: center;
 }
 
-.forms {
+.form-login {
   padding: 50px;
   color: white;
   width: 25%;
@@ -282,49 +282,49 @@ export default {
 }
 
 @media (min-width: 320px) {
-  .forms {
+  .form-login {
     width: 95%;
   }
 }
 
 @media (min-width: 480px) {
-  .forms {
+  .form-login {
     width: 90%;
   }
 }
 
 @media (min-width: 600px) {
-  .forms {
+  .form-login {
     width: 80%;
   }
 }
 
 @media (min-width: 768px) {
-  .forms {
+  .form-login {
     width: 50%;
   }
 }
 
 @media (min-width: 1024px) {
-  .forms {
+  .form-login {
     width: 25%;
   }
 }
 
 @media (min-width: 1280px) {
-  .forms {
+  .form-login {
     width: 28%;
   }
 }
 
 @media (min-width: 1440px) {
-  .forms {
+  .form-login {
     width: 25%;
   }
 }
 
 @media (min-width: 1920px) {
-  .forms {
+  .form-login {
     width: 35%;
   }
 }

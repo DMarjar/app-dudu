@@ -5,13 +5,19 @@ import { jwtDecode } from "jwt-decode";
 Vue.use(VueRouter);
 
 import Login from "../modules/auth-module/views/Login.vue";
+import SignUp from "../modules/auth-module/views/SignUp.vue";
 import Test from "../modules/example-module/views/blocked_views/Test.vue";
 
 const routes = [
   {
-    path: "/login",
+    path: "/log-in",
     name: "login",
     component: Login,
+  },
+  {
+    path: "/sign-up",
+    name: "signup",
+    component: SignUp,
   },
   {
     path: "/blocked",

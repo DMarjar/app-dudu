@@ -2,27 +2,26 @@
   <div class="view-body">
     <div class="forms glass">
       <div class="login-container alice-regular">
-        <h1 class="title playfair-display">Change password</h1>
+        <h1 class="playfair-display" id="title-signup">
+          Change temporary password
+        </h1>
         <ValidationObserver v-slot="{ handleSubmit }">
-          <b-form @submit.prevent="handleSubmit(forgotPassword)">
+          <b-form @submit.prevent="handleSubmit(changePassword)">
             <div class="row">
               <div class="col-12 col-md-6">
                 <b-form-group
                   id="input-group-1"
-                  label="Email:"
+                  label="Username:"
                   label-for="input-1"
                   style="margin-bottom: 15px"
                 >
-                  <ValidationProvider
-                    rules="required|email"
-                    v-slot="{ errors }"
-                  >
+                  <ValidationProvider rules="required" v-slot="{ errors }">
                     <div class="form-input">
-                      <span><i class="fi fi-tr-circle-envelope icon"></i></span>
+                      <span><i class="fi fi-ts-hat-wizard icon"></i></span>
                       <b-form-input
                         id="input-1"
                         class="input"
-                        v-model="form.email"
+                        v-model="form.username"
                       ></b-form-input>
                     </div>
                     <span class="errors">{{ errors[0] }}</span>
@@ -32,18 +31,25 @@
               <div class="col-12 col-md-6">
                 <b-form-group
                   id="input-group-2"
-                  label="Recovery code:"
+                  label="Temporary password:"
                   label-for="input-2"
-                  style="margin-bottom: 15px"
+                  class="input-with-icon"
                 >
                   <ValidationProvider rules="required" v-slot="{ errors }">
                     <div class="form-input">
-                      <span><i class="fi fi-tr-password icon"></i></span>
+                      <span><i class="fi fi-ts-lock-hashtag icon"></i></span>
                       <b-form-input
                         id="input-2"
                         class="input"
-                        v-model="form.code"
+                        v-model="form.password"
+                        :type="showTempPassword ? 'text' : 'password'"
                       ></b-form-input>
+                      <b-icon
+                        :icon="showTempPassword ? 'eye-slash' : 'eye'"
+                        aria-hidden="true"
+                        @click="toggleTempPassword"
+                        id="eye-icon"
+                      ></b-icon>
                     </div>
                     <span class="errors">{{ errors[0] }}</span>
                   </ValidationProvider>
@@ -51,9 +57,9 @@
               </div>
               <div class="col-12 col-md-6">
                 <b-form-group
-                  id="input-group-3"
+                  id="input-group-4"
                   label="New password:"
-                  label-for="input-3"
+                  label-for="input-4"
                   class="input-with-icon"
                 >
                   <ValidationProvider
@@ -63,9 +69,9 @@
                     <div class="form-input">
                       <span><i class="fi fi-ts-lock-hashtag icon"></i></span>
                       <b-form-input
-                        id="input-3"
+                        id="input-4"
                         class="input"
-                        v-model="form.password"
+                        v-model="form.new_password"
                         :type="showPassword ? 'text' : 'password'"
                       ></b-form-input>
                       <b-icon
@@ -81,9 +87,9 @@
               </div>
               <div class="col-12 col-md-6">
                 <b-form-group
-                  id="input-group-4"
+                  id="input-group-3"
                   label="Repeat password:"
-                  label-for="input-4"
+                  label-for="input-3"
                   class="input-with-icon"
                 >
                   <ValidationProvider
@@ -94,7 +100,7 @@
                     <div class="form-input">
                       <span><i class="fi fi-ts-lock-hashtag icon"></i></span>
                       <b-form-input
-                        id="input-4"
+                        id="input-3"
                         class="input"
                         v-model="confirmation"
                         :type="showRepeatPassword ? 'text' : 'password'"
@@ -115,20 +121,27 @@
             <br />
             <div class="text-center">
               <div class="button-container">
-                <span><i class="fi fi-ts-angle-right button-icon"></i></span>
-                <b-button class="button open-sans" type="submit"
-                  >Change password</b-button
+                <span v-if="!loading"
+                  ><i class="fi fi-ts-angle-right button-icon"></i
+                ></span>
+                <b-button
+                  v-if="!loading"
+                  class="button open-sans"
+                  type="submit"
                 >
+                  Change password
+                </b-button>
+                <b-spinner v-if="loading" label="Loading..."></b-spinner>
               </div>
             </div>
           </b-form>
         </ValidationObserver>
         <div class="lower-links">
           <div>
-            <a href="/">Go to sign up</a>
+            <a href="/">Go to sign in</a>
           </div>
           <div>
-            <a href="/forgot-password">Go back</a>
+            <a href="/sign-up">Go back</a>
           </div>
         </div>
       </div>
@@ -138,44 +151,112 @@
 
 <script>
 import { extend } from "vee-validate";
-import { required, email } from "vee-validate/dist/rules";
-
-extend("email", {
-  ...email,
-  message: "The email is not valid",
-});
+import { required } from "vee-validate/dist/rules";
+import axios from "axios";
 
 extend("required", {
   ...required,
   message: "This field is required",
 });
 
+extend("password", {
+  params: ["target"],
+  validate(value, { target }) {
+    return value === target;
+  },
+  message: "Password confirmation does not match",
+});
+
 export default {
-  name: "ChangePassword",
+  name: "ChangeTemporaryPassword",
   data() {
     return {
       form: {
-        email: "",
-        code: "",
+        username: "",
         password: "",
+        new_password: "",
       },
+      genderOptions: [
+        { value: "M", text: "Male" },
+        { value: "F", text: "Female" },
+      ],
+      loading: false,
       confirmation: "",
       showPassword: false,
+      showTempPassword: false,
       showRepeatPassword: false,
     };
   },
   methods: {
-    forgotPassword() {
-      alert("ForgotPassword");
+    changePassword() {
+      this.loading = true;
+      axios
+        .post(
+          "https://thl3xtink3.execute-api.us-east-2.amazonaws.com/Prod/set_password",
+          {
+            username: this.form.username,
+            password: this.form.password,
+            new_password: this.form.new_password,
+          }
+        )
+        .then((response) => {
+          this.form.username = "";
+          this.form.password = "";
+          console.log(response);
+          localStorage.setItem("access_token", response.data.access_token);
+          this.redirectUser();
+        })
+        .catch((error) => {
+          this.$swal({
+            title: "Error changing password",
+            text: "Something unexpected happened",
+            icon: "error",
+          });
+          console.log(error);
+        })
+        .finally(() => {
+          this.loading = false;
+        });
     },
     togglePassword() {
       this.showPassword = !this.showPassword;
     },
+    toggleTempPassword() {
+      this.showTempPassword = !this.showTempPassword;
+    },
     toggleRepeatPassword() {
       this.showRepeatPassword = !this.showRepeatPassword;
     },
+    redirectUser() {
+      this.$router.push("/blocked");
+    },
+  },
+  mounted() {
+    if (localStorage.getItem("showToast") === "true") {
+      const Toast = this.$swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 5000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = this.$swal.stopTimer;
+          toast.onmouseleave = this.$swal.resumeTimer;
+        },
+        customClass: {
+          popup: "colored-toast",
+        },
+      });
+      Toast.fire({
+        icon: "success",
+        title: "Account created, confirm it by changing your password",
+        color: "white",
+        background:
+          "linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))",
+      });
+      localStorage.removeItem("showToast");
+    }
   },
 };
 </script>
-
 <style src="@/assets/styles/auth-styles.css"></style>

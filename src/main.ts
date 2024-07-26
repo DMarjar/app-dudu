@@ -8,7 +8,10 @@ import VueSweetalert2 from "vue-sweetalert2";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
 import "sweetalert2/dist/sweetalert2.min.css";
+import "@asika32764/vue-animate/dist/vue-animate.css";
+import "@asika32764/vue-animate/dist/vue-animate.css";
 import { ValidationProvider, ValidationObserver } from "vee-validate";
+import "../src/assets/styles/toast-styles.css";
 
 // Use BootstrapVue
 Vue.use(BootstrapVue);

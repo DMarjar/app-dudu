@@ -36,7 +36,7 @@
         </ValidationObserver>
         <div class="lower-links">
           <div>
-            <a href="/">Go to log in</a>
+            <a href="/">Go to sign up</a>
           </div>
           <div>
             <a href="/change-password">I have a code already </a>
@@ -58,7 +58,7 @@ extend("email", {
 
 extend("required", {
   ...required,
-  message: "Este campo es requerido",
+  message: "This field is required",
 });
 
 export default {

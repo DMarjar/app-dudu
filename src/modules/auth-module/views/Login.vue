@@ -51,10 +51,17 @@
             <br />
             <div class="text-center">
               <div class="button-container">
-                <span><i class="fi fi-ts-angle-right button-icon"></i></span>
-                <b-button class="button open-sans" type="submit"
-                  >Continue</b-button
+                <span v-if="!loading"
+                  ><i class="fi fi-ts-angle-right button-icon"></i
+                ></span>
+                <b-button
+                  v-if="!loading"
+                  class="button open-sans"
+                  type="submit"
                 >
+                  Continue
+                </b-button>
+                <b-spinner v-if="loading" label="Loading..."></b-spinner>
               </div>
             </div>
           </b-form>
@@ -80,7 +87,7 @@ import axios from "axios";
 
 extend("required", {
   ...required,
-  message: "Este campo es requerido",
+  message: "This field is required",
 });
 
 export default {
@@ -92,6 +99,7 @@ export default {
         password: "",
       },
       showPassword: false,
+      loading: false,
     };
   },
   methods: {
@@ -99,6 +107,7 @@ export default {
       this.showPassword = !this.showPassword;
     },
     login() {
+      this.loading = true;
       axios
         .post(
           "https://thl3xtink3.execute-api.us-east-2.amazonaws.com/Prod/login",
@@ -108,26 +117,39 @@ export default {
           }
         )
         .then((response) => {
-          localStorage.setItem("access_token", response.data.access_token);
-
-          this.form.username = "";
-          this.form.password = "";
-          console.log(response);
-
-          this.$swal({
-            title: "Inicio de sesión exitoso",
-            text: "Checa el local storage para verificar.",
-            icon: "success",
-          });
+          if (response.data === "MUST CHANGE TEMPORARY PASSWORD") {
+            console.log(response);
+            this.$swal({
+              title: "You can't log in",
+              text: "You must change the temporary password that was sent to your email first.",
+              icon: "warning",
+              confirmButtonText: "Change password",
+            }).then((result) => {
+              if (result.isConfirmed) {
+                this.$router.push({ name: "changeTemporaryPassword" });
+              }
+            });
+          } else {
+            console.log(response);
+            localStorage.setItem("access_token", response.data.access_token);
+            this.form.username = "";
+            this.form.password = "";
+            this.redirectUser();
+          }
         })
         .catch((error) => {
-          console.error(error);
           this.$swal({
-            title: "Error de inicio de sesión",
-            text: "Por favor, verifica tus credenciales.",
+            title: "Sign in error",
+            text: "Please verify your credentials and try again.",
             icon: "error",
           });
+        })
+        .finally(() => {
+          this.loading = false;
         });
+    },
+    redirectUser() {
+      this.$router.push("/blocked");
     },
   },
 };

@@ -52,12 +52,14 @@
   padding: 50px;
   color: white;
   width: 25%;
+  animation: fade-up 0.5s;
 }
 
 .forms {
   padding: 50px;
   color: white;
   width: 35%;
+  animation: fade-up 0.5s;
 }
 
 .open-sans {
@@ -225,5 +227,16 @@
   }
   .forms {
     width: 35%;
+  }
+}
+
+@keyframes fade-up {
+  0% {
+    opacity: 0;
+    transform: translateY(30px) scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0px) scale(1);
   }
 }

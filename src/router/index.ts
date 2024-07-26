@@ -8,6 +8,7 @@ import Login from "../modules/auth-module/views/Login.vue";
 import SignUp from "../modules/auth-module/views/SignUp.vue";
 import ForgotPassword from "../modules/auth-module/views/ForgotPassword.vue";
 import ChangePassword from "../modules/auth-module/views/ChangePassword.vue";
+import ChangeTemporaryPassword from "../modules/auth-module/views/ChangeTemporaryPassword.vue";
 import Test from "../modules/example-module/views/blocked_views/Test.vue";
 
 const routes = [
@@ -32,6 +33,11 @@ const routes = [
     component: ChangePassword,
   },
   {
+    path: "/change-temporary-password",
+    name: "changeTemporaryPassword",
+    component: ChangeTemporaryPassword,
+  },
+  {
     path: "/blocked",
     name: "blocked",
     component: Test,
@@ -48,8 +54,6 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   const authRequired = to.matched.some((record) => record.meta.requiresAuth);
   const loggedIn = localStorage.getItem("access_token");
-
-  console.log(loggedIn);
 
   if (authRequired && !loggedIn) {
     return next("/");
@@ -73,7 +77,8 @@ router.beforeEach((to, from, next) => {
         to.path === "/" ||
         to.path === "/sign-up" ||
         to.path === "/forgot-password" ||
-        to.path === "/change-password"
+        to.path === "/change-password" ||
+        to.path === "/change-temporary-password"
       ) {
         return next("/blocked");
       }

@@ -26,10 +26,17 @@
             <br />
             <div class="text-center">
               <div class="button-container">
-                <span><i class="fi fi-ts-angle-right button-icon"></i></span>
-                <b-button class="button open-sans" type="submit"
-                  >Send code</b-button
+                <span v-if="!loading"
+                  ><i class="fi fi-ts-angle-right button-icon"></i
+                ></span>
+                <b-button
+                  v-if="!loading"
+                  class="button open-sans"
+                  type="submit"
                 >
+                  Register
+                </b-button>
+                <b-spinner v-if="loading" label="Loading..."></b-spinner>
               </div>
             </div>
           </b-form>
@@ -50,6 +57,7 @@
 <script>
 import { extend } from "vee-validate";
 import { required, email } from "vee-validate/dist/rules";
+import axios from "axios";
 
 extend("email", {
   ...email,
@@ -68,11 +76,37 @@ export default {
       form: {
         email: "",
       },
+      loading: false,
     };
   },
   methods: {
     forgotPassword() {
-      alert("ForgotPassword");
+      this.loading = true;
+      axios
+        .post(
+          "https://thl3xtink3.execute-api.us-east-2.amazonaws.com/Prod/recover_password",
+          {
+            username: this.form.email,
+          }
+        )
+        .then((response) => {
+          this.form.email = "";
+          this.redirectUser();
+        })
+        .catch((error) => {
+          console.log(error);
+          this.$swal({
+            title: "There's been an error",
+            text: "Please verify your information and try again.",
+            icon: "error",
+          });
+        })
+        .finally(() => {
+          this.loading = false;
+        });
+    },
+    redirectUser() {
+      this.$router.push("/change-password");
     },
   },
 };

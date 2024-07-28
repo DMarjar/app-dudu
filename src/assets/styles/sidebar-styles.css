@@ -1,0 +1,81 @@
+@import "~@flaticon/flaticon-uicons/css/all/all";
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 250px;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 20px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+  z-index: 1000;
+}
+
+.sidebar.open {
+  transform: translateX(0);
+}
+
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: orange;
+  padding: 10px;
+  font-size: 24px;
+  font-family: 'Playfair Display', serif;
+}
+
+.sidebar-close {
+  cursor: pointer;
+  width: 30px; 
+  height: 30px; 
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar ul li {
+  display: flex;
+  align-items: center;
+  margin: 15px 0;
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+}
+
+.sidebar ul li i {
+  margin-right: 10px;
+  display: flex;
+  align-items: center;
+}
+.sidebar-toggle {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  width: 50px; 
+  height: 50px; 
+  cursor: pointer;
+  z-index: 1001;
+}
+
+.sidebar-toggle.hidden {
+  display: none;
+}
+
+@media (max-width: 600px) {
+  .sidebar {
+    width: 200px;
+  }
+
+  .sidebar-header {
+    font-size: 20px;
+  }
+
+  .sidebar ul li {
+    font-size: 16px;
+  }
+}

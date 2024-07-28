@@ -9,6 +9,7 @@ import SignUp from "../modules/auth-module/views/SignUp.vue";
 import ForgotPassword from "../modules/auth-module/views/ForgotPassword.vue";
 import ChangePassword from "../modules/auth-module/views/ChangePassword.vue";
 import ChangeTemporaryPassword from "../modules/auth-module/views/ChangeTemporaryPassword.vue";
+import MissionsPage from "@/modules/missions/views/MissionsPage.vue";
 import Test from "../modules/example-module/views/blocked_views/Test.vue";
 
 const routes = [
@@ -36,6 +37,12 @@ const routes = [
     path: "/change-temporary-password",
     name: "changeTemporaryPassword",
     component: ChangeTemporaryPassword,
+  },
+  {
+    path: "/missions",
+    name: "missions",
+    component: MissionsPage,
+    meta: { title: "Missions | DUDU" },
   },
   {
     path: "/blocked",

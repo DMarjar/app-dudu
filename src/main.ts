@@ -12,6 +12,7 @@ import "@asika32764/vue-animate/dist/vue-animate.css";
 import "@asika32764/vue-animate/dist/vue-animate.css";
 import { ValidationProvider, ValidationObserver } from "vee-validate";
 import "../src/assets/styles/toast-styles.css";
+import VModal from 'vue-js-modal';
 
 // Use BootstrapVue
 Vue.use(BootstrapVue);
@@ -22,6 +23,9 @@ Vue.use(VueSweetalert2);
 
 Vue.component("ValidationProvider", ValidationProvider);
 Vue.component("ValidationObserver", ValidationObserver);
+
+// Use vue-js-modal
+Vue.use(VModal, { dynamic: true, injectModalsContainer: true });
 
 Vue.prototype.$http = axios;
 

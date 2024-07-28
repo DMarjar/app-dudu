@@ -11,6 +11,7 @@ import ChangePassword from "../modules/auth-module/views/ChangePassword.vue";
 import ChangeTemporaryPassword from "../modules/auth-module/views/ChangeTemporaryPassword.vue";
 import MissionsPage from "@/modules/missions/views/MissionsPage.vue";
 import Test from "../modules/example-module/views/blocked_views/Test.vue";
+import ProfileView from '../modules/profile/views/ProfileView.vue';
 
 const routes = [
   {
@@ -50,6 +51,11 @@ const routes = [
     component: Test,
     meta: { requiresAuth: true },
   },
+  {
+    path: '/profile',
+    name: 'Profile',
+    component: ProfileView
+  }
 ];
 
 const router = new VueRouter({

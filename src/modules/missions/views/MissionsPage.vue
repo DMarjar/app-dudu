@@ -89,6 +89,7 @@ import Vue from "vue";
 import missionService from "@/modules/missions/services/missionService";
 import {SearchRequest} from "../types/SearchRequest";
 import {Mission} from "@/modules/missions/types/Mission";
+import {getUserId} from "@/utils/getTokenInformation";
 
 export default Vue.extend({
   name: "MissionsPage",
@@ -104,7 +105,7 @@ export default Vue.extend({
 
       // Filters and search object
       searchRequest: {
-        id_user: 1,
+        id_user: 0,
         search_query: "",
         order_by: "creation_date",
         order: "ASC",
@@ -117,9 +118,14 @@ export default Vue.extend({
   methods: {
     // Function to search missions
     async searchMissions() {
-      const response = await missionService.searchMissions(this.searchRequest);
-      this.missions = response.missions;
-      this.totalMissions = response.total;
+      // TODO: Add the loading spinner
+      try {
+        const response = await missionService.searchMissions(this.searchRequest);
+        this.missions = response.missions;
+        this.totalMissions = response.total;
+      } catch (error) {
+        console.error(error);
+      }
     },
 
     // Function to display the subtitle message
@@ -146,7 +152,7 @@ export default Vue.extend({
 
     // Function to display the players image
     getPlayerImage(): string {
-      // TODO: Get the profile data to display the correct gender and level CHANGE ME
+      // TODO: Get the profile data to display the correct gender and level
       const profilePLACEHOLDER = {
         gender: 'M',
         level: 50,
@@ -158,6 +164,9 @@ export default Vue.extend({
   },
 
   mounted() {
+    // Set the user id
+    this.searchRequest.id_user = getUserId();
+    // Search missions
     this.searchMissions();
   },
 });

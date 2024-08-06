@@ -202,7 +202,6 @@ export default {
         .then((response) => {
           this.form.username = "";
           this.form.password = "";
-          console.log(response);
           localStorage.setItem("id_token", response.data.id_token);
           this.redirectUser();
         })

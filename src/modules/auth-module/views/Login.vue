@@ -118,7 +118,6 @@ export default {
         )
         .then((response) => {
           if (response.data === "MUST CHANGE TEMPORARY PASSWORD") {
-            console.log(response);
             this.$swal({
               title: "You can't log in",
               text: "You must change the temporary password that was sent to your email first.",
@@ -128,9 +127,8 @@ export default {
               if (result.isConfirmed) {
                 this.$router.push({ name: "changeTemporaryPassword" });
               }
-            });
+            });1
           } else {
-            console.log(response);
             localStorage.setItem("id_token", response.data.id_token);
             this.form.username = "";
             this.form.password = "";
@@ -149,7 +147,7 @@ export default {
         });
     },
     redirectUser() {
-      this.$router.push("/blocked");
+      this.$router.push("/missions");
     },
   },
 };

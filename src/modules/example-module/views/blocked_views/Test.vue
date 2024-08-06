@@ -10,7 +10,7 @@ export default {
   name: "Test",
   methods: {
     endSession() {
-      localStorage.removeItem("access_token");
+      localStorage.removeItem("id_token");
       this.$router.push("/");
     },
   },

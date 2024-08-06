@@ -8,21 +8,21 @@
             <div class="row">
               <div class="col-12 col-md-6">
                 <b-form-group
-                  id="input-group-1"
-                  label="Email:"
-                  label-for="input-1"
-                  style="margin-bottom: 15px"
+                    id="input-group-1"
+                    label="Email:"
+                    label-for="input-1"
+                    style="margin-bottom: 15px"
                 >
                   <ValidationProvider
-                    rules="required|email"
-                    v-slot="{ errors }"
+                      rules="required|email"
+                      v-slot="{ errors }"
                   >
                     <div class="form-input">
                       <span><i class="fi fi-tr-circle-envelope icon"></i></span>
                       <b-form-input
-                        id="input-1"
-                        class="input"
-                        v-model="form.email"
+                          id="input-1"
+                          class="input"
+                          v-model="form.email"
                       ></b-form-input>
                     </div>
                     <span class="errors">{{ errors[0] }}</span>
@@ -31,18 +31,18 @@
               </div>
               <div class="col-12 col-md-6">
                 <b-form-group
-                  id="input-group-2"
-                  label="Recovery code:"
-                  label-for="input-2"
-                  style="margin-bottom: 15px"
+                    id="input-group-2"
+                    label="Recovery code:"
+                    label-for="input-2"
+                    style="margin-bottom: 15px"
                 >
                   <ValidationProvider rules="required" v-slot="{ errors }">
                     <div class="form-input">
                       <span><i class="fi fi-tr-password icon"></i></span>
                       <b-form-input
-                        id="input-2"
-                        class="input"
-                        v-model="form.code"
+                          id="input-2"
+                          class="input"
+                          v-model="form.code"
                       ></b-form-input>
                     </div>
                     <span class="errors">{{ errors[0] }}</span>
@@ -51,28 +51,28 @@
               </div>
               <div class="col-12 col-md-6">
                 <b-form-group
-                  id="input-group-3"
-                  label="New password:"
-                  label-for="input-3"
-                  class="input-with-icon"
+                    id="input-group-3"
+                    label="New password:"
+                    label-for="input-3"
+                    class="input-with-icon"
                 >
                   <ValidationProvider
-                    rules="required|password:@confirm"
-                    v-slot="{ errors }"
+                      rules="required|password:@confirm"
+                      v-slot="{ errors }"
                   >
                     <div class="form-input">
                       <span><i class="fi fi-ts-lock-hashtag icon"></i></span>
                       <b-form-input
-                        id="input-3"
-                        class="input"
-                        v-model="form.password"
-                        :type="showPassword ? 'text' : 'password'"
+                          id="input-3"
+                          class="input"
+                          v-model="form.password"
+                          :type="showPassword ? 'text' : 'password'"
                       ></b-form-input>
                       <b-icon
-                        :icon="showPassword ? 'eye-slash' : 'eye'"
-                        aria-hidden="true"
-                        @click="togglePassword"
-                        id="eye-icon"
+                          :icon="showPassword ? 'eye-slash' : 'eye'"
+                          aria-hidden="true"
+                          @click="togglePassword"
+                          id="eye-icon"
                       ></b-icon>
                     </div>
                     <span class="errors">{{ errors[0] }}</span>
@@ -81,29 +81,29 @@
               </div>
               <div class="col-12 col-md-6">
                 <b-form-group
-                  id="input-group-4"
-                  label="Repeat password:"
-                  label-for="input-4"
-                  class="input-with-icon"
+                    id="input-group-4"
+                    label="Repeat password:"
+                    label-for="input-4"
+                    class="input-with-icon"
                 >
                   <ValidationProvider
-                    rules="required"
-                    name="confirm"
-                    v-slot="{ errors }"
+                      rules="required"
+                      name="confirm"
+                      v-slot="{ errors }"
                   >
                     <div class="form-input">
                       <span><i class="fi fi-ts-lock-hashtag icon"></i></span>
                       <b-form-input
-                        id="input-4"
-                        class="input"
-                        v-model="confirmation"
-                        :type="showRepeatPassword ? 'text' : 'password'"
+                          id="input-4"
+                          class="input"
+                          v-model="confirmation"
+                          :type="showRepeatPassword ? 'text' : 'password'"
                       ></b-form-input>
                       <b-icon
-                        :icon="showRepeatPassword ? 'eye-slash' : 'eye'"
-                        aria-hidden="true"
-                        @click="toggleRepeatPassword"
-                        id="eye-icon"
+                          :icon="showRepeatPassword ? 'eye-slash' : 'eye'"
+                          aria-hidden="true"
+                          @click="toggleRepeatPassword"
+                          id="eye-icon"
                       ></b-icon>
                     </div>
                     <span class="errors">{{ errors[0] }}</span>
@@ -112,16 +112,16 @@
               </div>
             </div>
 
-            <br />
+            <br/>
             <div class="text-center">
               <div class="button-container">
                 <span v-if="!loading"
-                  ><i class="fi fi-ts-angle-right button-icon"></i
+                ><i class="fi fi-ts-angle-right button-icon"></i
                 ></span>
                 <b-button
-                  v-if="!loading"
-                  class="button open-sans"
-                  type="submit"
+                    v-if="!loading"
+                    class="button open-sans"
+                    type="submit"
                 >
                   Change
                 </b-button>
@@ -144,8 +144,8 @@
 </template>
 
 <script>
-import { extend } from "vee-validate";
-import { required, email } from "vee-validate/dist/rules";
+import {extend} from "vee-validate";
+import {required, email} from "vee-validate/dist/rules";
 import axios from "axios";
 
 extend("email", {
@@ -177,32 +177,32 @@ export default {
     forgotPassword() {
       this.loading = true;
       axios
-        .post(
-          "https://thl3xtink3.execute-api.us-east-2.amazonaws.com/Prod/change_password",
-          {
-            username: this.form.email,
-            confirmation_code: this.form.code,
-            new_password: this.form.password,
-            confirm_new_password: this.form.password,
-          }
-        )
-        .then((response) => {
-          this.form.email = "";
-          this.form.password = "";
-          this.form.code = "";
-          this.redirectUser();
-        })
-        .catch((error) => {
-          console.log(error);
-          this.$swal({
-            title: "There's been an error",
-            text: "Please verify your information and try again.",
-            icon: "error",
+          .post(
+              "https://thl3xtink3.execute-api.us-east-2.amazonaws.com/Prod/change_password",
+              {
+                username: this.form.email,
+                confirmation_code: this.form.code,
+                new_password: this.form.password,
+                confirm_new_password: this.form.password,
+              }
+          )
+          .then((response) => {
+            this.form.email = "";
+            this.form.password = "";
+            this.form.code = "";
+            this.redirectUser();
+          })
+          .catch((error) => {
+            console.log(error);
+            this.$swal({
+              title: "There's been an error",
+              text: "Please verify your information and try again.",
+              icon: "error",
+            });
+          })
+          .finally(() => {
+            this.loading = false;
           });
-        })
-        .finally(() => {
-          this.loading = false;
-        });
     },
     togglePassword() {
       this.showPassword = !this.showPassword;

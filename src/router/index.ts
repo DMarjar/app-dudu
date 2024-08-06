@@ -17,32 +17,37 @@ const routes = [
     path: "/",
     name: "login",
     component: Login,
+    meta: { title: "Login | DUDU" },
   },
   {
     path: "/sign-up",
     name: "signup",
     component: SignUp,
+    meta: { title: "Sign Up | DUDU" },
   },
   {
     path: "/forgot-password",
     name: "forgotPassword",
     component: ForgotPassword,
+    meta: { title: "Forgot Password | DUDU" },
   },
   {
     path: "/change-password",
     name: "changePassword",
     component: ChangePassword,
+    meta: { title: "Change Password | DUDU", requiresAuth: true },
   },
   {
     path: "/change-temporary-password",
     name: "changeTemporaryPassword",
     component: ChangeTemporaryPassword,
+    meta: { title: "Change Temporary Password | DUDU" },
   },
   {
     path: "/missions",
     name: "missions",
     component: MissionsPage,
-    meta: { title: "Missions | DUDU" },
+    meta: { title: "Missions | DUDU", requiresAuth: true },
   },
   {
     path: "/blocked",
@@ -60,7 +65,7 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   const authRequired = to.matched.some((record) => record.meta.requiresAuth);
-  const loggedIn = localStorage.getItem("access_token");
+  const loggedIn = localStorage.getItem("id_token");
 
   if (authRequired && !loggedIn) {
     return next("/");
@@ -76,7 +81,7 @@ router.beforeEach((to, from, next) => {
       const tokenExpired = decodedToken.exp < Date.now() / 1000;
 
       if (tokenExpired) {
-        localStorage.removeItem("access_token");
+        localStorage.removeItem("id_token");
         return next("/");
       }
 
@@ -91,7 +96,7 @@ router.beforeEach((to, from, next) => {
       }
     } catch (error) {
       console.error("Error decodificando el token: ", error);
-      localStorage.removeItem("access_token");
+      localStorage.removeItem("id_token");
       return next("/");
     }
   }

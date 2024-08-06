@@ -131,7 +131,7 @@ export default {
             });
           } else {
             console.log(response);
-            localStorage.setItem("access_token", response.data.access_token);
+            localStorage.setItem("id_token", response.data.id_token);
             this.form.username = "";
             this.form.password = "";
             this.redirectUser();

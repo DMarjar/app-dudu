@@ -20,7 +20,7 @@
       </b-col>
       <b-col v-else>
         <b-card>
-          <p>No missions found</p>
+          <p>No missions registered yet. Add one now!</p>
         </b-card>
       </b-col>
 
@@ -70,6 +70,8 @@
       </b-col>
     </b-row>
 
+    <FabMissionCreationModal @mission-created="searchMissions()"/>
+
     <!-- Pagination -->
     <b-row>
       <b-col>
@@ -93,6 +95,9 @@ import {getUserId} from "@/utils/getTokenInformation";
 
 export default Vue.extend({
   name: "MissionsPage",
+  components: {
+    FabMissionCreationModal: () => import("@/modules/missions/components/FabMissionCreationModal.vue"),
+  },
   data() {
     return {
       // Missions
@@ -112,19 +117,50 @@ export default Vue.extend({
         status: "pending",
         page: 1,
       } as SearchRequest,
+
+      // Loading
+      isLoading: false,
     };
   },
 
   methods: {
+    // Function to change loading status to the opposite value
+    changeLoadingStatus() {
+      this.isLoading = !this.isLoading;
+    },
+
+    // Function to set the loading status to a specific value
+    // Useful for chained async function calls
+    setLoadingStatus(status: boolean) {
+      this.isLoading = status;
+    },
+
     // Function to search missions
     async searchMissions() {
       // TODO: Add the loading spinner
+      this.changeLoadingStatus();
       try {
+        this.searchRequest.page = this.currentPage;
         const response = await missionService.searchMissions(this.searchRequest);
-        this.missions = response.missions;
-        this.totalMissions = response.total;
+
+        // If the response status is not 200, show an error message
+        if (response.status !== 200) {
+          // TODO: Manage correct swal style
+          this.$swal(
+              "Error",
+              "An error occurred while searching the missions. Try again later.",
+              "error"
+          );
+          return;
+        }
+
+        const data = response.data;
+        this.missions = data.missions;
+        this.totalMissions = data.total;
       } catch (error) {
         console.error(error);
+      } finally {
+        this.changeLoadingStatus();
       }
     },
 

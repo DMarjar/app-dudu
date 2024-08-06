@@ -17,26 +17,31 @@ const routes = [
     path: "/",
     name: "login",
     component: Login,
+    meta: { title: "Login | DUDU" },
   },
   {
     path: "/sign-up",
     name: "signup",
     component: SignUp,
+    meta: { title: "Sign Up | DUDU" },
   },
   {
     path: "/forgot-password",
     name: "forgotPassword",
     component: ForgotPassword,
+    meta: { title: "Forgot Password | DUDU" },
   },
   {
     path: "/change-password",
     name: "changePassword",
     component: ChangePassword,
+    meta: { title: "Change Password | DUDU", requiresAuth: true },
   },
   {
     path: "/change-temporary-password",
     name: "changeTemporaryPassword",
     component: ChangeTemporaryPassword,
+    meta: { title: "Change Temporary Password | DUDU" },
   },
   {
     path: "/missions",

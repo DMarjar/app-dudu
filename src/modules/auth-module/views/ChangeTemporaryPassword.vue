@@ -10,18 +10,18 @@
             <div class="row">
               <div class="col-12 col-md-6">
                 <b-form-group
-                  id="input-group-1"
-                  label="Username:"
-                  label-for="input-1"
-                  style="margin-bottom: 15px"
+                    id="input-group-1"
+                    label="Username:"
+                    label-for="input-1"
+                    style="margin-bottom: 15px"
                 >
                   <ValidationProvider rules="required" v-slot="{ errors }">
                     <div class="form-input">
                       <span><i class="fi fi-ts-hat-wizard icon"></i></span>
                       <b-form-input
-                        id="input-1"
-                        class="input"
-                        v-model="form.username"
+                          id="input-1"
+                          class="input"
+                          v-model="form.username"
                       ></b-form-input>
                     </div>
                     <span class="errors">{{ errors[0] }}</span>
@@ -30,25 +30,25 @@
               </div>
               <div class="col-12 col-md-6">
                 <b-form-group
-                  id="input-group-2"
-                  label="Temporary password:"
-                  label-for="input-2"
-                  class="input-with-icon"
+                    id="input-group-2"
+                    label="Temporary password:"
+                    label-for="input-2"
+                    class="input-with-icon"
                 >
                   <ValidationProvider rules="required" v-slot="{ errors }">
                     <div class="form-input">
                       <span><i class="fi fi-ts-lock-hashtag icon"></i></span>
                       <b-form-input
-                        id="input-2"
-                        class="input"
-                        v-model="form.password"
-                        :type="showTempPassword ? 'text' : 'password'"
+                          id="input-2"
+                          class="input"
+                          v-model="form.password"
+                          :type="showTempPassword ? 'text' : 'password'"
                       ></b-form-input>
                       <b-icon
-                        :icon="showTempPassword ? 'eye-slash' : 'eye'"
-                        aria-hidden="true"
-                        @click="toggleTempPassword"
-                        id="eye-icon"
+                          :icon="showTempPassword ? 'eye-slash' : 'eye'"
+                          aria-hidden="true"
+                          @click="toggleTempPassword"
+                          id="eye-icon"
                       ></b-icon>
                     </div>
                     <span class="errors">{{ errors[0] }}</span>
@@ -57,28 +57,28 @@
               </div>
               <div class="col-12 col-md-6">
                 <b-form-group
-                  id="input-group-4"
-                  label="New password:"
-                  label-for="input-4"
-                  class="input-with-icon"
+                    id="input-group-4"
+                    label="New password:"
+                    label-for="input-4"
+                    class="input-with-icon"
                 >
                   <ValidationProvider
-                    rules="required|password:@confirm"
-                    v-slot="{ errors }"
+                      rules="required|password:@confirm"
+                      v-slot="{ errors }"
                   >
                     <div class="form-input">
                       <span><i class="fi fi-ts-lock-hashtag icon"></i></span>
                       <b-form-input
-                        id="input-4"
-                        class="input"
-                        v-model="form.new_password"
-                        :type="showPassword ? 'text' : 'password'"
+                          id="input-4"
+                          class="input"
+                          v-model="form.new_password"
+                          :type="showPassword ? 'text' : 'password'"
                       ></b-form-input>
                       <b-icon
-                        :icon="showPassword ? 'eye-slash' : 'eye'"
-                        aria-hidden="true"
-                        @click="togglePassword"
-                        id="eye-icon"
+                          :icon="showPassword ? 'eye-slash' : 'eye'"
+                          aria-hidden="true"
+                          @click="togglePassword"
+                          id="eye-icon"
                       ></b-icon>
                     </div>
                     <span class="errors">{{ errors[0] }}</span>
@@ -87,29 +87,29 @@
               </div>
               <div class="col-12 col-md-6">
                 <b-form-group
-                  id="input-group-3"
-                  label="Repeat password:"
-                  label-for="input-3"
-                  class="input-with-icon"
+                    id="input-group-3"
+                    label="Repeat password:"
+                    label-for="input-3"
+                    class="input-with-icon"
                 >
                   <ValidationProvider
-                    rules="required"
-                    name="confirm"
-                    v-slot="{ errors }"
+                      rules="required"
+                      name="confirm"
+                      v-slot="{ errors }"
                   >
                     <div class="form-input">
                       <span><i class="fi fi-ts-lock-hashtag icon"></i></span>
                       <b-form-input
-                        id="input-3"
-                        class="input"
-                        v-model="confirmation"
-                        :type="showRepeatPassword ? 'text' : 'password'"
+                          id="input-3"
+                          class="input"
+                          v-model="confirmation"
+                          :type="showRepeatPassword ? 'text' : 'password'"
                       ></b-form-input>
                       <b-icon
-                        :icon="showRepeatPassword ? 'eye-slash' : 'eye'"
-                        aria-hidden="true"
-                        @click="toggleRepeatPassword"
-                        id="eye-icon"
+                          :icon="showRepeatPassword ? 'eye-slash' : 'eye'"
+                          aria-hidden="true"
+                          @click="toggleRepeatPassword"
+                          id="eye-icon"
                       ></b-icon>
                     </div>
                     <span class="errors">{{ errors[0] }}</span>
@@ -118,16 +118,16 @@
               </div>
             </div>
 
-            <br />
+            <br/>
             <div class="text-center">
               <div class="button-container">
                 <span v-if="!loading"
-                  ><i class="fi fi-ts-angle-right button-icon"></i
+                ><i class="fi fi-ts-angle-right button-icon"></i
                 ></span>
                 <b-button
-                  v-if="!loading"
-                  class="button open-sans"
-                  type="submit"
+                    v-if="!loading"
+                    class="button open-sans"
+                    type="submit"
                 >
                   Change password
                 </b-button>
@@ -150,8 +150,8 @@
 </template>
 
 <script>
-import { extend } from "vee-validate";
-import { required } from "vee-validate/dist/rules";
+import {extend} from "vee-validate";
+import {required} from "vee-validate/dist/rules";
 import axios from "axios";
 
 extend("required", {
@@ -161,7 +161,7 @@ extend("required", {
 
 extend("password", {
   params: ["target"],
-  validate(value, { target }) {
+  validate(value, {target}) {
     return value === target;
   },
   message: "Password confirmation does not match",
@@ -177,8 +177,8 @@ export default {
         new_password: "",
       },
       genderOptions: [
-        { value: "M", text: "Male" },
-        { value: "F", text: "Female" },
+        {value: "M", text: "Male"},
+        {value: "F", text: "Female"},
       ],
       loading: false,
       confirmation: "",
@@ -191,31 +191,31 @@ export default {
     changePassword() {
       this.loading = true;
       axios
-        .post(
-          "https://thl3xtink3.execute-api.us-east-2.amazonaws.com/Prod/set_password",
-          {
-            username: this.form.username,
-            password: this.form.password,
-            new_password: this.form.new_password,
-          }
-        )
-        .then((response) => {
-          this.form.username = "";
-          this.form.password = "";
-          localStorage.setItem("id_token", response.data.id_token);
-          this.redirectUser();
-        })
-        .catch((error) => {
-          this.$swal({
-            title: "Error changing password",
-            text: "Something unexpected happened",
-            icon: "error",
+          .post(
+              "https://thl3xtink3.execute-api.us-east-2.amazonaws.com/Prod/set_password",
+              {
+                username: this.form.username,
+                password: this.form.password,
+                new_password: this.form.new_password,
+              }
+          )
+          .then((response) => {
+            this.form.username = "";
+            this.form.password = "";
+            localStorage.setItem("id_token", response.data.id_token);
+            this.redirectUser();
+          })
+          .catch((error) => {
+            this.$swal({
+              title: "Error changing password",
+              text: "Something unexpected happened",
+              icon: "error",
+            });
+            console.log(error);
+          })
+          .finally(() => {
+            this.loading = false;
           });
-          console.log(error);
-        })
-        .finally(() => {
-          this.loading = false;
-        });
     },
     togglePassword() {
       this.showPassword = !this.showPassword;
@@ -251,7 +251,7 @@ export default {
         title: "Account created, confirm it by changing your password",
         color: "white",
         background:
-          "linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))",
+            "linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0))",
       });
       localStorage.removeItem("showToast");
     }

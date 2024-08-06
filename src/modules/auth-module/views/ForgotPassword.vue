@@ -6,33 +6,33 @@
         <ValidationObserver v-slot="{ handleSubmit }">
           <b-form @submit.prevent="handleSubmit(forgotPassword)">
             <b-form-group
-              id="input-group-1"
-              label="Email:"
-              label-for="input-1"
-              style="margin-bottom: 15px"
+                id="input-group-1"
+                label="Email:"
+                label-for="input-1"
+                style="margin-bottom: 15px"
             >
               <ValidationProvider rules="required|email" v-slot="{ errors }">
                 <div class="form-input">
                   <span><i class="fi fi-tr-circle-envelope icon"></i></span>
                   <b-form-input
-                    id="input-1"
-                    class="input"
-                    v-model="form.email"
+                      id="input-1"
+                      class="input"
+                      v-model="form.email"
                   ></b-form-input>
                 </div>
                 <span class="errors">{{ errors[0] }}</span>
               </ValidationProvider>
             </b-form-group>
-            <br />
+            <br/>
             <div class="text-center">
               <div class="button-container">
                 <span v-if="!loading"
-                  ><i class="fi fi-ts-angle-right button-icon"></i
+                ><i class="fi fi-ts-angle-right button-icon"></i
                 ></span>
                 <b-button
-                  v-if="!loading"
-                  class="button open-sans"
-                  type="submit"
+                    v-if="!loading"
+                    class="button open-sans"
+                    type="submit"
                 >
                   Register
                 </b-button>
@@ -55,8 +55,8 @@
 </template>
 
 <script>
-import { extend } from "vee-validate";
-import { required, email } from "vee-validate/dist/rules";
+import {extend} from "vee-validate";
+import {required, email} from "vee-validate/dist/rules";
 import axios from "axios";
 
 extend("email", {
@@ -83,27 +83,27 @@ export default {
     forgotPassword() {
       this.loading = true;
       axios
-        .post(
-          "https://thl3xtink3.execute-api.us-east-2.amazonaws.com/Prod/recover_password",
-          {
-            username: this.form.email,
-          }
-        )
-        .then((response) => {
-          this.form.email = "";
-          this.redirectUser();
-        })
-        .catch((error) => {
-          console.log(error);
-          this.$swal({
-            title: "There's been an error",
-            text: "Please verify your information and try again.",
-            icon: "error",
+          .post(
+              "https://thl3xtink3.execute-api.us-east-2.amazonaws.com/Prod/recover_password",
+              {
+                username: this.form.email,
+              }
+          )
+          .then((response) => {
+            this.form.email = "";
+            this.redirectUser();
+          })
+          .catch((error) => {
+            console.log(error);
+            this.$swal({
+              title: "There's been an error",
+              text: "Please verify your information and try again.",
+              icon: "error",
+            });
+          })
+          .finally(() => {
+            this.loading = false;
           });
-        })
-        .finally(() => {
-          this.loading = false;
-        });
     },
     redirectUser() {
       this.$router.push("/change-password");

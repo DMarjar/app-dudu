@@ -1,5 +1,11 @@
 <template>
   <div>
+
+    <!-- TODO: Use the correct background image design-->
+    <div class="background-container">
+      <img :src="getRandomBackgroundImage()" alt="Background image" class="background-img">
+    </div>
+
     <b-row no-gutters>
       <!-- Player image -->
       <b-col>
@@ -196,7 +202,18 @@ export default Vue.extend({
 
       // Return the correct image based on the level and gender
       return require(`@/assets/wizards/${profilePLACEHOLDER.gender.toLowerCase()}/wizard_lvl_${profilePLACEHOLDER.level}.png`);
+    },
+
+    // TODO: Decide to use a fixed background or a dynamic one
+    // if you want the fixed background, use @/assets/backgrounds/bg_home.png
+    // Function to get a random background image
+    getRandomBackgroundImage(): string {
+      // Get a random number between 0 and 6
+      const randomNumber = Math.floor(Math.random() * 7);
+      // Return the correct image based on the random number
+      return require(`@/assets/backgrounds/bg_dynamic_${randomNumber}.png`);
     }
+
   },
 
   mounted() {
@@ -212,5 +229,18 @@ export default Vue.extend({
 .player-image {
   width: 100%;
   height: auto;
+}
+
+.background-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+
+.background-img {
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
 }
 </style>

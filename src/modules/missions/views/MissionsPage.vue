@@ -195,7 +195,7 @@ export default Vue.extend({
       }
 
       // Return the correct image based on the level and gender
-      return `../../../assets/wizards/${profilePLACEHOLDER.gender.toLowerCase()}/wizard_lvl_${profilePLACEHOLDER.level}.png`;
+      return require(`@/assets/wizards/${profilePLACEHOLDER.gender.toLowerCase()}/wizard_lvl_${profilePLACEHOLDER.level}.png`);
     }
   },
 

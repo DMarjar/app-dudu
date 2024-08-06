@@ -3,7 +3,7 @@
     <b-row no-gutters>
       <!-- Player image -->
       <b-col>
-        <img src="../../../assets/wizard-lvl50.png" alt="wizard" class="player-image"/>
+        <img :src="getPlayerImage()" class="player-image" alt="Player image">
       </b-col>
 
       <!-- Missions list -->
@@ -143,6 +143,18 @@ export default Vue.extend({
       // Default message
       return "=Unknown...";
     },
+
+    // Function to display the players image
+    getPlayerImage(): string {
+      // TODO: Get the profile data to display the correct gender and level CHANGE ME
+      const profilePLACEHOLDER = {
+        gender: 'M',
+        level: 50,
+      }
+
+      // Return the correct image based on the level and gender
+      return `../../../assets/wizards/${profilePLACEHOLDER.gender.toLowerCase()}/wizard_lvl_${profilePLACEHOLDER.level}.png`;
+    }
   },
 
   mounted() {

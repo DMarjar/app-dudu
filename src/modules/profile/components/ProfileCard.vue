@@ -87,6 +87,7 @@ export default defineComponent({
 
 <style scoped>
 @import "~@flaticon/flaticon-uicons/css/all/all";
+
 .profile-card {
   padding: 15px;
   color: white;
@@ -103,6 +104,7 @@ export default defineComponent({
   width: 100%;
   max-width: 600px;
   overflow: hidden;
+  animation: fade-up 0.5s;
 }
 
 .title {
@@ -141,7 +143,7 @@ export default defineComponent({
 
 .details-container {
   flex: 1;
-  min-width: 0; /* Evita que el contenido se desborde */
+  min-width: 0;
 }
 
 .profile-detail {
@@ -158,7 +160,7 @@ export default defineComponent({
 .profile-detail span {
   font-size: 18px;
   font-family: 'Playfair Display', serif;
-  word-break: break-word; /* Permite que el texto largo se rompa */
+  word-break: break-word;
 }
 
 .level-container {
@@ -238,5 +240,16 @@ export default defineComponent({
 
 .delete-button:hover {
   background-color: #99222B;
+}
+
+@keyframes fade-up {
+  0% {
+    opacity: 0;
+    transform: translateY(30px) scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0px) scale(1);
+  }
 }
 </style>

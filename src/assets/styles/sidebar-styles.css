@@ -1,10 +1,12 @@
 @import "~@flaticon/flaticon-uicons/css/all/all";
+
+/* Sidebar Styles */
 .sidebar {
   position: fixed;
   top: 0;
   left: 0;
   width: 250px;
-  height: 100vh;
+  height: 100%;
   background-color: rgba(0, 0, 0, 0.9);
   color: white;
   padding: 20px;
@@ -14,10 +16,12 @@
   z-index: 1000;
 }
 
+/* Open Sidebar */
 .sidebar.open {
   transform: translateX(0);
 }
 
+/* Sidebar Header */
 .sidebar-header {
   display: flex;
   justify-content: space-between;
@@ -28,12 +32,14 @@
   font-family: 'Playfair Display', serif;
 }
 
+/* Close Button */
 .sidebar-close {
   cursor: pointer;
   width: 30px; 
   height: 30px; 
 }
 
+/* Sidebar List */
 .sidebar ul {
   list-style: none;
   padding: 0;
@@ -52,6 +58,8 @@
   display: flex;
   align-items: center;
 }
+
+/* Sidebar Toggle Button */
 .sidebar-toggle {
   position: fixed;
   top: 20px;
@@ -66,9 +74,10 @@
   display: none;
 }
 
+/* Responsive Styles */
 @media (max-width: 600px) {
   .sidebar {
-    width: 200px;
+    width: 100%;
   }
 
   .sidebar-header {
@@ -77,5 +86,30 @@
 
   .sidebar ul li {
     font-size: 16px;
+  }
+
+  .sidebar-toggle {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+@media (max-width: 400px) {
+  .sidebar {
+    width: 100%;
+    padding: 10px;
+  }
+
+  .sidebar-header {
+    font-size: 18px;
+  }
+
+  .sidebar ul li {
+    font-size: 14px;
+  }
+
+  .sidebar-toggle {
+    width: 35px;
+    height: 35px;
   }
 }

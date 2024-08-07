@@ -62,108 +62,152 @@
   @import "~@flaticon/flaticon-uicons/css/all/all";
 
   .custom-modal .modal-content {
-    padding: 20px;
-    color: white;
-    border-radius: 15px;
-    background: linear-gradient(135deg,
-        rgba(255, 255, 255, 0.1),
-        rgba(255, 255, 255, 0));
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-    text-align: left;
-    font-family: 'Playfair Display', sans-serif;
-  }
+  padding: 20px;
+  color: white;
+  border-radius: 15px;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1),
+    rgba(255, 255, 255, 0)
+  );
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  text-align: left;
+  font-family: 'Playfair Display', sans-serif;
+  max-width: 90%; 
+  margin: 0 auto; 
+}
 
-  .custom-modal .modal-header {
-    border-bottom: none;
-  }
+.custom-modal .modal-header {
+  border-bottom: none;
+}
 
-  .custom-modal .modal-footer {
-    border-top: none;
-  }
+.custom-modal .modal-footer {
+  border-top: none;
+}
 
-  .custom-modal .btn-primary,
-  .custom-modal .btn-secondary {
-    display: none;
-  }
+.custom-modal .btn-primary,
+.custom-modal .btn-secondary {
+  display: none;
+}
 
-  .form-group {
-    margin-bottom: 15px;
-  }
+.form-group {
+  margin-bottom: 15px;
+}
 
-  .form-group label {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 5px;
-    font-family: 'Playfair Display', serif;
+.form-group label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+  font-family: 'Alice', serif;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 9px;
+  border: 1px solid #ccc;
+  border-radius: 13px;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.12);
+  background-color: #333;
+  color: #fff;
+}
+
+.form-group input::placeholder,
+.form-group select::placeholder {
+  color: #666;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  background-color: #333;
+  color: #fff;
+}
+
+.cancel-button,
+.confirm-button {
+  padding: 10px 20px; 
+  font-size: 16px;
+  color: white;
+  border: none;
+  border-radius: 13px;
+  cursor: pointer;
+  font-family: 'Open Sans', sans-serif;
+  display: flex;
+  align-items: center;
+}
+
+.cancel-button {
+  background-color: #ACA7A4;
+}
+
+.cancel-button i {
+  margin-left: 10px;
+  font-size: 16px;
+}
+
+.cancel-button:hover {
+  background-color: #615e5d;
+}
+
+.confirm-button {
+  background-color: #577CA6;
+}
+
+.confirm-button i {
+  margin-left: 10px;
+  font-size: 16px;
+}
+
+.confirm-button:hover {
+  background-color: #3b5a82;
+}
+
+/* Estilos responsivos */
+@media (max-width: 600px) {
+  .custom-modal .modal-content {
+    max-width: 100%; 
+    padding: 15px;
   }
 
   .form-group input,
   .form-group select {
-    width: 100%;
-    height: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 13px;
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.12);
-    background-color: #333;
-    color: rgb(255, 255, 255);
-  }
-
-  .form-group input::placeholder,
-  .form-group select::placeholder {
-    color: #666;
-  }
-
-  .form-group input:focus,
-  .form-group select:focus {
-    background-color: #333;
-    color: rgb(255, 255, 255);
-  }
-
-  .form-group option {
-    color: rgb(255, 255, 255);
-    background-color: #333;
+    font-size: 14px; 
   }
 
   .cancel-button,
   .confirm-button {
-    padding: 5px 20px;
-    font-size: 16px;
-    color: white;
-    border: none;
-    border-radius: 13px;
-    cursor: pointer;
-    font-family: 'Open Sans', sans-serif;
-    display: flex;
-    align-items: center;
+    font-size: 14px; 
+    padding: 8px 15px; 
   }
 
-  .cancel-button {
-    background-color: #ACA7A4;
-  }
-
-  .cancel-button i {
-    margin-left: 10px;
-    font-size: 16px;
-  }
-
-  .cancel-button:hover {
-    background-color: #615e5d;
-  }
-
-  .confirm-button {
-    background-color: #577CA6;
-  }
-
+  .cancel-button i,
   .confirm-button i {
-    margin-left: 10px;
-    font-size: 16px;
+    font-size: 14px; 
+  }
+}
+
+@media (max-width: 400px) {
+  .custom-modal .modal-content {
+    max-width: 90%; 
+    padding: 10px;
   }
 
-  .confirm-button:hover {
-    background-color: #3b5a82;
+  .form-group input,
+  .form-group select {
+    font-size: 12px;
   }
 
+  .cancel-button,
+  .confirm-button {
+    font-size: 12px; 
+    padding: 6px 12px; 
+  }
+
+  .cancel-button i,
+  .confirm-button i {
+    font-size: 12px; 
+  }
+}
   </style>

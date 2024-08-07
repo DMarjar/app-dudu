@@ -105,17 +105,19 @@ export default defineComponent({
   max-width: 600px;
   overflow: hidden;
   animation: fade-up 0.5s;
+  margin: 0 auto; 
 }
 
 .title {
   margin-bottom: 20px;
   font-family: 'Playfair Display', serif;
-  font-size: 35px;
+  font-size: 2.2rem; 
 }
 
 .profile-container {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
 }
 
 .avatar-container {
@@ -136,7 +138,7 @@ export default defineComponent({
 }
 
 .username, .gender {
-  font-size: 18px;
+  font-size: 1.2rem; 
   font-family: 'Playfair Display', serif;
   margin-bottom: 5px;
 }
@@ -148,7 +150,7 @@ export default defineComponent({
 
 .profile-detail {
   margin-bottom: 15px;
-  font-size: 18px;
+  font-size: 1rem; 
   font-family: 'Playfair Display', serif;
 }
 
@@ -158,7 +160,7 @@ export default defineComponent({
 }
 
 .profile-detail span {
-  font-size: 18px;
+  font-size: 1rem; 
   font-family: 'Playfair Display', serif;
   word-break: break-word;
 }
@@ -204,7 +206,7 @@ export default defineComponent({
 }
 
 .edit-button, .delete-button {
-  padding: 5px 20px;
+  padding: 10px 20px; 
   font-size: 16px;
   color: white;
   border: none;
@@ -222,7 +224,7 @@ export default defineComponent({
 
 .edit-button i {
   margin-left: 10px;
-  font-size: 25px;
+  font-size: 20px; 
 }
 
 .edit-button:hover {
@@ -235,7 +237,7 @@ export default defineComponent({
 
 .delete-button i {
   margin-left: 10px;
-  font-size: 25px;
+  font-size: 20px; 
 }
 
 .delete-button:hover {
@@ -252,4 +254,108 @@ export default defineComponent({
     transform: translateY(0px) scale(1);
   }
 }
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+  .profile-card {
+    padding: 10px;
+    max-width: 90%; 
+  }
+
+  .title {
+    font-size: 1.8rem; 
+  }
+
+  .profile-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .avatar-container {
+    margin-right: 0;
+    margin-bottom: 15px;
+    width: 120px;
+  }
+
+  .avatar {
+    width: 80px;
+    height: 80px;
+  }
+
+  .username, .gender {
+    font-size: 1rem; 
+  }
+
+  .profile-detail {
+    font-size: 0.9rem; 
+  }
+
+  .level-text {
+    font-size: 12px; 
+  }
+
+  .button-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .edit-button, .delete-button {
+    font-size: 14px; 
+    padding: 8px 15px; 
+  }
+
+  .edit-button i,
+  .delete-button i {
+    font-size: 18px; 
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-card {
+    padding: 5px;
+    max-width: 100%;
+  }
+
+  .title {
+    font-size: 1.5rem; 
+  }
+
+  .avatar-container {
+    margin-bottom: 10px;
+    width: 100px;
+  }
+
+  .avatar {
+    width: 60px;
+    height: 60px;
+  }
+
+  .username, .gender {
+    font-size: 0.9rem; 
+  }
+
+  .profile-detail {
+    font-size: 0.8rem; 
+  }
+
+  .level-text {
+    font-size: 10px;
+  }
+
+  .button-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .edit-button, .delete-button {
+    font-size: 12px; 
+    padding: 6px 12px;
+  }
+
+  .edit-button i,
+  .delete-button i {
+    font-size: 16px; 
+  }
+}
+
 </style>

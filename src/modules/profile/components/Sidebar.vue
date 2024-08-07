@@ -35,9 +35,11 @@
       onMounted(() => {
         document.addEventListener('keydown', handleKeydown);
       });
+
       onBeforeUnmount(() => {
         document.removeEventListener('keydown', handleKeydown);
       });
+
       return {
         isOpen,
         toggleSidebar

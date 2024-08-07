@@ -1,9 +1,15 @@
 <template>
   <div>
+
+    <!-- TODO: Use the correct background image design-->
+    <div class="background-container">
+      <img :src="getRandomBackgroundImage()" alt="Background image" class="background-img">
+    </div>
+
     <b-row no-gutters>
       <!-- Player image -->
       <b-col>
-        <img src="../../../assets/wizard-lvl50.png" alt="wizard" class="player-image"/>
+        <img :src="getPlayerImage()" class="player-image" alt="Player image">
       </b-col>
 
       <!-- Missions list -->
@@ -20,7 +26,7 @@
       </b-col>
       <b-col v-else>
         <b-card>
-          <p>No missions found</p>
+          <p>No missions registered yet. Add one now!</p>
         </b-card>
       </b-col>
 
@@ -70,6 +76,8 @@
       </b-col>
     </b-row>
 
+    <FabMissionCreationModal @mission-created="searchMissions()"/>
+
     <!-- Pagination -->
     <b-row>
       <b-col>
@@ -89,9 +97,13 @@ import Vue from "vue";
 import missionService from "@/modules/missions/services/missionService";
 import {SearchRequest} from "../types/SearchRequest";
 import {Mission} from "@/modules/missions/types/Mission";
+import {getUserId} from "@/utils/getTokenInformation";
 
 export default Vue.extend({
   name: "MissionsPage",
+  components: {
+    FabMissionCreationModal: () => import("@/modules/missions/components/FabMissionCreationModal.vue"),
+  },
   data() {
     return {
       // Missions
@@ -104,22 +116,58 @@ export default Vue.extend({
 
       // Filters and search object
       searchRequest: {
-        id_user: 1,
+        id_user: 0,
         search_query: "",
         order_by: "creation_date",
         order: "ASC",
         status: "pending",
         page: 1,
       } as SearchRequest,
+
+      // Loading
+      isLoading: false,
     };
   },
 
   methods: {
+    // Function to change loading status to the opposite value
+    changeLoadingStatus() {
+      this.isLoading = !this.isLoading;
+    },
+
+    // Function to set the loading status to a specific value
+    // Useful for chained async function calls
+    setLoadingStatus(status: boolean) {
+      this.isLoading = status;
+    },
+
     // Function to search missions
     async searchMissions() {
-      const response = await missionService.searchMissions(this.searchRequest);
-      this.missions = response.missions;
-      this.totalMissions = response.total;
+      // TODO: Add the loading spinner
+      this.changeLoadingStatus();
+      try {
+        this.searchRequest.page = this.currentPage;
+        const response = await missionService.searchMissions(this.searchRequest);
+
+        // If the response status is not 200, show an error message
+        if (response.status !== 200) {
+          // TODO: Manage correct swal style
+          this.$swal(
+              "Error",
+              "An error occurred while searching the missions. Try again later.",
+              "error"
+          );
+          return;
+        }
+
+        const data = response.data;
+        this.missions = data.missions;
+        this.totalMissions = data.total;
+      } catch (error) {
+        console.error(error);
+      } finally {
+        this.changeLoadingStatus();
+      }
     },
 
     // Function to display the subtitle message
@@ -143,9 +191,35 @@ export default Vue.extend({
       // Default message
       return "=Unknown...";
     },
+
+    // Function to display the players image
+    getPlayerImage(): string {
+      // TODO: Get the profile data to display the correct gender and level
+      const profilePLACEHOLDER = {
+        gender: 'M',
+        level: 50,
+      }
+
+      // Return the correct image based on the level and gender
+      return require(`@/assets/wizards/${profilePLACEHOLDER.gender.toLowerCase()}/wizard_lvl_${profilePLACEHOLDER.level}.png`);
+    },
+
+    // TODO: Decide to use a fixed background or a dynamic one
+    // if you want the fixed background, use @/assets/backgrounds/bg_home.png
+    // Function to get a random background image
+    getRandomBackgroundImage(): string {
+      // Get a random number between 0 and 6
+      const randomNumber = Math.floor(Math.random() * 7);
+      // Return the correct image based on the random number
+      return require(`@/assets/backgrounds/bg_dynamic_${randomNumber}.png`);
+    }
+
   },
 
   mounted() {
+    // Set the user id
+    this.searchRequest.id_user = getUserId();
+    // Search missions
     this.searchMissions();
   },
 });
@@ -155,5 +229,18 @@ export default Vue.extend({
 .player-image {
   width: 100%;
   height: auto;
+}
+
+.background-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+
+.background-img {
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
 }
 </style>

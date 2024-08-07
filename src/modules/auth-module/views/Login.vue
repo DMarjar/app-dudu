@@ -149,7 +149,7 @@ export default {
         });
     },
     redirectUser() {
-      this.$router.push("/blocked");
+      this.$router.push("/profile");
     },
   },
 };

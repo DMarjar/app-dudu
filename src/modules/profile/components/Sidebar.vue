@@ -2,7 +2,6 @@
     <div class="sidebar" :class="{ open: isOpen }">
       <div class="sidebar-header">
         <span>D&D</span>
-        <!-- Sustituir el icono con una imagen -->
         <img src="@/assets/icon-sidebar.png" class="sidebar-close" @click="toggleSidebar" alt="Close Icon">
       </div>
       <ul>
@@ -36,11 +35,9 @@
       onMounted(() => {
         document.addEventListener('keydown', handleKeydown);
       });
-  
       onBeforeUnmount(() => {
         document.removeEventListener('keydown', handleKeydown);
       });
-  
       return {
         isOpen,
         toggleSidebar

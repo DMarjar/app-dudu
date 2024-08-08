@@ -148,7 +148,7 @@ export default {
           });
     },
     redirectUser() {
-      this.$router.push("/missions");
+      this.$router.push("/profile");
     },
   },
 };

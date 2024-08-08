@@ -1,0 +1,106 @@
+.custom-modal .modal-content {
+  padding: 10px; 
+  color: white;
+  border-radius: 15px;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1),
+    rgba(255, 255, 255, 0)
+  );
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  text-align: left;
+  font-family: 'Playfair Display', sans-serif;
+  max-width: 90vw; 
+  margin: 0 auto; 
+}
+
+.custom-modal .modal-header {
+  border-bottom: none;
+}
+
+.custom-modal .modal-footer {
+  border-top: none;
+}
+
+.custom-modal .btn-primary,
+.custom-modal .btn-secondary {
+  display: none; 
+}
+
+.cancel-button,
+.delete-button {
+  padding: 10px 20px;
+  font-size: 16px;
+  color: white;
+  border: none;
+  border-radius: 13px;
+  cursor: pointer;
+  font-family: 'Open Sans', sans-serif;
+  display: flex;
+  align-items: center;
+}
+
+.cancel-button {
+  background-color: #ACA7A4;
+}
+
+.cancel-button i {
+  margin-left: 10px;
+  font-size: 16px;
+}
+
+.cancel-button:hover {
+  background-color: #615e5d;
+}
+
+.delete-button {
+  background-color: #BB2B31;
+}
+
+.delete-button i {
+  margin-left: 10px;
+  font-size: 16px;
+}
+
+.delete-button:hover {
+  background-color: #99222B;
+}
+
+/* Estilos responsivos */
+@media (max-width: 600px) {
+  .custom-modal .modal-content {
+    max-width: 95vw; 
+    padding: 15px;
+  }
+
+  .cancel-button,
+  .delete-button {
+    font-size: 14px; 
+    padding: 8px 15px; 
+  }
+
+  .cancel-button i,
+  .delete-button i {
+    font-size: 14px; 
+  }
+}
+
+@media (max-width: 400px) {
+  .custom-modal .modal-content {
+    max-width: 90%; 
+    padding: 10px;
+  }
+
+  .cancel-button,
+  .delete-button {
+    font-size: 12px; 
+    padding: 6px 12px; 
+  }
+
+  .cancel-button i,
+  .delete-button i {
+    font-size: 12px; 
+  }
+}

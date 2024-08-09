@@ -32,15 +32,10 @@ export default defineComponent({
       profile: {
         username: 'WizardGuy123',
         email: 'john@example.com',
-        gender: 'Male',
+        gender: 'pene',
         currentLevel: 4,
-        currentXP: 50,
+        currentXP: 76,
         maxXP: 100,
-        missions: {
-          completed: 15,
-          cancelled: 15,
-          failed: 15
-        }
       },
       isSidebarOpen: false,
       showDelete: false

@@ -19,7 +19,27 @@ const createMission = async (body: any) => {
     }
 }
 
+const cancelMission = async (body: any) => {
+    try {
+        return await axiosInstance.put("/cancel_mission", body);
+    } catch (error) {
+        console.error(error);
+        throw Error("Error canceling mission: " + error);
+    }
+}
+
+const completeMission = async (body: any) => {
+    try {
+        return await axiosInstance.put("/complete_mission", body);
+    } catch (error) {
+        console.error(error);
+        throw Error("Error completing mission: " + error);
+    }
+}
+
 export default {
     searchMissions,
     createMission,
+    cancelMission,
+    completeMission
 }

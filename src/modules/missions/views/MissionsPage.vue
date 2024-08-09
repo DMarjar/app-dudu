@@ -19,6 +19,8 @@
             <b-card
                 :title="mission.fantasy_description"
                 :sub-title="subtitleDisplayMessage(mission)"
+                @click="selectMission(mission)"
+                v-b-modal.missionDetailsModal
             >
             </b-card>
           </b-col>
@@ -26,7 +28,7 @@
       </b-col>
       <b-col v-else>
         <b-card>
-          <p>No missions registered yet. Add one now!</p>
+          <p>No missions {{ searchRequest.status }} yet.</p>
         </b-card>
       </b-col>
 
@@ -70,6 +72,7 @@
               <b-form-select-option value="pending">Pending</b-form-select-option>
               <b-form-select-option value="completed">Completed</b-form-select-option>
               <b-form-select-option value="failed">Failed</b-form-select-option>
+              <b-form-select-option value="cancelled">Cancelled</b-form-select-option>
             </b-form-select>
           </b-form-group>
         </b-card>
@@ -77,6 +80,7 @@
     </b-row>
 
     <FabMissionCreationModal @mission-created="searchMissions()"/>
+    <MissionDetailsModal @statusChanged="handleStatusChange" :mission="selectedMission"/>
 
     <!-- Pagination -->
     <b-row>
@@ -103,11 +107,13 @@ export default Vue.extend({
   name: "MissionsPage",
   components: {
     FabMissionCreationModal: () => import("@/modules/missions/components/FabMissionCreationModal.vue"),
+    MissionDetailsModal: () => import("@/modules/missions/components/MissionDetailsModal.vue"),
   },
   data() {
     return {
       // Missions
       missions: [] as Mission[],
+      selectedMission: {} as Mission,
 
       // Pagination
       currentPage: 1,
@@ -118,7 +124,7 @@ export default Vue.extend({
       searchRequest: {
         id_user: 0,
         search_query: "",
-        order_by: "creation_date",
+        order_by: "due_date",
         order: "ASC",
         status: "pending",
         page: 1,
@@ -141,9 +147,15 @@ export default Vue.extend({
       this.isLoading = status;
     },
 
+    // Function to select a mission and open the details modal
+    selectMission(mission: Mission) {
+      this.selectedMission = mission;
+    },
+
     // Function to search missions
     async searchMissions() {
       // TODO: Add the loading spinner
+      this.missions = [];
       this.changeLoadingStatus();
       try {
         this.searchRequest.page = this.currentPage;
@@ -190,6 +202,12 @@ export default Vue.extend({
       }
       // Default message
       return "=Unknown...";
+    },
+
+    // Function to handle the status change of a mission
+    handleStatusChange(status: string) {
+      this.searchRequest.status = status;
+      this.searchMissions();
     },
 
     // Function to display the players image

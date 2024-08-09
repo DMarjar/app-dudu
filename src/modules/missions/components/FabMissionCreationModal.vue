@@ -76,8 +76,8 @@
             </ValidationProvider>
           </b-form-group>
 
-          <b-button type="submit" variant="primary">Create</b-button>
-          <b-button variant="danger" @click="setModalStatus(false)">Cancel</b-button>
+          <b-button type="submit" variant="primary" :disabled="isLoading">Create</b-button>
+          <b-button variant="danger" @click="setModalStatus(false)" :disabled="isLoading">Cancel</b-button>
         </b-form>
       </ValidationObserver>
     </b-modal>
@@ -167,15 +167,15 @@ export default Vue.extend({
       try {
         const requestBody = {
           id_user: getUserId(),
-          original_descripton: this.newMission.description,
+          original_description: this.newMission.description,
           creation_date: this.newMission.creationDate,
-          // due_date: this.newMission.dueDate, TODO: TLACUANO HASNT IMPLEMENTED THIS YET
+          due_date: this.newMission.dueDate,
           status: "pending",
         }
 
         const response = await missionService.createMission(requestBody);
 
-        if (response.status !== 201) {
+        if (response.status !== 200) {
           // TODO: Manage correct swal style
           this.$swal(
               "Error",

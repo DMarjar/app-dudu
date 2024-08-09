@@ -4,13 +4,13 @@
     <div class="profile-container">
       <div class="avatar-container">
         <img :src="avatarSrc" alt="Avatar" class="avatar" />
-        <span class="username">{{ profile.username }}</span>
+        <span class="username">{{ username }}</span>
         <span class="gender">{{ profile.gender }}</span>
       </div>
       <div class="details-container">
         <div class="profile-detail">
           <label>Email:</label>
-          <span>{{ profile.email }}</span>
+          <span>{{ email }}</span>
         </div>
         <div class="profile-detail">
           <label>Current level:</label>
@@ -44,9 +44,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, ref } from 'vue';
+import { defineComponent, computed, ref, onMounted } from 'vue';
 import avatar from '@/assets/magician-profile.png';
 import EditProfileModal from './EditProfileModal.vue';
+import { getUserId, getUserEmail, getUsername } from '@/utils/getTokenInformation';
+
+
 
 export default defineComponent({
   name: 'ProfileCard',
@@ -60,6 +63,10 @@ export default defineComponent({
     }
   },
   setup(props, { emit }) {
+    const username = ref('');
+    const email = ref('');
+    const userId = ref('');
+
     const xpPercentage = computed(() => {
       return (props.profile.currentXP / props.profile.maxXP) * 100;
     });
@@ -74,7 +81,17 @@ export default defineComponent({
       console.log('Profile updated', updatedProfile);
     };
 
+    onMounted(() => {
+      username.value = getUsername() || '';
+      email.value = getUserEmail() || '';
+      userId.value = getUserId() || '';
+      //llamar a otras funciones para obtener más datos usando el userId
+    });
+
     return {
+      username,
+      email,
+      userId,
       xpPercentage,
       showModal,
       showEditModal,
@@ -138,7 +155,7 @@ export default defineComponent({
 }
 
 .username, .gender {
-  font-size: 1.2rem; 
+  font-size: 1.0rem; 
   font-family: 'Playfair Display', serif;
   margin-bottom: 5px;
 }
@@ -349,7 +366,7 @@ export default defineComponent({
 
   .edit-button, .delete-button {
     font-size: 12px; 
-    padding: 6px 12px;
+    padding: 5px 10px; 
   }
 
   .edit-button i,
@@ -357,5 +374,4 @@ export default defineComponent({
     font-size: 16px; 
   }
 }
-
 </style>

@@ -178,7 +178,7 @@ export default {
       this.loading = true;
       axios
           .post(
-              "https://thl3xtink3.execute-api.us-east-2.amazonaws.com/Prod/change_password",
+              "https://3tpdypq2mc.execute-api.us-east-2.amazonaws.com/Prod/change_password",
               {
                 username: this.form.email,
                 confirmation_code: this.form.code,

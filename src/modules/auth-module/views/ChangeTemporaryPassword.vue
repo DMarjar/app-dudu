@@ -192,7 +192,7 @@ export default {
       this.loading = true;
       axios
           .post(
-              "https://thl3xtink3.execute-api.us-east-2.amazonaws.com/Prod/set_password",
+              "https://3tpdypq2mc.execute-api.us-east-2.amazonaws.com/Prod/set_password",
               {
                 username: this.form.username,
                 password: this.form.password,

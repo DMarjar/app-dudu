@@ -3,7 +3,7 @@
     <img src="@/assets/icon-sidebar.png" class="sidebar-toggle" :class="{ hidden: isSidebarOpen }" @click="toggleSidebar" alt="Menu Icon">
     <Sidebar ref="sidebar" @toggle="onSidebarToggle" />
     <div class="profile-container">
-      <ProfileCard :profile="profile" @show-delete-modal="showDeleteModal" />
+      <ProfileCard  @show-delete-modal="showDeleteModal" />
       <img src="@/assets/magician.png" class="mage-image" alt="Mage Image">
     </div>
     <ConfirmDeleteModal
@@ -29,18 +29,13 @@ export default defineComponent({
   },
   data() {
     return {
-      profile: {
-        username: 'WizardGuy123',
-        email: 'john@example.com',
-        gender: 'pene',
-        currentLevel: 4,
-        currentXP: 76,
-        maxXP: 100,
-      },
       isSidebarOpen: false,
       showDelete: false
     };
   },
+  
+
+  
   methods: {
     toggleSidebar() {
       (this.$refs.sidebar as any).toggleSidebar();

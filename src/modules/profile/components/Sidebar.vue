@@ -2,7 +2,7 @@
   <div class="sidebar" :class="{ open: isOpen }">
     <div class="sidebar-header">
       <span>D&D</span>
-      <img src="@/assets/icon-sidebar.png" class="sidebar-close" @click="toggleSidebar" alt="Close Icon">
+      <i class="fi fi-br-cross sidebar-close" @click="toggleSidebar" aria-label="Close Sidebar"></i>
     </div>
     <ul>
       <li><button><i class="fi fi-tr-house-chimney"></i> Home</button></li>

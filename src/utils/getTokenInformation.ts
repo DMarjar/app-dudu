@@ -1,40 +1,39 @@
+// Función para decodificar el token JWT
 const decodeToken = () => {
-    // Get the token from local storage
     const token = localStorage.getItem('id_token');
     if (!token) return null;
 
-    // Decode the token
     const base64Url = token.split(".")[1];
     const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
     const jsonPayload = decodeURIComponent(
         atob(base64)
             .split("")
-            .map(function (c) {
-                return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
-            })
+            .map(c => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
             .join("")
     );
 
-    // Return the decoded token
     return JSON.parse(jsonPayload);
 }
 
+// Función para obtener el ID del usuario
 const getUserId = () => {
     const token = decodeToken();
-    if (!token) return null;
-    return token.sub;
+    return token ? token.sub : null;
 }
 
+// Función para obtener el correo del usuario
 const getUserEmail = () => {
     const token = decodeToken();
-    if (!token) return null;
-    return token.email;
+    return token ? token.email : null;
 }
 
+// Función para obtener el nombre de usuario
 const getUsername = () => {
     const token = decodeToken();
-    if (!token) return null;
-    return token["cognito:username"];
+    return token ? token["cognito:username"] : null;
 }
 
-export {getUserId, getUserEmail, getUsername};
+
+
+// Exportar funciones
+export { getUserId, getUserEmail, getUsername };

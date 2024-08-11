@@ -110,7 +110,7 @@ export default {
       this.loading = true;
       axios
           .post(
-              "https://thl3xtink3.execute-api.us-east-2.amazonaws.com/Prod/login",
+              "https://3tpdypq2mc.execute-api.us-east-2.amazonaws.com/Prod/login",
               {
                 username: this.form.username,
                 password: this.form.password,

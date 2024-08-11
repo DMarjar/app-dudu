@@ -1,24 +1,26 @@
 <template>
   <div class="profile-card glass">
-    <h1 class="title">User Profile</h1>
+    <div class="title">
+      <span class="title">{{ userDetails.wizard_title }}</span>
+    </div>
     <div class="profile-container">
       <div class="avatar-container">
         <img :src="avatarSrc" alt="Avatar" class="avatar" />
-        <span class="username">{{ profile.username }}</span>
-        <span class="gender">{{ profile.gender }}</span>
+        <span class="username">{{ username }}</span>
+        <span class="gender">{{ genderToText}}</span> 
       </div>
       <div class="details-container">
         <div class="profile-detail">
           <label>Email:</label>
-          <span>{{ profile.email }}</span>
+          <span>{{ email }}</span>
         </div>
         <div class="profile-detail">
           <label>Current level:</label>
-          <span>{{ profile.currentLevel }}</span>
+          <span>{{ userDetails.level }}</span>
           <div class="level-container">
             <div class="level-bar">
               <div class="level-progress" :style="{ width: xpPercentage + '%' }"></div>
-              <span class="level-text">{{ profile.currentXP }} / {{ profile.maxXP }}</span>
+              <span class="level-text">{{ userDetails.current_xp }} / {{ userDetails.xp_limit }}</span>
             </div>
           </div>
         </div>
@@ -44,9 +46,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, ref } from 'vue';
+import { defineComponent, computed, ref, onMounted } from 'vue';
 import avatar from '@/assets/magician-profile.png';
 import EditProfileModal from './EditProfileModal.vue';
+import { getUserId, getUserEmail, getUsername } from '@/utils/getTokenInformation';
+import { getUserDetails } from '../services/profileService';
+
+
+
 
 export default defineComponent({
   name: 'ProfileCard',
@@ -60,8 +67,28 @@ export default defineComponent({
     }
   },
   setup(props, { emit }) {
+    const username = ref('');
+    const email = ref('');
+    const userId = ref('');
+
+    const userDetails = ref({
+      level: '',
+      current_xp: 0,
+      gender: '',
+      id_reward: '',
+      unlock_level: '',
+      wizard_title: '',
+      xp_limit: 0
+    });
+
+    const profile = computed(() => ({
+      username: username.value,
+      email: email.value,
+      gender: genderToText.value
+    }));
+
     const xpPercentage = computed(() => {
-      return (props.profile.currentXP / props.profile.maxXP) * 100;
+      return (userDetails.value.current_xp / userDetails.value.xp_limit) * 100;
     });
 
     const showModal = ref(false);
@@ -74,12 +101,35 @@ export default defineComponent({
       console.log('Profile updated', updatedProfile);
     };
 
+    const genderToText = computed(() => {
+      const gender = userDetails.value.gender.toLowerCase();
+      return gender === 'm' ? 'Male' : gender === 'f' ? 'Female' : 'Unknown';
+    });
+
+    onMounted(async () => {
+      username.value = getUsername() || '';
+      email.value = getUserEmail() || '';
+      userId.value = getUserId() || '';
+      //se puede llamar aquí a otras funciones para obtener más datos usando el userId
+      const userDetailsResponse = await getUserDetails();
+      if (userDetailsResponse) {
+        userDetails.value = userDetailsResponse[0];
+        emit('level-updated', userDetails.value.level); // Emitir evento con el nivel
+      }
+    });
+
     return {
+      username,
+      email,
+      userId,
+      userDetails,
+      genderToText,
       xpPercentage,
       showModal,
       showEditModal,
       updateProfile,
-      avatarSrc: avatar
+      avatarSrc: avatar,
+      profile
     };
   }
 });
@@ -111,7 +161,7 @@ export default defineComponent({
 .title {
   margin-bottom: 20px;
   font-family: 'Playfair Display', serif;
-  font-size: 2.2rem; 
+  font-size: 1.2rem; 
 }
 
 .profile-container {
@@ -138,7 +188,7 @@ export default defineComponent({
 }
 
 .username, .gender {
-  font-size: 1.2rem; 
+  font-size: 1.0rem; 
   font-family: 'Playfair Display', serif;
   margin-bottom: 5px;
 }
@@ -349,7 +399,7 @@ export default defineComponent({
 
   .edit-button, .delete-button {
     font-size: 12px; 
-    padding: 6px 12px;
+    padding: 5px 10px; 
   }
 
   .edit-button i,
@@ -357,5 +407,4 @@ export default defineComponent({
     font-size: 16px; 
   }
 }
-
 </style>

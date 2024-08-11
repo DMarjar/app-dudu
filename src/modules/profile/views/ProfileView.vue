@@ -41,8 +41,15 @@ export default defineComponent({
       (this.$refs.sidebar as any).toggleSidebar();
     },
     onSidebarToggle(isOpen: boolean) {
+      if (!isOpen) {
+      // Delay the reappearance of the toggle icon
+      setTimeout(() => {
+        this.isSidebarOpen = isOpen;
+      }, 300); // El mismo tiempo de la transición del sidebar
+    } else {
       this.isSidebarOpen = isOpen;
-    },
+    }
+  },
     showDeleteModal() {
       this.showDelete = true;
     },

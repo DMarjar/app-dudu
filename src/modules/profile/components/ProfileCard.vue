@@ -81,6 +81,12 @@ export default defineComponent({
       xp_limit: 0
     });
 
+    const profile = computed(() => ({
+      username: username.value,
+      email: email.value,
+      gender: genderToText.value
+    }));
+
     const xpPercentage = computed(() => {
       return (userDetails.value.current_xp / userDetails.value.xp_limit) * 100;
     });
@@ -122,7 +128,8 @@ export default defineComponent({
       showModal,
       showEditModal,
       updateProfile,
-      avatarSrc: avatar
+      avatarSrc: avatar,
+      profile
     };
   }
 });

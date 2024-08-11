@@ -46,17 +46,33 @@
 }
 
 .sidebar ul li {
-  display: flex;
-  align-items: center;
   margin: 15px 0;
   font-family: 'Playfair Display', serif;
   font-size: 18px;
 }
 
-.sidebar ul li i {
+.sidebar ul li button {
+  display: flex;
+  align-items: center;
+  background: none;
+  border: none;
+  color: white;
+  font-family: inherit;
+  font-size: inherit;
+  padding: 0;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+}
+
+.sidebar ul li button i {
   margin-right: 10px;
   display: flex;
   align-items: center;
+}
+
+.sidebar ul li button:hover {
+  color: orange; /* Efecto hover para botones */
 }
 
 /* Sidebar Toggle Button */

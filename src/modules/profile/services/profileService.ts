@@ -12,13 +12,13 @@ const getUserDetails = async () => {
 
     try {
         console.log('Sending request with:', {
-            url: 'https://thl3xtink3.execute-api.us-east-2.amazonaws.com/Prod/get_profile/',
+            url: 'https://3tpdypq2mc.execute-api.us-east-2.amazonaws.com/Prod/get_profile/',
             token,
             userId,
         });
 
         const response = await axios.post(
-            'https://thl3xtink3.execute-api.us-east-2.amazonaws.com/Prod/get_profile/',
+            'https://3tpdypq2mc.execute-api.us-east-2.amazonaws.com/Prod/get_profile/',
             { id_user: userId },
             {
                 headers: {

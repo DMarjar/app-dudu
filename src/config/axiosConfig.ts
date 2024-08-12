@@ -1,21 +1,21 @@
-import axios from 'axios';
+import axios from "axios";
 
 const axiosInstance = axios.create({
-    baseURL: 'https://iza19c120k.execute-api.us-east-2.amazonaws.com/Prod',
-    timeout: 10000,
+  baseURL: "https://alkaryi7ic.execute-api.us-east-2.amazonaws.com/Prod",
+  timeout: 10000,
 });
 
 axiosInstance.interceptors.request.use(
-    (config) => {
-        const token = localStorage.getItem('id_token');
-        if (token) {
-            config.headers.Authorization = `Bearer ${token}`;
-        }
-        return config;
-    },
-    (error) => {
-        return Promise.reject(error);
+  (config) => {
+    const token = localStorage.getItem("id_token");
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
     }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
 );
 
 export default axiosInstance;

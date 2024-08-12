@@ -113,8 +113,7 @@ export default defineComponent({
         return;
       }
 
-      userDetails.value = response.data;
-      console.log(userDetails.value);
+      userDetails.value = response.data.profile;
       emit('level-updated', userDetails.value.level); // Emitir evento con el nivel
     });
 

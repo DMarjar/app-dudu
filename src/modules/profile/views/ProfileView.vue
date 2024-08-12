@@ -9,8 +9,13 @@
     />
     <Sidebar ref="sidebar" @toggle="onSidebarToggle" />
     <div class="profile-container">
+<<<<<<< HEAD
       <ProfileCard :profile="profile" @show-delete-modal="showDeleteModal" />
       <img src="@/assets/magician.png" class="mage-image" alt="Mage Image" />
+=======
+      <ProfileCard  @show-delete-modal="showDeleteModal" />
+      <img src="@/assets/magician.png" class="mage-image" alt="Mage Image">
+>>>>>>> origin/develop
     </div>
     <ConfirmDeleteModal
       :show="showDelete"
@@ -35,6 +40,7 @@ export default defineComponent({
   },
   data() {
     return {
+<<<<<<< HEAD
       profile: {
         username: "WizardGuy123",
         email: "john@example.com",
@@ -48,17 +54,29 @@ export default defineComponent({
           failed: 15,
         },
       },
+=======
+>>>>>>> origin/develop
       isSidebarOpen: false,
       showDelete: false,
     };
   },
+  
+
+  
   methods: {
     toggleSidebar() {
       (this.$refs.sidebar as any).toggleSidebar();
     },
     onSidebarToggle(isOpen: boolean) {
+      if (!isOpen) {
+      // Delay the reappearance of the toggle icon
+      setTimeout(() => {
+        this.isSidebarOpen = isOpen;
+      }, 300); // El mismo tiempo de la transición del sidebar
+    } else {
       this.isSidebarOpen = isOpen;
-    },
+    }
+  },
     showDeleteModal() {
       this.showDelete = true;
     },

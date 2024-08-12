@@ -109,6 +109,7 @@ export default {
     login() {
       this.loading = true;
       axios
+<<<<<<< HEAD
         .post(
           "https://3tpdypq2mc.execute-api.us-east-2.amazonaws.com/Prod/login",
           {
@@ -118,6 +119,36 @@ export default {
         )
         .then((response) => {
           if (response.data === "MUST CHANGE TEMPORARY PASSWORD") {
+=======
+          .post(
+              "https://3tpdypq2mc.execute-api.us-east-2.amazonaws.com/Prod/login",
+              {
+                username: this.form.username,
+                password: this.form.password,
+              }
+          )
+          .then((response) => {
+            if (response.data === "MUST CHANGE TEMPORARY PASSWORD") {
+              this.$swal({
+                title: "You can't log in",
+                text: "You must change the temporary password that was sent to your email first.",
+                icon: "warning",
+                confirmButtonText: "Change password",
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  this.$router.push({name: "changeTemporaryPassword"});
+                }
+              });
+              1
+            } else {
+              localStorage.setItem("id_token", response.data.id_token);
+              this.form.username = "";
+              this.form.password = "";
+              this.redirectUser();
+            }
+          })
+          .catch((error) => {
+>>>>>>> origin/develop
             this.$swal({
               title: "You can't log in",
               text: "You must change the temporary password that was sent to your email first.",

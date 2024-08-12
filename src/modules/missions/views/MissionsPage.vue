@@ -13,6 +13,7 @@
       </div>
     </div>
 
+<<<<<<< HEAD
     <div class="player-img-container">
       <img :src="getPlayerImage()" class="player-image" alt="Player image" />
     </div>
@@ -45,6 +46,12 @@
                       >
                     </div>
                   </template>
+=======
+    <b-row no-gutters>
+      <b-col>
+        <img :src="getPlayerImage()" class="player-image" alt="Player image">
+      </b-col>
+>>>>>>> origin/develop
 
                   <div>
                     <h5 class="playfair-display">
@@ -141,10 +148,17 @@
       </b-row>
       <div style="width: 66%; display: flex; justify-content: center">
         <b-pagination
+<<<<<<< HEAD
           v-model="currentPage"
           :total-rows="totalMissions"
           :per-page="missionsPerPage"
           @change="searchMissions"
+=======
+            v-model="currentPage"
+            :total-rows="totalMissions"
+            :per-page="missionsPerPage"
+            @change="changePage"
+>>>>>>> origin/develop
         ></b-pagination>
       </div>
     </div>
@@ -160,9 +174,17 @@
 <script lang="ts">
 import Vue from "vue";
 import missionService from "@/modules/missions/services/missionService";
+<<<<<<< HEAD
 import { SearchRequest } from "../types/SearchRequest";
 import { Mission } from "@/modules/missions/types/Mission";
 import { getUserId } from "@/utils/getTokenInformation";
+=======
+import profileService from "@/modules/profile/services/profileService";
+import {SearchRequest} from "../types/SearchRequest";
+import {Mission} from "@/modules/missions/types/Mission";
+import {Profile} from "../../profile/types/Profile";
+import {getUserId, getUsername} from "@/utils/getTokenInformation";
+>>>>>>> origin/develop
 
 export default Vue.extend({
   name: "MissionsPage",
@@ -177,6 +199,9 @@ export default Vue.extend({
       // Missions
       missions: [] as Mission[],
       selectedMission: {} as Mission,
+
+      // Profile
+      profile: {} as Profile,
 
       // Pagination
       currentPage: 1,
@@ -200,6 +225,7 @@ export default Vue.extend({
   },
 
   methods: {
+    getUsername,
     // Function to change loading status to the opposite value
     changeLoadingStatus() {
       this.isLoading = !this.isLoading;
@@ -211,9 +237,40 @@ export default Vue.extend({
       this.isLoading = status;
     },
 
+    // Function to handle the paginator change page event
+    changePage(page: number) {
+      this.currentPage = page;
+      this.searchMissions();
+    },
+
     // Function to select a mission and open the details modal
     selectMission(mission: Mission) {
       this.selectedMission = mission;
+    },
+
+    // Function to get the user profile information
+    async getProfileInformation() {
+      try {
+        const response = await profileService.getProfile();
+        console.log(response);
+
+        // If the response status is not 200, show an error message
+        if (response.status !== 200) {
+          this.$swal(
+              "Error",
+              "An error occurred while retrieving the profile information. Try again later.",
+              "error"
+          );
+          return;
+        }
+
+        this.profile = response.data.profile;
+        console.log(this.profile);
+
+      } catch (error) {
+        console.error(error);
+      } finally {
+      }
     },
 
     // Function to search missions
@@ -280,6 +337,7 @@ export default Vue.extend({
 
     // Function to display the players image
     getPlayerImage(): string {
+<<<<<<< HEAD
       // TODO: Get the profile data to display the correct gender and level
       const profilePLACEHOLDER = {
         gender: "M",
@@ -290,6 +348,13 @@ export default Vue.extend({
       return require(`@/assets/wizards/${profilePLACEHOLDER.gender.toLowerCase()}/wizard_lvl_${
         profilePLACEHOLDER.level
       }.png`);
+=======
+      if (!this.profile.level) {
+        return '';
+      }
+      // Return the correct image based on the level and gender
+      return require(`@/assets/wizards/${this.profile.gender.toLowerCase()}/wizard_lvl_${this.profile.level}.png`);
+>>>>>>> origin/develop
     },
 
     // TODO: Decide to use a fixed background or a dynamic one
@@ -304,6 +369,8 @@ export default Vue.extend({
   },
 
   mounted() {
+    // Get the profile information
+    this.getProfileInformation();
     // Set the user id
     this.searchRequest.id_user = getUserId();
     // Search missions

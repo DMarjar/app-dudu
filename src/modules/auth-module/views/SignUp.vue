@@ -133,6 +133,7 @@ export default {
     signup() {
       this.loading = true;
       axios
+<<<<<<< HEAD
         .post(
           "https://3tpdypq2mc.execute-api.us-east-2.amazonaws.com/Prod/register_user",
           {
@@ -167,6 +168,42 @@ export default {
         .finally(() => {
           this.loading = false;
         });
+=======
+          .post(
+              "https://3tpdypq2mc.execute-api.us-east-2.amazonaws.com/Prod/register_user",
+              {
+                email: this.form.email,
+                username: this.form.username,
+                gender: this.form.gender,
+              }
+          )
+          .then((response) => {
+            this.form.email = "";
+            this.form.username = "";
+            this.form.gender = null;
+            this.redirectUser();
+          })
+          .catch((error) => {
+            if (this.form.gender === "Uno de los 39 tipos de gay") {
+              this.$swal({
+                title: "Cual de los 39?",
+                icon: "warning",
+                imageUrl:
+                    "https://i.kym-cdn.com/photos/images/newsfeed/002/418/775/f5d.jpeg",
+                imageHeight: "300",
+              });
+            } else {
+              this.$swal({
+                title: "Sign up error",
+                text: "Please verify your information and try again.",
+                icon: "error",
+              });
+            }
+          })
+          .finally(() => {
+            this.loading = false;
+          });
+>>>>>>> origin/develop
     },
     redirectUser() {
       localStorage.setItem("showToast", "true");

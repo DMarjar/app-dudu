@@ -1,67 +1,67 @@
 <template>
-    <b-modal v-model="showModal" title="Edit Profile" @ok="updateProfile" @hide="emitClose" dialog-class="custom-modal">
-      <div class="form-group">
-        <label for="username">Username</label>
-        <input type="text" v-model="profile.username" class="form-control" id="username" />
-      </div>
-      <div class="form-group">
-        <label for="gender">Gender</label>
-        <select v-model="profile.gender" class="form-control" id="gender">
-          <option value="Male">Male</option>
-          <option value="Female">Female</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label for="email">Email</label>
-        <input type="email" v-model="profile.email" class="form-control" id="email" />
-      </div>
-      <template #modal-footer="{ ok, cancel }">
-        <button @click="cancel" class="cancel-button">
-          Cancel
-          <i class="fi fi-tr-circle-xmark"></i>
-        </button>
-        <button @click="ok" class="confirm-button">
-          Save Changes
-          <i class="fi fi-tr-vote-yea"></i>
-        </button>
-      </template>
-    </b-modal>
-  </template>
-  
-  <script lang="ts">
-  import { defineComponent, PropType } from 'vue';
-  import { BModal } from 'bootstrap-vue';
-  
-  export default defineComponent({
-    name: 'EditProfileModal',
-    components: {
-      BModal
-    },
-    props: {
-      profile: {
-        type: Object as PropType<{ username: string; gender: string; email: string }>,
-        required: true
-      },
-      showModal: {
-        type: Boolean,
-        required: true
-      }
-    },
-    methods: {
-      updateProfile() {
-        this.$emit('update-profile', this.profile);
-      },
-      emitClose() {
-        this.$emit('close');
-      }
-    }
-  });
-  </script>
-  
-  <style scoped>
-  @import "~@flaticon/flaticon-uicons/css/all/all";
+  <b-modal v-model="showModal" title="Edit Profile" @ok="updateProfile" @hide="emitClose" dialog-class="custom-modal">
+    <div class="form-group">
+      <label for="username">Username</label>
+      <input type="text" v-model="profile.username" class="form-input" id="username" />
+    </div>
+    <div class="form-group">
+      <label for="gender">Gender</label>
+      <select v-model="profile.gender" class="form-input" id="gender">
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input type="email" v-model="profile.email" class="form-input" id="email" />
+    </div>
+    <template #modal-footer="{ ok, cancel }">
+      <button @click="cancel" class="cancel-button">
+        Cancel
+        <i class="fi fi-tr-circle-xmark"></i>
+      </button>
+      <button @click="ok" class="confirm-button">
+        Save Changes
+        <i class="fi fi-tr-vote-yea"></i>
+      </button>
+    </template>
+  </b-modal>
+</template>
 
-  .custom-modal .modal-content {
+<script lang="ts">
+import { defineComponent, PropType } from 'vue';
+import { BModal } from 'bootstrap-vue';
+
+export default defineComponent({
+  name: 'EditProfileModal',
+  components: {
+    BModal
+  },
+  props: {
+    profile: {
+      type: Object as PropType<{ username: string; gender: string; email: string }>,
+      required: true
+    },
+    showModal: {
+      type: Boolean,
+      required: true
+    }
+  },
+  methods: {
+    updateProfile() {
+      this.$emit('update-profile', this.profile);
+    },
+    emitClose() {
+      this.$emit('close');
+    }
+  }
+});
+</script>
+
+<style scoped>
+@import "~@flaticon/flaticon-uicons/css/all/all";
+
+.custom-modal .modal-content {
   padding: 20px;
   color: white;
   border-radius: 15px;
@@ -74,7 +74,7 @@
   border: 1px solid rgba(255, 255, 255, 0.5);
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
   text-align: left;
-  font-family: 'Playfair Display', sans-serif;
+  font-family: 'Playfair Display', serif;
   max-width: 90%; 
   margin: 0 auto; 
 }
@@ -103,28 +103,31 @@
   font-family: 'Alice', serif;
 }
 
-.form-group input,
-.form-group select {
+.form-input {
   width: 100%;
+  margin: 0 auto; /* Centra el contenedor si es necesario */
   padding: 9px;
   border: 1px solid #ccc;
   border-radius: 13px;
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.12);
-  background-color: #333;
-  color: #fff;
+  background-color: #ffffff;
+  color: #000000;
+  font-family: 'Open Sans', sans-serif;
 }
 
-.form-group input::placeholder,
-.form-group select::placeholder {
+.form-input::placeholder {
   color: #666;
 }
 
-.form-group input:focus,
-.form-group select:focus {
-  background-color: #333;
-  color: #fff;
+.form-input:focus {
+  border-color: #007bff; /* Border color when focused */
+  background-color: #ffffff;
+  color: #000000;
+  outline: none;
+  box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.25); /* Focus shadow effect */
 }
 
+/* Button Styles */
 .cancel-button,
 .confirm-button {
   padding: 10px 20px; 
@@ -171,8 +174,7 @@
     padding: 15px;
   }
 
-  .form-group input,
-  .form-group select {
+  .form-input {
     font-size: 14px; 
   }
 
@@ -194,8 +196,7 @@
     padding: 10px;
   }
 
-  .form-group input,
-  .form-group select {
+  .form-input {
     font-size: 12px;
   }
 
@@ -210,4 +211,4 @@
     font-size: 12px; 
   }
 }
-  </style>
+</style>

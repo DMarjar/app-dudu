@@ -89,7 +89,7 @@
             v-model="currentPage"
             :total-rows="totalMissions"
             :per-page="missionsPerPage"
-            @change="searchMissions"
+            @change="changePage"
         ></b-pagination>
       </b-col>
     </b-row>
@@ -128,6 +128,7 @@ export default Vue.extend({
         order: "ASC",
         status: "pending",
         page: 1,
+        limit: 6,
       } as SearchRequest,
 
       // Loading
@@ -145,6 +146,12 @@ export default Vue.extend({
     // Useful for chained async function calls
     setLoadingStatus(status: boolean) {
       this.isLoading = status;
+    },
+
+    // Function to handle the paginator change page event
+    changePage(page: number) {
+      this.currentPage = page;
+      this.searchMissions();
     },
 
     // Function to select a mission and open the details modal

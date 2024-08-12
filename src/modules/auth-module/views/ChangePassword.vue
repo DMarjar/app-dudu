@@ -177,7 +177,6 @@ export default {
     forgotPassword() {
       this.loading = true;
       axios
-<<<<<<< HEAD
         .post(
           "https://3tpdypq2mc.execute-api.us-east-2.amazonaws.com/Prod/change_password",
           {
@@ -199,33 +198,6 @@ export default {
             title: "There's been an error",
             text: "Please verify your information and try again.",
             icon: "error",
-=======
-          .post(
-              "https://3tpdypq2mc.execute-api.us-east-2.amazonaws.com/Prod/change_password",
-              {
-                username: this.form.email,
-                confirmation_code: this.form.code,
-                new_password: this.form.password,
-                confirm_new_password: this.form.password,
-              }
-          )
-          .then((response) => {
-            this.form.email = "";
-            this.form.password = "";
-            this.form.code = "";
-            this.redirectUser();
-          })
-          .catch((error) => {
-            console.log(error);
-            this.$swal({
-              title: "There's been an error",
-              text: "Please verify your information and try again.",
-              icon: "error",
-            });
-          })
-          .finally(() => {
-            this.loading = false;
->>>>>>> origin/develop
           });
         })
         .finally(() => {

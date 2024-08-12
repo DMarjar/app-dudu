@@ -191,7 +191,6 @@ export default {
     changePassword() {
       this.loading = true;
       axios
-<<<<<<< HEAD
         .post(
           "https://3tpdypq2mc.execute-api.us-east-2.amazonaws.com/Prod/set_password",
           {
@@ -211,32 +210,6 @@ export default {
             title: "Error changing password",
             text: "Something unexpected happened",
             icon: "error",
-=======
-          .post(
-              "https://3tpdypq2mc.execute-api.us-east-2.amazonaws.com/Prod/set_password",
-              {
-                username: this.form.username,
-                password: this.form.password,
-                new_password: this.form.new_password,
-              }
-          )
-          .then((response) => {
-            this.form.username = "";
-            this.form.password = "";
-            localStorage.setItem("id_token", response.data.id_token);
-            this.redirectUser();
-          })
-          .catch((error) => {
-            this.$swal({
-              title: "Error changing password",
-              text: "Something unexpected happened",
-              icon: "error",
-            });
-            console.log(error);
-          })
-          .finally(() => {
-            this.loading = false;
->>>>>>> origin/develop
           });
           console.log(error);
         })

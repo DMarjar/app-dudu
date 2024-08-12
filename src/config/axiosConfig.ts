@@ -1,34 +1,16 @@
 import axios from "axios";
 
-<<<<<<< HEAD
-const axiosInstance = axios.create({
+// MISSIONS API
+const axiosMissionApiInstance = axios.create({
   baseURL: "https://alkaryi7ic.execute-api.us-east-2.amazonaws.com/Prod",
   timeout: 10000,
 });
 
-axiosInstance.interceptors.request.use(
+axiosMissionApiInstance.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("id_token");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
-=======
-// MISSIONS API
-const axiosMissionApiInstance = axios.create({
-    baseURL: 'https://alkaryi7ic.execute-api.us-east-2.amazonaws.com/Prod',
-    timeout: 10000,
-});
-
-axiosMissionApiInstance.interceptors.request.use(
-    (config) => {
-        const token = localStorage.getItem('id_token');
-        if (token) {
-            config.headers.Authorization = `Bearer ${token}`;
-        }
-        return config;
-    },
-    (error) => {
-        return Promise.reject(error);
->>>>>>> origin/develop
     }
     return config;
   },
@@ -38,25 +20,22 @@ axiosMissionApiInstance.interceptors.request.use(
 );
 
 const axiosUsersApiInstance = axios.create({
-    baseURL: 'https://3tpdypq2mc.execute-api.us-east-2.amazonaws.com/Prod',
-    timeout: 10000,
+  baseURL: "https://3tpdypq2mc.execute-api.us-east-2.amazonaws.com/Prod",
+  timeout: 10000,
 });
 
 // USERS API
 axiosUsersApiInstance.interceptors.request.use(
-    (config) => {
-        const token = localStorage.getItem('id_token');
-        if (token) {
-            config.headers.Authorization = `Bearer ${token}`;
-        }
-        return config;
-    },
-    (error) => {
-        return Promise.reject(error);
+  (config) => {
+    const token = localStorage.getItem("id_token");
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
     }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
 );
 
-export {
-    axiosMissionApiInstance,
-    axiosUsersApiInstance,
-}
+export { axiosMissionApiInstance, axiosUsersApiInstance };

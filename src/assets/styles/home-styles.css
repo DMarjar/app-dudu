@@ -250,12 +250,23 @@
   display: flex;
   align-items: center;
   justify-content: end;
+  position: relative;
+}
+
+.xp-fill {
+  background-color: orange;
+  height: 100%;
+  border-radius: 20px 0 0 20px;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .xp-number {
   color: white;
   font-size: 0.8rem;
   margin-right: 10px;
+  z-index: 1; /* Para que el texto esté sobre el relleno */
 }
 
 .user-icon {

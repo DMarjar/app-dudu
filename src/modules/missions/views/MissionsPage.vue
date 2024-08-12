@@ -3,10 +3,10 @@
     <div class="name-xp-container">
       <div>
         <h3 class="playfair-display wizard-name">WizardGuy123</h3>
-        <!-- <div class="xp-bar open-sans">
+        <div class="xp-bar open-sans">
           <div class="xp-fill" :style="{ width: xpPercentage + '%' }"></div>
-          <span class="xp-number">{{ currentXp }}/{{ totalXp }}</span>
-        </div> -->
+          <span class="xp-number">{{ currentXp }}/{{ xpLimit }}</span>
+        </div>
       </div>
       <div class="fab-top">
         <span><i class="fi fi-ts-circle-user user-icon"></i></span>
@@ -16,6 +16,17 @@
     <div class="player-img-container">
       <img :src="getPlayerImage()" class="player-image" alt="Player image" />
     </div>
+
+    <img
+      src="@/assets/icon-sidebar.png"
+      class="sidebar-toggle"
+      :class="{ hidden: isSidebarOpen }"
+      @click="toggleSidebar"
+      alt="Menu Icon"
+    />
+
+    <Sidebar ref="sidebar" @toggle="onSidebarToggle" />
+
     <div class="home-mission-filter-container">
       <b-row>
         <!-- Missions list -->
@@ -165,6 +176,7 @@ import { SearchRequest } from "../types/SearchRequest";
 import { Mission } from "@/modules/missions/types/Mission";
 import { Profile } from "../../profile/types/Profile";
 import { getUserId, getUsername } from "@/utils/getTokenInformation";
+import Sidebar from "../../profile/components/Sidebar.vue";
 
 export default Vue.extend({
   name: "MissionsPage",
@@ -173,9 +185,11 @@ export default Vue.extend({
       import("@/modules/missions/components/FabMissionCreationModal.vue"),
     MissionDetailsModal: () =>
       import("@/modules/missions/components/MissionDetailsModal.vue"),
+    Sidebar,
   },
   data() {
     return {
+      isSidebarOpen: false,
       // Missions
       missions: [] as Mission[],
       selectedMission: {} as Mission,
@@ -187,6 +201,10 @@ export default Vue.extend({
       currentPage: 1,
       totalMissions: 0,
       missionsPerPage: 6, // static value, do not change
+
+      // Exp
+      currentXp: 0,
+      xpLimit: 0,
 
       // Filters and search object
       searchRequest: {
@@ -203,12 +221,31 @@ export default Vue.extend({
       isLoading: false,
     };
   },
+  computed: {
+    xpPercentage(): number {
+      return (this.currentXp / this.xpLimit) * 100;
+    },
+  },
 
   methods: {
     getUsername,
     // Function to change loading status to the opposite value
     changeLoadingStatus() {
       this.isLoading = !this.isLoading;
+    },
+
+    toggleSidebar() {
+      (this.$refs.sidebar as any).toggleSidebar();
+    },
+    onSidebarToggle(isOpen: boolean) {
+      if (!isOpen) {
+        // Delay the reappearance of the toggle icon
+        setTimeout(() => {
+          this.isSidebarOpen = isOpen;
+        }, 300); // El mismo tiempo de la transición del sidebar
+      } else {
+        this.isSidebarOpen = isOpen;
+      }
     },
 
     // Function to set the loading status to a specific value
@@ -232,7 +269,6 @@ export default Vue.extend({
     async getProfileInformation() {
       try {
         const response = await profileService.getProfile();
-        console.log(response);
 
         // If the response status is not 200, show an error message
         if (response.status !== 200) {
@@ -246,6 +282,8 @@ export default Vue.extend({
 
         this.profile = response.data.profile;
         console.log(this.profile);
+        this.currentXp = this.profile.current_xp;
+        this.xpLimit = this.profile.xp_limit;
       } catch (error) {
         console.error(error);
       } finally {

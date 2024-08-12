@@ -131,6 +131,7 @@ export default {
             1;
           } else {
             localStorage.setItem("id_token", response.data.id_token);
+            localStorage.setItem("access_token", response.data.access_token);
             this.form.username = "";
             this.form.password = "";
             this.redirectUser();

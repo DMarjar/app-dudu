@@ -10,13 +10,14 @@
     </div>
     <ul>
       <li>
-        <button><i class="fi fi-tr-house-chimney"></i> Home</button>
+        <button @click="redirectHome">
+          <i class="fi fi-tr-house-chimney"></i> Home
+        </button>
       </li>
       <li>
-        <button><i class="fi fi-ts-circle-user"></i> Profile</button>
-      </li>
-      <li>
-        <button><i class="fi fi-ts-book-bookmark"></i> Mission History</button>
+        <button @click="redirectProfile">
+          <i class="fi fi-ts-circle-user"></i> Profile
+        </button>
       </li>
       <li>
         <button @click="endSession">
@@ -37,6 +38,16 @@ export default defineComponent({
       localStorage.removeItem("id_token");
       localStorage.removeItem("access_token");
       this.$router.push("/");
+    },
+    redirectHome() {
+      if (this.$router.currentRoute.path !== "/missions") {
+        this.$router.push("/missions");
+      }
+    },
+    redirectProfile() {
+      if (this.$router.currentRoute.path !== "/profile") {
+        this.$router.push("/profile");
+      }
     },
   },
   setup(_, { emit }) {

@@ -7,7 +7,6 @@
     </div>
 
     <b-row no-gutters>
-      <!-- Player image -->
       <b-col>
         <img :src="getPlayerImage()" class="player-image" alt="Player image">
       </b-col>
@@ -99,9 +98,11 @@
 <script lang="ts">
 import Vue from "vue";
 import missionService from "@/modules/missions/services/missionService";
+import profileService from "@/modules/profile/services/profileService";
 import {SearchRequest} from "../types/SearchRequest";
 import {Mission} from "@/modules/missions/types/Mission";
-import {getUserId} from "@/utils/getTokenInformation";
+import {Profile} from "../../profile/types/Profile";
+import {getUserId, getUsername} from "@/utils/getTokenInformation";
 
 export default Vue.extend({
   name: "MissionsPage",
@@ -114,6 +115,9 @@ export default Vue.extend({
       // Missions
       missions: [] as Mission[],
       selectedMission: {} as Mission,
+
+      // Profile
+      profile: {} as Profile,
 
       // Pagination
       currentPage: 1,
@@ -137,6 +141,7 @@ export default Vue.extend({
   },
 
   methods: {
+    getUsername,
     // Function to change loading status to the opposite value
     changeLoadingStatus() {
       this.isLoading = !this.isLoading;
@@ -157,6 +162,31 @@ export default Vue.extend({
     // Function to select a mission and open the details modal
     selectMission(mission: Mission) {
       this.selectedMission = mission;
+    },
+
+    // Function to get the user profile information
+    async getProfileInformation() {
+      try {
+        const response = await profileService.getProfile();
+        console.log(response);
+
+        // If the response status is not 200, show an error message
+        if (response.status !== 200) {
+          this.$swal(
+              "Error",
+              "An error occurred while retrieving the profile information. Try again later.",
+              "error"
+          );
+          return;
+        }
+
+        this.profile = response.data.profile;
+        console.log(this.profile);
+
+      } catch (error) {
+        console.error(error);
+      } finally {
+      }
     },
 
     // Function to search missions
@@ -219,14 +249,11 @@ export default Vue.extend({
 
     // Function to display the players image
     getPlayerImage(): string {
-      // TODO: Get the profile data to display the correct gender and level
-      const profilePLACEHOLDER = {
-        gender: 'M',
-        level: 50,
+      if (!this.profile.level) {
+        return '';
       }
-
       // Return the correct image based on the level and gender
-      return require(`@/assets/wizards/${profilePLACEHOLDER.gender.toLowerCase()}/wizard_lvl_${profilePLACEHOLDER.level}.png`);
+      return require(`@/assets/wizards/${this.profile.gender.toLowerCase()}/wizard_lvl_${this.profile.level}.png`);
     },
 
     // TODO: Decide to use a fixed background or a dynamic one
@@ -242,6 +269,8 @@ export default Vue.extend({
   },
 
   mounted() {
+    // Get the profile information
+    this.getProfileInformation();
     // Set the user id
     this.searchRequest.id_user = getUserId();
     // Search missions

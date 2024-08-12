@@ -1,13 +1,10 @@
 <template>
   <div class="profile-card glass">
-    <div class="title">
-      <span class="title">{{ userDetails.wizard_title }}</span>
-    </div>
     <div class="profile-container">
       <div class="avatar-container">
-        <img :src="avatarSrc" alt="Avatar" class="avatar" />
+        <img :src="avatarSrc" alt="Avatar" class="avatar"/>
         <span class="username">{{ username }}</span>
-        <span class="gender">{{ genderToText}}</span> 
+        <span class="gender">{{ genderToText }}</span>
       </div>
       <div class="details-container">
         <div class="profile-detail">
@@ -37,22 +34,20 @@
       </div>
     </div>
     <EditProfileModal
-      :profile="profile"
-      :showModal="showModal"
-      @close="showModal = false"
-      @update-profile="updateProfile"
+        :profile="profile"
+        :showModal="showModal"
+        @close="showModal = false"
+        @update-profile="updateProfile"
     />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, ref, onMounted } from 'vue';
+import {defineComponent, computed, ref, onMounted} from 'vue';
 import avatar from '@/assets/magician-profile.png';
 import EditProfileModal from './EditProfileModal.vue';
-import { getUserId, getUserEmail, getUsername } from '@/utils/getTokenInformation';
-import { getUserDetails } from '../services/profileService';
-
-
+import {getUserId, getUserEmail, getUsername} from '@/utils/getTokenInformation';
+import profileService from "@/modules/profile/services/profileService";
 
 
 export default defineComponent({
@@ -66,7 +61,7 @@ export default defineComponent({
       required: true
     }
   },
-  setup(props, { emit }) {
+  setup(props, {emit}) {
     const username = ref('');
     const email = ref('');
     const userId = ref('');
@@ -111,11 +106,15 @@ export default defineComponent({
       email.value = getUserEmail() || '';
       userId.value = getUserId() || '';
       //se puede llamar aquí a otras funciones para obtener más datos usando el userId
-      const userDetailsResponse = await getUserDetails();
-      if (userDetailsResponse) {
-        userDetails.value = userDetailsResponse[0];
-        emit('level-updated', userDetails.value.level); // Emitir evento con el nivel
+      const response = await profileService.getProfile();
+
+      if (response.status !== 200) {
+        console.error('Error getting profile information');
+        return;
       }
+
+      userDetails.value = response.data.profile;
+      emit('level-updated', userDetails.value.level); // Emitir evento con el nivel
     });
 
     return {
@@ -143,9 +142,9 @@ export default defineComponent({
   color: white;
   border-radius: 15px;
   background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.1),
-    rgba(255, 255, 255, 0)
+      135deg,
+      rgba(255, 255, 255, 0.1),
+      rgba(255, 255, 255, 0)
   );
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.5);
@@ -155,13 +154,13 @@ export default defineComponent({
   max-width: 600px;
   overflow: hidden;
   animation: fade-up 0.5s;
-  margin: 0 auto; 
+  margin: 0 auto;
 }
 
 .title {
   margin-bottom: 20px;
   font-family: 'Playfair Display', serif;
-  font-size: 1.2rem; 
+  font-size: 1.2rem;
 }
 
 .profile-container {
@@ -188,7 +187,7 @@ export default defineComponent({
 }
 
 .username, .gender {
-  font-size: 1.0rem; 
+  font-size: 1.0rem;
   font-family: 'Playfair Display', serif;
   margin-bottom: 5px;
 }
@@ -200,7 +199,7 @@ export default defineComponent({
 
 .profile-detail {
   margin-bottom: 15px;
-  font-size: 1rem; 
+  font-size: 1rem;
   font-family: 'Playfair Display', serif;
 }
 
@@ -210,7 +209,7 @@ export default defineComponent({
 }
 
 .profile-detail span {
-  font-size: 1rem; 
+  font-size: 1rem;
   font-family: 'Playfair Display', serif;
   word-break: break-word;
 }
@@ -256,7 +255,7 @@ export default defineComponent({
 }
 
 .edit-button, .delete-button {
-  padding: 10px 20px; 
+  padding: 10px 20px;
   font-size: 16px;
   color: white;
   border: none;
@@ -274,7 +273,7 @@ export default defineComponent({
 
 .edit-button i {
   margin-left: 10px;
-  font-size: 20px; 
+  font-size: 20px;
 }
 
 .edit-button:hover {
@@ -287,7 +286,7 @@ export default defineComponent({
 
 .delete-button i {
   margin-left: 10px;
-  font-size: 20px; 
+  font-size: 20px;
 }
 
 .delete-button:hover {
@@ -309,11 +308,11 @@ export default defineComponent({
 @media (max-width: 768px) {
   .profile-card {
     padding: 10px;
-    max-width: 90%; 
+    max-width: 90%;
   }
 
   .title {
-    font-size: 1.8rem; 
+    font-size: 1.8rem;
   }
 
   .profile-container {
@@ -333,15 +332,15 @@ export default defineComponent({
   }
 
   .username, .gender {
-    font-size: 1rem; 
+    font-size: 1rem;
   }
 
   .profile-detail {
-    font-size: 0.9rem; 
+    font-size: 0.9rem;
   }
 
   .level-text {
-    font-size: 12px; 
+    font-size: 12px;
   }
 
   .button-container {
@@ -350,13 +349,13 @@ export default defineComponent({
   }
 
   .edit-button, .delete-button {
-    font-size: 14px; 
-    padding: 8px 15px; 
+    font-size: 14px;
+    padding: 8px 15px;
   }
 
   .edit-button i,
   .delete-button i {
-    font-size: 18px; 
+    font-size: 18px;
   }
 }
 
@@ -367,7 +366,7 @@ export default defineComponent({
   }
 
   .title {
-    font-size: 1.5rem; 
+    font-size: 1.5rem;
   }
 
   .avatar-container {
@@ -381,11 +380,11 @@ export default defineComponent({
   }
 
   .username, .gender {
-    font-size: 0.9rem; 
+    font-size: 0.9rem;
   }
 
   .profile-detail {
-    font-size: 0.8rem; 
+    font-size: 0.8rem;
   }
 
   .level-text {
@@ -398,13 +397,13 @@ export default defineComponent({
   }
 
   .edit-button, .delete-button {
-    font-size: 12px; 
-    padding: 5px 10px; 
+    font-size: 12px;
+    padding: 5px 10px;
   }
 
   .edit-button i,
   .delete-button i {
-    font-size: 16px; 
+    font-size: 16px;
   }
 }
 </style>

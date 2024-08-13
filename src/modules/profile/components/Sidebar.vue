@@ -7,7 +7,6 @@
     <ul>
       <li><button><i class="fi fi-tr-house-chimney"></i> Home</button></li>
       <li><button><i class="fi fi-ts-circle-user"></i> Profile</button></li>
-      <li><button><i class="fi fi-ts-book-bookmark"></i> Mission History</button></li>
       <li><button @click="endSession"><i class="fi fi-sr-enter"></i> Logout</button></li>
     </ul>
   </div>

@@ -112,9 +112,11 @@ export default defineComponent({
         console.error('Error getting profile information');
         return;
       }
-
       userDetails.value = response.data.profile;
-      emit('level-updated', userDetails.value.level); // Emitir evento con el nivel
+      console.log('Level:', userDetails.value.level); 
+      console.log('Gender:', userDetails.value.gender);  
+
+      emit('level-updated', userDetails.value.level, userDetails.value.gender);
     });
 
     return {

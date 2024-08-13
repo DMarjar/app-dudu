@@ -9,8 +9,8 @@
     />
     <Sidebar ref="sidebar" @toggle="onSidebarToggle" />
     <div class="profile-container">
-      <ProfileCard @show-delete-modal="showDeleteModal" />
-      <img src="@/assets/magician.png" class="mage-image" alt="Mage Image" />
+      <ProfileCard @level-updated="updateMageImage" @show-delete-modal="showDeleteModal" />
+      <img :src="mageImageSrc" class="mage-image" alt="Mage Image" />
     </div>
     <ConfirmDeleteModal
       :show="showDelete"
@@ -37,19 +37,18 @@ export default defineComponent({
     return {
       isSidebarOpen: false,
       showDelete: false,
+      mageImageSrc: "", 
     };
   },
-
   methods: {
     toggleSidebar() {
       (this.$refs.sidebar as any).toggleSidebar();
     },
     onSidebarToggle(isOpen: boolean) {
       if (!isOpen) {
-        // Delay the reappearance of the toggle icon
         setTimeout(() => {
           this.isSidebarOpen = isOpen;
-        }, 300); // El mismo tiempo de la transición del sidebar
+        }, 300);
       } else {
         this.isSidebarOpen = isOpen;
       }
@@ -61,7 +60,21 @@ export default defineComponent({
       console.log("Profile deleted");
       this.showDelete = false;
     },
-  },
+    updateMageImage(level: number, gender: string) {
+  
+    const folder = gender.toLowerCase() === "m" ? "m" : "f";
+    const levelSegment = Math.floor((level - 1) / 5) * 5 + 1;
+    
+    
+    try {
+      this.mageImageSrc = require(`@/assets/wizards/${folder}/wizard_lvl_${levelSegment}.png`);
+    } catch (error) {
+      console.error('Error loading mage image:', error);
+      // imagen predeterminada al cargar la vista
+      this.mageImageSrc = require('@/assets/magician.png');
+    }
+  }
+}
 });
 </script>
 
@@ -88,11 +101,11 @@ export default defineComponent({
 
 .mage-image {
   position: absolute;
-  width: 68.5%;
+  width: 60%;
   height: auto;
   z-index: 20;
   right: -64%;
-  top: 42%;
+  top: 50%;
   transform: translateY(-50%);
   animation: fade-up 0.3s;
 }

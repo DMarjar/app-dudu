@@ -52,35 +52,17 @@ import EditProfileModal from './EditProfileModal.vue';
 import { getUserId, getUserEmail, getUsername } from '@/utils/getTokenInformation';
 import { getUserDetails } from '../services/profileService';
 
-
-
-
 export default defineComponent({
   name: 'ProfileCard',
   components: {
     EditProfileModal
   },
-  props: {
-    profile: {
-      type: Object,
-      required: true
-    }
-  },
   setup(props, { emit }) {
     const username = ref('');
     const email = ref('');
     const userId = ref('');
-
-    const userDetails = ref({
-      level: '',
-      current_xp: 0,
-      gender: '',
-      id_reward: '',
-      unlock_level: '',
-      wizard_title: '',
-      xp_limit: 0
-    });
-
+    const userDetails = ref({} as any);
+    
     const profile = computed(() => ({
       username: username.value,
       email: email.value,
@@ -110,10 +92,12 @@ export default defineComponent({
       username.value = getUsername() || '';
       email.value = getUserEmail() || '';
       userId.value = getUserId() || '';
-      //se puede llamar aquí a otras funciones para obtener más datos usando el userId
+
+      // Llamar a la función que obtiene los detalles del usuario
       const userDetailsResponse = await getUserDetails();
-      if (userDetailsResponse) {
-        userDetails.value = userDetailsResponse[0];
+
+      if (userDetailsResponse && userDetailsResponse.profile) {
+        userDetails.value = userDetailsResponse.profile; // Acceder a los datos anidados en `profile`
         emit('level-updated', userDetails.value.level); // Emitir evento con el nivel
       }
     });
@@ -154,7 +138,7 @@ export default defineComponent({
   width: 100%;
   max-width: 600px;
   overflow: hidden;
-  animation: fade-up 0.5s;
+  animation: fade-up 0.3s;
   margin: 0 auto; 
 }
 

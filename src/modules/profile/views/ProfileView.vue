@@ -61,20 +61,28 @@ export default defineComponent({
       this.showDelete = false;
     },
     updateMageImage(level: number, gender: string) {
-  
-    const folder = gender.toLowerCase() === "m" ? "m" : "f";
-    const levelSegment = Math.floor((level - 1) / 5) * 5 + 1;
+      //determina la carpeta según el género
+      const folder = gender.toLowerCase() === "m" ? "m" : "f";
+      
+      //ajusta el nivel para obtener el segmento correcto de la imagen (de 5 en 5)
+      const levelSegment = Math.floor((level - 1) / 5) * 5 + 1;
+
+      //si el nivel es exactamente un múltiplo de 5, usa ese nivel
+      const adjustedLevelSegment = level % 5 === 0 ? level : levelSegment;
+
+      console.log('Folder:', folder);
+      console.log('Level segment:', adjustedLevelSegment);
     
-    
-    try {
-      this.mageImageSrc = require(`@/assets/wizards/${folder}/wizard_lvl_${levelSegment}.png`);
-    } catch (error) {
-      console.error('Error loading mage image:', error);
-      // imagen predeterminada al cargar la vista
-      this.mageImageSrc = require('@/assets/magician.png');
+      try {
+        //carga la imagen basada en el nivel ajustado y el género
+        this.mageImageSrc = require(`@/assets/wizards/${folder}/wizard_lvl_${adjustedLevelSegment}.png`);
+      } catch (error) {
+        console.error('Error loading mage image:', error);
+        //si hay un error, usa una imagen predeterminada
+        this.mageImageSrc = require('@/assets/magician.png');
+      }
     }
   }
-}
 });
 </script>
 

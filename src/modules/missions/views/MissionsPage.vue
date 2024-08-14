@@ -13,8 +13,12 @@
       </div>
     </div>
 
-    <div class="player-img-container">
+    <div class="player-img-container" v-if="isLoading && profile">
       <img :src="getPlayerImage()" class="player-image" alt="Player image" />
+    </div>
+
+    <div v-if="!isLoading">
+      <b-spinner class="player-img-loader" label="Loading..."></b-spinner>
     </div>
 
     <img
@@ -74,10 +78,36 @@
         </b-col>
 
         <b-col cols="8" v-else class="no-mission-col-card">
-          <b-card class="glass-card">
-            <p class="alice-regular">
-              No missions {{ searchRequest.status }} yet.
-            </p>
+          <b-card class="glass-card" v-if="!isLoading && missions.length <= 0">
+            <p class="alice-regular">No missions to show.</p>
+          </b-card>
+
+          <b-card
+            v-if="isLoading"
+            style="
+              display: flex;
+              align-items: center;
+              height: 100%;
+              background-color: transparent;
+              border: none;
+            "
+          >
+            <div class="loader">
+              <div class="head-loader"></div>
+
+              <div class="flames">
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+              </div>
+
+              <div class="eye"></div>
+            </div>
           </b-card>
         </b-col>
 
@@ -232,10 +262,6 @@ export default Vue.extend({
   methods: {
     getUsername,
     // Function to change loading status to the opposite value
-    changeLoadingStatus() {
-      this.isLoading = !this.isLoading;
-    },
-
     toggleSidebar() {
       (this.$refs.sidebar as any).toggleSidebar();
     },
@@ -269,10 +295,9 @@ export default Vue.extend({
 
     // Function to get the user profile information
     async getProfileInformation() {
+      this.setLoadingStatus(true);
       try {
         const response = await profileService.getProfile();
-
-        // If the response status is not 200, show an error message
         if (response.status !== 200) {
           this.$swal(
             "Error",
@@ -281,7 +306,6 @@ export default Vue.extend({
           );
           return;
         }
-
         this.profile = response.data.profile;
         console.log(this.profile);
         this.currentXp = this.profile.current_xp;
@@ -289,6 +313,7 @@ export default Vue.extend({
       } catch (error) {
         console.error(error);
       } finally {
+        this.setLoadingStatus(false);
       }
     },
 
@@ -296,18 +321,14 @@ export default Vue.extend({
     async searchMissions() {
       // TODO: Add the loading spinner
       this.missions = [];
-      this.changeLoadingStatus();
+      this.setLoadingStatus(true);
       try {
         this.searchRequest.page = this.currentPage;
         const response = await missionService.searchMissions(
           this.searchRequest
         );
-
         console.log(response);
-
-        // If the response status is not 200, show an error message
         if (response.status !== 200) {
-          // TODO: Manage correct swal style
           this.$swal(
             "Error",
             "An error occurred while searching the missions. Try again later.",
@@ -322,7 +343,7 @@ export default Vue.extend({
       } catch (error) {
         console.error(error);
       } finally {
-        this.changeLoadingStatus();
+        this.setLoadingStatus(false);
       }
     },
 

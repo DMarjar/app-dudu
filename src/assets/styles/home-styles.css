@@ -74,6 +74,10 @@
   background-color: rgba(0, 0, 0, 0.6) !important;
 }
 
+#missionDetailsModal {
+  background-color: rgba(0, 0, 0, 0.6) !important;
+}
+
 .form-title {
   font-size: 2.3rem;
 }
@@ -97,38 +101,55 @@
   padding-top: 0px !important;
 }
 
+.modal-title {
+  width: 100%;
+}
+
 .alice-regular {
   font-family: "Alice", serif;
   font-weight: 400;
   font-style: normal;
 }
 
-#btn-modal-container {
+.btn-modal-container {
   margin-top: 20px;
 }
 
-#btn-modal-row {
+#btn-modal-row,
+#btn-modal-row-details {
   width: 100%;
   margin-left: 0px;
 }
 
-#btn-create-modal-col {
+#btn-create-modal-col,
+#btn-complete-modal-col {
   padding-left: 0px;
 }
 
-#btn-cancel-modal-col {
+#btn-cancel-modal-col,
+#btn-cancel-modal-col-details {
   padding-right: 0px;
 }
 
-#create-btn-modal {
+#create-btn-modal,
+#complete-btn-modal-details {
   width: 100%;
   background-color: #577ca6;
   border-color: #577ca6;
 }
 
 #create-btn-modal:hover,
-#cancel-btn-modal:hover {
+#cancel-btn-modal:hover,
+#cancel-btn-modal-details:hover,
+#complete-btn-modal-details:hover {
   border-color: white;
+}
+
+#cancel-btn-modal,
+#cancel-btn-modal-details {
+  width: 100%;
+  background-color: #aca7a4;
+  border-color: #aca7a4;
 }
 
 .button-container-modal {
@@ -137,6 +158,37 @@
   align-items: center;
   justify-content: center;
   font-size: 16px;
+}
+
+.mission-description-details {
+  position: relative;
+  top: -25px;
+  font-size: 1.3rem;
+}
+
+.mission-time-details {
+  font-size: 0.9rem;
+}
+
+.date-details {
+  background-color: white;
+  color: black;
+  height: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 20px;
+}
+
+.date-details p {
+  font-size: 0.7rem;
+  font-weight: 400;
+  margin-bottom: 0px;
+}
+
+.mission-og-description-details {
+  font-size: 1.1rem;
+  margin-bottom: 1.2rem !important;
 }
 
 .button-icon-modal {
@@ -150,12 +202,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-#cancel-btn-modal {
-  width: 100%;
-  background-color: #aca7a4;
-  border-color: #aca7a4;
 }
 
 .playfair-display {
@@ -175,6 +221,10 @@
 
 .mission-number {
   font-size: 1.3rem !important;
+}
+
+.mission-number-details {
+  font-size: 2rem !important;
 }
 
 .time-left {

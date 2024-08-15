@@ -2,10 +2,13 @@
   <div class="view-home">
     <div class="name-xp-container">
       <div>
-        <h3 class="playfair-display wizard-name">WizardGuy123</h3>
-        <div class="xp-bar open-sans">
+        <h3 class="playfair-display wizard-name">{{ username }}</h3>
+        <div class="xp-bar open-sans" v-if="!isLoading && profile">
           <div class="xp-fill" :style="{ width: xpPercentage + '%' }"></div>
           <span class="xp-number">{{ currentXp }}/{{ xpLimit }}</span>
+        </div>
+        <div v-if="isLoading">
+          <b-spinner class="player-level-loader" label="Loading..."></b-spinner>
         </div>
       </div>
       <div class="fab-top">
@@ -13,11 +16,11 @@
       </div>
     </div>
 
-    <div class="player-img-container" v-if="isLoading && profile">
+    <div class="player-img-container" v-if="!isLoading && profile">
       <img :src="getPlayerImage()" class="player-image" alt="Player image" />
     </div>
 
-    <div v-if="!isLoading">
+    <div v-if="isLoading">
       <b-spinner class="player-img-loader" label="Loading..."></b-spinner>
     </div>
 
@@ -78,12 +81,15 @@
         </b-col>
 
         <b-col cols="8" v-else class="no-mission-col-card">
-          <b-card class="glass-card" v-if="!isLoading && missions.length <= 0">
-            <p class="alice-regular">No missions to show.</p>
+          <b-card
+            class="glass-card no-missions"
+            v-if="!isLoadingSearchMission && missions.length <= 0"
+          >
+            <p class="alice-regular">No missions were found.</p>
           </b-card>
 
           <b-card
-            v-if="isLoading"
+            v-if="isLoadingSearchMission"
             style="
               display: flex;
               align-items: center;
@@ -251,6 +257,8 @@ export default Vue.extend({
 
       // Loading
       isLoading: false,
+      isLoadingSearchMission: false,
+      username: "",
     };
   },
   computed: {
@@ -260,7 +268,12 @@ export default Vue.extend({
   },
 
   methods: {
-    getUsername,
+    getUsername() {
+      const storedUsername = localStorage.getItem("username");
+      console.log(storedUsername);
+      this.username = storedUsername !== null ? storedUsername : "";
+      console.log(this.username);
+    },
     // Function to change loading status to the opposite value
     toggleSidebar() {
       (this.$refs.sidebar as any).toggleSidebar();
@@ -280,6 +293,10 @@ export default Vue.extend({
     // Useful for chained async function calls
     setLoadingStatus(status: boolean) {
       this.isLoading = status;
+    },
+
+    setLoadingSearchMissionStatus(status: boolean) {
+      this.isLoadingSearchMission = status;
     },
 
     // Function to handle the paginator change page event
@@ -321,7 +338,7 @@ export default Vue.extend({
     async searchMissions() {
       // TODO: Add the loading spinner
       this.missions = [];
-      this.setLoadingStatus(true);
+      this.setLoadingSearchMissionStatus(true);
       try {
         this.searchRequest.page = this.currentPage;
         const response = await missionService.searchMissions(
@@ -343,7 +360,7 @@ export default Vue.extend({
       } catch (error) {
         console.error(error);
       } finally {
-        this.setLoadingStatus(false);
+        this.setLoadingSearchMissionStatus(false);
       }
     },
 
@@ -404,6 +421,7 @@ export default Vue.extend({
     this.searchRequest.id_user = getUserId();
     // Search missions
     this.searchMissions();
+    this.getUsername();
   },
 });
 </script>

@@ -3,10 +3,19 @@
 /*LOADERS*/
 
 .player-img-loader {
-  width: 400px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  color: white;
+  position: absolute;
+  left: 150px;
+}
+
+.player-level-loader {
+  color: white;
+  position: absolute;
+  margin-top: 6px !important;
+  width: 20px !important;
+  height: 20px !important;
+  position: relative;
+  left: 80px;
 }
 
 /* From Uiverse.io by StealthWorm */
@@ -583,6 +592,7 @@
   color: white;
   font-weight: 800;
   margin-right: 10px;
+  margin-bottom: 0px !important;
 }
 
 .name-xp-container {
@@ -593,12 +603,25 @@
   align-items: center;
 }
 
+.no-missions {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.1rem;
+}
+
+.no-missions p {
+  margin-bottom: 0px;
+}
+
 .xp-bar {
   background-color: black;
-  width: 100%;
+  width: 200px;
   height: 20px;
   margin-right: 10px;
   border-radius: 20px;
+  margin-top: 8px;
   display: flex;
   align-items: center;
   justify-content: end;

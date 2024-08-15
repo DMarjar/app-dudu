@@ -197,12 +197,8 @@ export default Vue.extend({
 
       const requestBody = {
         id_mission: this.missionDetails.id_mission,
-<<<<<<< HEAD
-      };
-=======
         id_user: getUserId(),
-      }
->>>>>>> 79d4696867093712c7ad5629dcfd248c69f294d4
+      };
       try {
         const response = await missionService.completeMission(requestBody);
 
@@ -216,7 +212,7 @@ export default Vue.extend({
           return;
         }
 
-        const {level, level_up, xp,} = response.data;
+        const { level, level_up, xp } = response.data;
 
         let message = `The mission has been completed successfully! You earned ${xp} XP.`;
 
@@ -224,23 +220,10 @@ export default Vue.extend({
           message += ` You leveled up to level ${level}!`;
         }
 
-        this.$swal(
-<<<<<<< HEAD
-          "Success",
-          "The mission has been completed successfully.",
-          "success"
-        );
+        this.$swal("Success", message, "success");
+
         this.missionDetails.status = "completed";
         this.$emit("statusChanged", this.missionDetails.status);
-=======
-            "Success",
-            message,
-            "success"
-        );
-
-        this.missionDetails.status = 'completed';
-        this.$emit('statusChanged', this.missionDetails.status);
->>>>>>> 79d4696867093712c7ad5629dcfd248c69f294d4
       } catch (error) {
         console.error("Error completing mission:", error);
       } finally {

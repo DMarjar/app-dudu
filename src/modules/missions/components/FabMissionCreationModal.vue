@@ -10,21 +10,29 @@
     </b-button>
 
     <b-modal
-        id="form-modal"
-        v-model="showModal"
-        title="Create mission"
-        @hide="resetForm"
-        no-close-on-esc
-        no-stacking
-        centered
-        hide-header-close
-        hide-footer
-        @hidden="resetForm"
+      class="glass-card"
+      id="form-modal"
+      v-model="showModal"
+      @hide="resetForm"
+      no-close-on-esc
+      no-stacking
+      centered
+      hide-header-close
+      hide-footer
+      @hidden="resetForm"
     >
+      <template v-slot:modal-title>
+        <span class="playfair-display form-title">Create mission</span>
+      </template>
+
       <!-- TODO: CHANGE THE VALIDATION BECAUSE I DONT UNDERSTAND VEE-VALIDATE-->
       <ValidationObserver>
         <b-form @submit.prevent="createMission">
-          <b-form-group label="Mission description" label-for="description">
+          <b-form-group
+            label="Dutie Description:"
+            class="alice-regular"
+            label-for="description"
+          >
             <ValidationProvider rules="required" v-slot="{ errors }">
               <b-form-textarea
                   id="description"
@@ -40,41 +48,73 @@
             </ValidationProvider>
           </b-form-group>
 
-          <b-form-group label="Creation date" label-for="creationDate">
-            <ValidationProvider rules="required" v-slot="{ errors }">
-              <b-form-input
-                  id="creationDate"
-                  v-model="newMission.creationDate"
-                  type="date"
-                  required
-              ></b-form-input>
-              <span class="errors">{{ errors[0] }}</span>
-            </ValidationProvider>
-          </b-form-group>
+          <div class="row">
+            <div class="col">
+              <b-form-group
+                label="Creation date"
+                class="alice-regular"
+                label-for="creationDate"
+              >
+                <ValidationProvider rules="required" v-slot="{ errors }">
+                  <b-form-input
+                    id="creationDate"
+                    v-model="newMission.creationDate"
+                    type="date"
+                    required
+                  ></b-form-input>
+                  <span class="errors">{{ errors[0] }}</span>
+                </ValidationProvider>
+              </b-form-group>
+            </div>
+            <div class="col">
+              <b-form-group
+                label="Due date"
+                class="alice-regular"
+                label-for="dueDate"
+              >
+                <ValidationProvider rules="required" v-slot="{ errors }">
+                  <b-form-input
+                    id="dueDate"
+                    v-model="newMission.dueDate"
+                    type="date"
+                    required
+                  ></b-form-input>
+                  <span class="errors">{{ errors[0] }}</span>
+                </ValidationProvider>
+              </b-form-group>
+            </div>
+          </div>
 
-          <b-form-group label="Due date" label-for="dueDate">
-            <ValidationProvider rules="required" v-slot="{ errors }">
-              <b-form-input
-                  id="dueDate"
-                  v-model="newMission.dueDate"
-                  type="date"
-                  required
-              ></b-form-input>
-              <span class="errors">{{ errors[0] }}</span>
-            </ValidationProvider>
-          </b-form-group>
-
-          <b-button type="submit" variant="primary" :disabled="isLoading"
-          >Create
-          </b-button
-          >
-          <b-button
-              variant="danger"
-              @click="setModalStatus(false)"
-              :disabled="isLoading"
-          >Cancel
-          </b-button
-          >
+          <div class="text-center" id="btn-modal-container">
+            <div class="row" id="btn-modal-row">
+              <div class="col-6" id="btn-create-modal-col">
+                <div class="button-container-modal">
+                  <span><i class="fi fi-tr-add button-icon-modal"></i></span>
+                  <b-button
+                    type="submit"
+                    id="create-btn-modal"
+                    class="open-sans"
+                    :disabled="isLoading"
+                    >Create</b-button
+                  >
+                </div>
+              </div>
+              <div class="col-6" id="btn-cancel-modal-col">
+                <div class="button-container-modal">
+                  <span
+                    ><i class="fi fi-tr-circle-xmark button-icon-modal"></i
+                  ></span>
+                  <b-button
+                    id="cancel-btn-modal"
+                    class="open-sans"
+                    @click="setModalStatus(false)"
+                    :disabled="isLoading"
+                    >Cancel</b-button
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
         </b-form>
       </ValidationObserver>
     </b-modal>

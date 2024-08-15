@@ -75,7 +75,9 @@
 
         <b-col cols="8" v-else class="no-mission-col-card">
           <b-card class="glass-card">
-            <p>No missions {{ searchRequest.status }} yet.</p>
+            <p class="alice-regular">
+              No missions {{ searchRequest.status }} yet.
+            </p>
           </b-card>
         </b-col>
 

@@ -14,8 +14,8 @@
     </div>
     <ConfirmDeleteModal
       :show="showDelete"
-      @close="showDelete = false"
       @confirm="deleteProfile"
+      @close="showDelete = false"
     />
   </div>
 </template>
@@ -25,6 +25,7 @@ import { defineComponent, ref } from "vue";
 import ProfileCard from "../components/ProfileCard.vue";
 import Sidebar from "../components/Sidebar.vue";
 import ConfirmDeleteModal from "../components/ConfirmDeleteModal.vue";
+import profileService from "@/modules/profile/services/profileService";
 
 export default defineComponent({
   name: "ProfileView",
@@ -37,7 +38,7 @@ export default defineComponent({
     return {
       isSidebarOpen: false,
       showDelete: false,
-      mageImageSrc: "", 
+      mageImageSrc: "",
     };
   },
   methods: {
@@ -56,29 +57,26 @@ export default defineComponent({
     showDeleteModal() {
       this.showDelete = true;
     },
-    deleteProfile() {
-      console.log("Profile deleted");
-      this.showDelete = false;
+    async deleteProfile() {
+      try {
+        await profileService.deleteUserProfile();
+        console.log("Profile successfully deleted");
+        this.$router.push("/");
+      } catch (error) {
+        console.error("Error deleting profile: ", error);
+        this.$router.push("/");
+      } finally {
+        this.showDelete = false;
+      }
     },
     updateMageImage(level: number, gender: string) {
-      //determina la carpeta según el género
       const folder = gender.toLowerCase() === "m" ? "m" : "f";
-      
-      //ajusta el nivel para obtener el segmento correcto de la imagen (de 5 en 5)
       const levelSegment = Math.floor((level - 1) / 5) * 5 + 1;
-
-      //si el nivel es exactamente un múltiplo de 5, usa ese nivel
       const adjustedLevelSegment = level % 5 === 0 ? level : levelSegment;
-
-      console.log('Folder:', folder);
-      console.log('Level segment:', adjustedLevelSegment);
-    
       try {
-        //carga la imagen basada en el nivel ajustado y el género
         this.mageImageSrc = require(`@/assets/wizards/${folder}/wizard_lvl_${adjustedLevelSegment}.png`);
       } catch (error) {
         console.error('Error loading mage image:', error);
-        //si hay un error, usa una imagen predeterminada
         this.mageImageSrc = require('@/assets/magician.png');
       }
     }

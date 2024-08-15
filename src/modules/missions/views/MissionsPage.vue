@@ -289,7 +289,6 @@ export default Vue.extend({
         }
 
         this.profile = response.data.profile;
-        console.log(this.profile);
         this.currentXp = this.profile.current_xp;
         this.xpLimit = this.profile.xp_limit;
       } catch (error) {
@@ -308,8 +307,6 @@ export default Vue.extend({
         const response = await missionService.searchMissions(
             this.searchRequest
         );
-
-        console.log(response);
 
         // If the response status is not 200, show an error message
         if (response.status !== 200) {

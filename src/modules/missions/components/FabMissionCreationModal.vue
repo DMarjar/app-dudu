@@ -2,10 +2,10 @@
   <div>
     <b-button variant="primary" class="fab" @click="showModal = true">
       <span
-        ><i
+      ><i
           style="position: relative; top: 6px"
           class="fi fi-tr-scroll-document-story"
-        ></i
+      ></i
       ></span>
     </b-button>
 
@@ -35,14 +35,14 @@
           >
             <ValidationProvider rules="required" v-slot="{ errors }">
               <b-form-textarea
-                id="description"
-                v-model="newMission.description"
-                required
-                no-resize
-                trim
-                max-rows="3"
-                no-auto-shrink
-                rows="3"
+                  id="description"
+                  v-model="newMission.description"
+                  required
+                  no-resize
+                  trim
+                  max-rows="3"
+                  no-auto-shrink
+                  rows="3"
               ></b-form-textarea>
               <span class="errors">{{ errors[0] }}</span>
             </ValidationProvider>
@@ -123,10 +123,10 @@
 
 <script lang="ts">
 import Vue from "vue";
-import { required } from "vee-validate/dist/rules";
-import { extend } from "vee-validate";
+import {required} from "vee-validate/dist/rules";
+import {extend} from "vee-validate";
 import missionService from "@/modules/missions/services/missionService";
-import { getUserId } from "@/utils/getTokenInformation";
+import {getUserId} from "@/utils/getTokenInformation";
 
 extend("required", {
   ...required,
@@ -189,9 +189,9 @@ export default Vue.extend({
     // TODO: CHANGE ME to a correct validation with vee-validate
     validateForm() {
       return !(
-        this.newMission.description === "" ||
-        this.newMission.creationDate === "" ||
-        this.newMission.dueDate === ""
+          this.newMission.description === "" ||
+          this.newMission.creationDate === "" ||
+          this.newMission.dueDate === ""
       );
     },
 
@@ -217,18 +217,18 @@ export default Vue.extend({
         if (response.status !== 200) {
           // TODO: Manage correct swal style
           this.$swal(
-            "Error",
-            "An error occurred while creating the mission. Try again later.",
-            "error"
+              "Error",
+              "An error occurred while creating the mission. Try again later.",
+              "error"
           );
           return;
         }
 
         // TODO: Manage correct swal style
         this.$swal(
-          "Success",
-          "The mission has been created successfully.",
-          "success"
+            "Success",
+            "The mission has been created successfully.",
+            "success"
         );
         this.setModalStatus(false);
         // Emit an event to notify the parent component that a mission has been created to get the latest data

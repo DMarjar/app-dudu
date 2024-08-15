@@ -2,24 +2,24 @@
   <div>
     <b-button variant="primary" class="fab" @click="showModal = true">
       <span
-        ><i
+      ><i
           style="position: relative; top: 6px"
           class="fi fi-tr-scroll-document-story"
-        ></i
+      ></i
       ></span>
     </b-button>
 
     <b-modal
-      id="form-modal"
-      v-model="showModal"
-      title="Create mission"
-      @hide="resetForm"
-      no-close-on-esc
-      no-stacking
-      centered
-      hide-header-close
-      hide-footer
-      @hidden="resetForm"
+        id="form-modal"
+        v-model="showModal"
+        title="Create mission"
+        @hide="resetForm"
+        no-close-on-esc
+        no-stacking
+        centered
+        hide-header-close
+        hide-footer
+        @hidden="resetForm"
     >
       <!-- TODO: CHANGE THE VALIDATION BECAUSE I DONT UNDERSTAND VEE-VALIDATE-->
       <ValidationObserver>
@@ -27,14 +27,14 @@
           <b-form-group label="Mission description" label-for="description">
             <ValidationProvider rules="required" v-slot="{ errors }">
               <b-form-textarea
-                id="description"
-                v-model="newMission.description"
-                required
-                no-resize
-                trim
-                max-rows="3"
-                no-auto-shrink
-                rows="3"
+                  id="description"
+                  v-model="newMission.description"
+                  required
+                  no-resize
+                  trim
+                  max-rows="3"
+                  no-auto-shrink
+                  rows="3"
               ></b-form-textarea>
               <span class="errors">{{ errors[0] }}</span>
             </ValidationProvider>
@@ -43,10 +43,10 @@
           <b-form-group label="Creation date" label-for="creationDate">
             <ValidationProvider rules="required" v-slot="{ errors }">
               <b-form-input
-                id="creationDate"
-                v-model="newMission.creationDate"
-                type="date"
-                required
+                  id="creationDate"
+                  v-model="newMission.creationDate"
+                  type="date"
+                  required
               ></b-form-input>
               <span class="errors">{{ errors[0] }}</span>
             </ValidationProvider>
@@ -55,23 +55,25 @@
           <b-form-group label="Due date" label-for="dueDate">
             <ValidationProvider rules="required" v-slot="{ errors }">
               <b-form-input
-                id="dueDate"
-                v-model="newMission.dueDate"
-                type="date"
-                required
+                  id="dueDate"
+                  v-model="newMission.dueDate"
+                  type="date"
+                  required
               ></b-form-input>
               <span class="errors">{{ errors[0] }}</span>
             </ValidationProvider>
           </b-form-group>
 
           <b-button type="submit" variant="primary" :disabled="isLoading"
-            >Create</b-button
+          >Create
+          </b-button
           >
           <b-button
-            variant="danger"
-            @click="setModalStatus(false)"
-            :disabled="isLoading"
-            >Cancel</b-button
+              variant="danger"
+              @click="setModalStatus(false)"
+              :disabled="isLoading"
+          >Cancel
+          </b-button
           >
         </b-form>
       </ValidationObserver>
@@ -81,10 +83,10 @@
 
 <script lang="ts">
 import Vue from "vue";
-import { required } from "vee-validate/dist/rules";
-import { extend } from "vee-validate";
+import {required} from "vee-validate/dist/rules";
+import {extend} from "vee-validate";
 import missionService from "@/modules/missions/services/missionService";
-import { getUserId } from "@/utils/getTokenInformation";
+import {getUserId} from "@/utils/getTokenInformation";
 
 extend("required", {
   ...required,
@@ -147,9 +149,9 @@ export default Vue.extend({
     // TODO: CHANGE ME to a correct validation with vee-validate
     validateForm() {
       return !(
-        this.newMission.description === "" ||
-        this.newMission.creationDate === "" ||
-        this.newMission.dueDate === ""
+          this.newMission.description === "" ||
+          this.newMission.creationDate === "" ||
+          this.newMission.dueDate === ""
       );
     },
 
@@ -175,18 +177,18 @@ export default Vue.extend({
         if (response.status !== 200) {
           // TODO: Manage correct swal style
           this.$swal(
-            "Error",
-            "An error occurred while creating the mission. Try again later.",
-            "error"
+              "Error",
+              "An error occurred while creating the mission. Try again later.",
+              "error"
           );
           return;
         }
 
         // TODO: Manage correct swal style
         this.$swal(
-          "Success",
-          "The mission has been created successfully.",
-          "success"
+            "Success",
+            "The mission has been created successfully.",
+            "success"
         );
         this.setModalStatus(false);
         // Emit an event to notify the parent component that a mission has been created to get the latest data

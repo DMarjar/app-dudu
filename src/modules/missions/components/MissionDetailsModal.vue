@@ -136,11 +136,13 @@ export default Vue.extend({
       }
     },
 
+    // Function to mark a pending mission as completed
     async completeMission() {
       this.changeLoadingStatus();
 
       const requestBody = {
         id_mission: this.missionDetails.id_mission,
+        id_user: getUserId(),
       }
       try {
         const response = await missionService.completeMission(requestBody);
@@ -155,12 +157,20 @@ export default Vue.extend({
           return;
         }
 
-        // TODO: Manage correct swal style
+        const {level, level_up, xp,} = response.data;
+
+        let message = `The mission has been completed successfully! You earned ${xp} XP.`;
+
+        if (level_up) {
+          message += ` You leveled up to level ${level}!`;
+        }
+
         this.$swal(
             "Success",
-            "The mission has been completed successfully.",
+            message,
             "success"
         );
+
         this.missionDetails.status = 'completed';
         this.$emit('statusChanged', this.missionDetails.status);
       } catch (error) {

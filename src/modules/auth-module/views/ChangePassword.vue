@@ -18,14 +18,14 @@
                     v-slot="{ errors }"
                   >
                     <div class="form-input">
-                      <span><i class="fi fi-tr-circle-envelope icon"></i></span>
+                      <span><i class="fi fi-ts-hat-wizard icon"></i></span>
                       <b-form-input
                         id="input-1"
                         class="input"
                         v-model="form.username"
                       ></b-form-input>
                     </div>
-                    <span class="errors">{{ errors[0] }}</span>
+                    <span class="errors open-sans">{{ errors[0] }}</span>
                   </ValidationProvider>
                 </b-form-group>
               </div>
@@ -36,7 +36,10 @@
                   label-for="input-2"
                   style="margin-bottom: 15px"
                 >
-                  <ValidationProvider rules="required" v-slot="{ errors }">
+                  <ValidationProvider
+                    rules="required|max:6"
+                    v-slot="{ errors }"
+                  >
                     <div class="form-input">
                       <span><i class="fi fi-tr-password icon"></i></span>
                       <b-form-input
@@ -46,7 +49,7 @@
                         v-model="form.code"
                       ></b-form-input>
                     </div>
-                    <span class="errors">{{ errors[0] }}</span>
+                    <span class="errors open-sans">{{ errors[0] }}</span>
                   </ValidationProvider>
                 </b-form-group>
               </div>
@@ -58,14 +61,14 @@
                   class="input-with-icon"
                 >
                   <ValidationProvider
-                    rules="required|password:@confirm"
+                    rules="required|password:@confirm|password-regex|max:20"
                     v-slot="{ errors }"
                   >
                     <div class="form-input">
                       <span><i class="fi fi-ts-lock-hashtag icon"></i></span>
                       <b-form-input
                         id="input-3"
-                        class="input"
+                        class="input-type-password"
                         v-model="form.password"
                         :type="showPassword ? 'text' : 'password'"
                       ></b-form-input>
@@ -76,7 +79,7 @@
                         id="eye-icon"
                       ></b-icon>
                     </div>
-                    <span class="errors">{{ errors[0] }}</span>
+                    <span class="errors open-sans">{{ errors[0] }}</span>
                   </ValidationProvider>
                 </b-form-group>
               </div>
@@ -88,7 +91,7 @@
                   class="input-with-icon"
                 >
                   <ValidationProvider
-                    rules="required"
+                    rules="required|password-regex|max:20"
                     name="confirm"
                     v-slot="{ errors }"
                   >
@@ -96,7 +99,7 @@
                       <span><i class="fi fi-ts-lock-hashtag icon"></i></span>
                       <b-form-input
                         id="input-4"
-                        class="input"
+                        class="input-type-password"
                         v-model="confirmation"
                         :type="showRepeatPassword ? 'text' : 'password'"
                       ></b-form-input>
@@ -107,7 +110,7 @@
                         id="eye-icon"
                       ></b-icon>
                     </div>
-                    <span class="errors">{{ errors[0] }}</span>
+                    <span class="errors open-sans">{{ errors[0] }}</span>
                   </ValidationProvider>
                 </b-form-group>
               </div>
@@ -164,6 +167,16 @@ extend("min", {
   ...min,
   params: ["length"],
   message: "This field cannot be shorter than {length} characters",
+});
+
+extend("password-regex", {
+  validate: (value) => {
+    const passwordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#_])[A-Za-z\d@$!%*?&#_]{8,}$/;
+    return passwordRegex.test(value);
+  },
+  message:
+    "Password must be at least 8 characters long, include at least one lowercase letter, one uppercase letter, one number, and one special character (@$!%*?&#_)",
 });
 
 extend("no_invalid_chars", {

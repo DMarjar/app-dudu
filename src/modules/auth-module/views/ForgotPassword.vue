@@ -18,14 +18,14 @@
                 v-slot="{ errors }"
               >
                 <div class="form-input">
-                  <span><i class="fi fi-tr-circle-envelope icon"></i></span>
+                  <span><i class="fi fi-ts-hat-wizard icon"></i></span>
                   <b-form-input
                     id="input-1"
                     class="input"
                     v-model="form.username"
                   ></b-form-input>
                 </div>
-                <span class="errors">{{ errors[0] }}</span>
+                <span class="errors open-sans">{{ errors[0] }}</span>
               </ValidationProvider>
             </b-form-group>
             <br />

@@ -11,7 +11,7 @@
               label-for="input-1"
               style="margin-bottom: 15px"
             >
-              <ValidationProvider rules="required" v-slot="{ errors }">
+              <ValidationProvider rules="required|max:20" v-slot="{ errors }">
                 <div class="form-input">
                   <span><i class="fi fi-ts-hat-wizard icon"></i></span>
                   <b-form-input
@@ -20,7 +20,7 @@
                     v-model="form.username"
                   ></b-form-input>
                 </div>
-                <span class="errors">{{ errors[0] }}</span>
+                <span class="errors open-sans">{{ errors[0] }}</span>
               </ValidationProvider>
             </b-form-group>
             <b-form-group
@@ -29,12 +29,12 @@
               label-for="input-2"
               class="input-with-icon"
             >
-              <ValidationProvider rules="required" v-slot="{ errors }">
+              <ValidationProvider rules="required|max:40" v-slot="{ errors }">
                 <div class="form-input">
                   <span><i class="fi fi-ts-lock-hashtag icon"></i></span>
                   <b-form-input
                     id="input-2"
-                    class="input"
+                    class="input-type-password"
                     v-model="form.password"
                     :type="showPassword ? 'text' : 'password'"
                   ></b-form-input>
@@ -45,7 +45,7 @@
                     id="eye-icon"
                   ></b-icon>
                 </div>
-                <span class="errors">{{ errors[0] }}</span>
+                <span class="errors open-sans">{{ errors[0] }}</span>
               </ValidationProvider>
             </b-form-group>
             <br />
@@ -82,12 +82,18 @@
 
 <script>
 import { extend } from "vee-validate";
-import { required } from "vee-validate/dist/rules";
+import { required, max } from "vee-validate/dist/rules";
 import axios from "axios";
 
 extend("required", {
   ...required,
   message: "This field is required",
+});
+
+extend("max", {
+  ...max,
+  params: ["length"],
+  message: "This field cannot be longer than {length} characters",
 });
 
 export default {
@@ -143,6 +149,8 @@ export default {
             title: "Sign in error",
             text: "Please verify your credentials and try again.",
             icon: "error",
+            iconColor: "#BB2B31",
+            confirmButtonColor: "#577ca6",
           });
         })
         .finally(() => {

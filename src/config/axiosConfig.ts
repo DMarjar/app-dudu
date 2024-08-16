@@ -38,26 +38,5 @@ axiosUsersApiInstance.interceptors.request.use(
   }
 );
 
-// DELETE USER PROFILE API
-const axiosDeleteUserApiInstance = axios.create({
-  baseURL: "https://3tpdypq2mc.execute-api.us-east-2.amazonaws.com/Prod",
-  timeout: 11000,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
 
-axiosDeleteUserApiInstance.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem("id_token");
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
-
-export { axiosMissionApiInstance, axiosUsersApiInstance, axiosDeleteUserApiInstance };
+export { axiosMissionApiInstance, axiosUsersApiInstance };

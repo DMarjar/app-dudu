@@ -203,7 +203,6 @@ export default {
           this.form.username = "";
           this.form.password = "";
           localStorage.setItem("id_token", response.data.id_token);
-          localStorage.setItem("access_token", response.data.access_token);
           this.redirectUser();
         })
         .catch((error) => {

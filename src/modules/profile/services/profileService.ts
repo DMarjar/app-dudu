@@ -1,4 +1,4 @@
-import {axiosDeleteUserApiInstance, axiosUsersApiInstance} from "@/config/axiosConfig";
+import {axiosUsersApiInstance} from "@/config/axiosConfig";
 import {getUserId} from "@/utils/getTokenInformation";
 
 const getProfile = async () => {
@@ -20,9 +20,10 @@ const deleteUserProfile = async () => {
             sub,
             id_user: sub,  //id_user es el mismo que sub
         };
-        const response = await axiosDeleteUserApiInstance.delete("/delete_user_profile", {
+        const response = await axiosUsersApiInstance.post("/delete_user_profile", {
         data: requestBody
          });
+         
         return response;
     } catch (error) {
         console.error("Error deleting profile: ", error);

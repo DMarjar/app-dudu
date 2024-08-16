@@ -2,10 +2,10 @@
   <div>
     <b-button variant="primary" class="fab" @click="showModal = true">
       <span
-      ><i
+        ><i
           style="position: relative; top: 6px"
           class="fi fi-tr-scroll-document-story"
-      ></i
+        ></i
       ></span>
     </b-button>
 
@@ -25,7 +25,6 @@
         <span class="playfair-display form-title">Create mission</span>
       </template>
 
-      <!-- TODO: CHANGE THE VALIDATION BECAUSE I DONT UNDERSTAND VEE-VALIDATE-->
       <ValidationObserver>
         <b-form @submit.prevent="createMission">
           <b-form-group
@@ -35,14 +34,14 @@
           >
             <ValidationProvider rules="required" v-slot="{ errors }">
               <b-form-textarea
-                  id="description"
-                  v-model="newMission.description"
-                  required
-                  no-resize
-                  trim
-                  max-rows="3"
-                  no-auto-shrink
-                  rows="3"
+                id="description"
+                v-model="newMission.description"
+                required
+                no-resize
+                trim
+                max-rows="3"
+                no-auto-shrink
+                rows="3"
               ></b-form-textarea>
               <span class="errors">{{ errors[0] }}</span>
             </ValidationProvider>
@@ -86,34 +85,46 @@
           </div>
 
           <div class="text-center btn-modal-container">
-            <div class="row" id="btn-modal-row">
-              <div class="col-6" id="btn-create-modal-col">
-                <div class="button-container-modal">
-                  <span><i class="fi fi-tr-add button-icon-modal"></i></span>
-                  <b-button
-                    type="submit"
-                    id="create-btn-modal"
-                    class="open-sans"
-                    :disabled="isLoading"
-                    >Create</b-button
-                  >
+            <b-row
+              v-if="!isLoading"
+              id="btn-modal-row-details"
+              style="margin-top: 35px"
+            >
+              <div class="row" id="btn-modal-row">
+                <div class="col-6" id="btn-create-modal-col">
+                  <div class="button-container-modal">
+                    <span><i class="fi fi-tr-add button-icon-modal"></i></span>
+                    <b-button
+                      type="submit"
+                      id="create-btn-modal"
+                      class="open-sans"
+                      :disabled="isLoading"
+                      >Create</b-button
+                    >
+                  </div>
+                </div>
+                <div class="col-6" id="btn-cancel-modal-col">
+                  <div class="button-container-modal">
+                    <span
+                      ><i class="fi fi-tr-circle-xmark button-icon-modal"></i
+                    ></span>
+                    <b-button
+                      id="cancel-btn-modal"
+                      class="open-sans"
+                      @click="setModalStatus(false)"
+                      :disabled="isLoading"
+                      >Cancel</b-button
+                    >
+                  </div>
                 </div>
               </div>
-              <div class="col-6" id="btn-cancel-modal-col">
-                <div class="button-container-modal">
-                  <span
-                    ><i class="fi fi-tr-circle-xmark button-icon-modal"></i
-                  ></span>
-                  <b-button
-                    id="cancel-btn-modal"
-                    class="open-sans"
-                    @click="setModalStatus(false)"
-                    :disabled="isLoading"
-                    >Cancel</b-button
-                  >
-                </div>
-              </div>
-            </div>
+            </b-row>
+            <b-row
+              v-else
+              class="d-flex justify-content-center align-items-center"
+            >
+              <b-spinner label="Loading..." small></b-spinner>
+            </b-row>
           </div>
         </b-form>
       </ValidationObserver>
@@ -123,23 +134,15 @@
 
 <script lang="ts">
 import Vue from "vue";
-import {required} from "vee-validate/dist/rules";
-import {extend} from "vee-validate";
+import { required } from "vee-validate/dist/rules";
+import { extend } from "vee-validate";
 import missionService from "@/modules/missions/services/missionService";
-import {getUserId} from "@/utils/getTokenInformation";
+import { getUserId } from "@/utils/getTokenInformation";
 
 extend("required", {
   ...required,
   message: "This field is required",
 });
-
-/*
-TODO: Add validation for the creation and due date, such as:
-- The creation date must be before the end date
-- The due date must be after the creation date
-- The due date must be in the future
-- Both dates must be different
- */
 
 export default Vue.extend({
   data() {
@@ -169,14 +172,6 @@ export default Vue.extend({
       this.showModal = status;
     },
 
-    changeLoadingStatus() {
-      this.isLoading = !this.isLoading;
-    },
-
-    setLoadingStatus(status: boolean) {
-      this.isLoading = status;
-    },
-
     // Function to reset the form values when the modal is hidden
     resetForm() {
       this.newMission = {
@@ -189,54 +184,64 @@ export default Vue.extend({
     // TODO: CHANGE ME to a correct validation with vee-validate
     validateForm() {
       return !(
-          this.newMission.description === "" ||
-          this.newMission.creationDate === "" ||
-          this.newMission.dueDate === ""
+        this.newMission.description === "" ||
+        this.newMission.creationDate === "" ||
+        this.newMission.dueDate === ""
       );
     },
 
     // Function to handle the form submission
     async createMission() {
-      // TODO: Add correct form validation CHANGE ME
       if (!this.validateForm()) {
-        return;
-      }
+          return;
+        }
+      const result = await this.$swal({
+        title: "Are you sure?",
+        text: "Do you really want to complete this mission?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, cancel it!",
+        cancelButtonText: "No, keep it",
+      });
+      if (result.isConfirmed) {
 
-      this.changeLoadingStatus();
-      try {
-        const requestBody = {
-          id_user: getUserId(),
-          original_description: this.newMission.description,
-          creation_date: this.newMission.creationDate,
-          due_date: this.newMission.dueDate,
-          status: "pending",
-        };
+        this.isLoading = true;
 
-        const response = await missionService.createMission(requestBody);
+        try {
+          const requestBody = {
+            id_user: getUserId(),
+            original_description: this.newMission.description,
+            creation_date: this.newMission.creationDate,
+            due_date: this.newMission.dueDate,
+            status: "pending",
+          };
 
-        if (response.status !== 200) {
-          // TODO: Manage correct swal style
-          this.$swal(
+          const response = await missionService.createMission(requestBody);
+
+          if (response.status !== 200) {
+            this.$swal(
               "Error",
               "An error occurred while creating the mission. Try again later.",
               "error"
-          );
-          return;
-        }
+            );
+            return;
+          }
 
-        // TODO: Manage correct swal style
-        this.$swal(
+          this.$swal(
             "Success",
             "The mission has been created successfully.",
             "success"
-        );
+          );
+          this.$emit("mission-created");
+          this.setModalStatus(false);
+        } catch (error) {
+          console.error(error);
+        } finally {
+          this.isLoading = false;
+        }
+      } else {
+        this.$swal("Cancelled", "The mission is safe!", "info");
         this.setModalStatus(false);
-        // Emit an event to notify the parent component that a mission has been created to get the latest data
-        this.$emit("mission-created");
-      } catch (error) {
-        console.error(error);
-      } finally {
-        this.changeLoadingStatus();
       }
     },
   },

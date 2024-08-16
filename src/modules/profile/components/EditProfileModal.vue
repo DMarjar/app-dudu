@@ -1,10 +1,6 @@
 <template>
   <b-modal v-model="showModal" title="Edit Profile" @ok="updateProfile" @hide="emitClose" dialog-class="custom-modal">
     <div class="form-group">
-      <label for="username">Username</label>
-      <input type="text" v-model="profile.username" class="form-input" id="username" />
-    </div>
-    <div class="form-group">
       <label for="gender">Gender</label>
       <select v-model="profile.gender" class="form-input" id="gender">
         <option value="Male">Male</option>
@@ -39,7 +35,7 @@ export default defineComponent({
   },
   props: {
     profile: {
-      type: Object as PropType<{ username: string; gender: string; email: string }>,
+      type: Object as PropType<{gender: string; email: string }>,
       required: true
     },
     showModal: {

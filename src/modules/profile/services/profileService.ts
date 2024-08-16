@@ -13,25 +13,27 @@ const getProfile = async () => {
     }
 }
 
-const deleteUserProfile = async () => {
+
+const deleteUserProfile = async (body:any) => {
     try {
-        const sub = getUserId();
-        const requestBody = {
-            sub,
-            id_user: sub,  //id_user es el mismo que sub
-        };
-        const response = await axiosUsersApiInstance.post("/delete_user_profile", {
-        data: requestBody
-         });
-         
-        return response;
+        return await axiosUsersApiInstance.post("/delete_user_profile", body)
     } catch (error) {
         console.error("Error deleting profile: ", error);
         throw new Error("Error deleting profile: " + error);
     }
-};
+}
+
+const updateProfile = async (body: any) => {
+    try {
+        return await axiosUsersApiInstance.put("/update_profile", body);
+    } catch (error) {
+        console.error(error);
+        throw Error("Error updating profile: " + error);
+    }
+}
 
 export default {
     getProfile,
-    deleteUserProfile
+    deleteUserProfile,
+    updateProfile
 }

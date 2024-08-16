@@ -9,20 +9,17 @@
               <div class="col-12 col-md-6">
                 <b-form-group
                   id="input-group-1"
-                  label="Email:"
+                  label="Repeat username:"
                   label-for="input-1"
                   style="margin-bottom: 15px"
                 >
-                  <ValidationProvider
-                    rules="required|email"
-                    v-slot="{ errors }"
-                  >
+                  <ValidationProvider rules="required" v-slot="{ errors }">
                     <div class="form-input">
                       <span><i class="fi fi-tr-circle-envelope icon"></i></span>
                       <b-form-input
                         id="input-1"
                         class="input"
-                        v-model="form.email"
+                        v-model="form.username"
                       ></b-form-input>
                     </div>
                     <span class="errors">{{ errors[0] }}</span>
@@ -145,13 +142,8 @@
 
 <script>
 import { extend } from "vee-validate";
-import { required, email } from "vee-validate/dist/rules";
+import { required } from "vee-validate/dist/rules";
 import axios from "axios";
-
-extend("email", {
-  ...email,
-  message: "The email is not valid",
-});
 
 extend("required", {
   ...required,
@@ -163,7 +155,7 @@ export default {
   data() {
     return {
       form: {
-        email: "",
+        username: "",
         code: "",
         password: "",
       },
@@ -180,14 +172,14 @@ export default {
         .post(
           "https://3tpdypq2mc.execute-api.us-east-2.amazonaws.com/Prod/change_password",
           {
-            username: this.form.email,
+            username: this.form.username,
             confirmation_code: this.form.code,
             new_password: this.form.password,
             confirm_new_password: this.form.password,
           }
         )
         .then((response) => {
-          this.form.email = "";
+          this.form.username = "";
           this.form.password = "";
           this.form.code = "";
           this.redirectUser();

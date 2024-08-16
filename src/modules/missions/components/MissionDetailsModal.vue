@@ -10,12 +10,12 @@
   >
     <template v-slot:modal-title>
       <div class="top-part-card">
-        <span class="open-sans mission-number mission-number-details"
-          >#{{ mission.id_mission }}</span
-        >
-        <b-badge class="pending-badge badge"
-          ><span class="alice-regular"> {{ mission.status }}</span></b-badge
-        >
+        <span class="open-sans mission-number mission-number-details">
+          #{{ mission.id_mission }}
+        </span>
+        <b-badge class="pending-badge badge">
+          <span class="alice-regular">{{ mission.status }}</span>
+        </b-badge>
       </div>
     </template>
 
@@ -45,7 +45,6 @@
         </div>
       </b-col>
 
-      <!-- THIS FRAGMENT DECIDES WHETHER TO DISPLAY THE REMAINING TIME OR THE STATUS OF THE MISSION-->
       <b-col
         v-if="missionDetails.status === 'pending'"
         cols="12"
@@ -69,8 +68,11 @@
       class="text-center btn-modal-container"
       v-if="missionDetails.status === 'pending'"
     >
-      <!-- THIS ROW IS ONLY SHOWN IF THE MISSION IS PENDING-->
-      <b-row id="btn-modal-row-details" style="margin-top: 35px">
+      <b-row
+        v-if="!isLoading"
+        id="btn-modal-row-details"
+        style="margin-top: 35px"
+      >
         <b-col cols="6" id="btn-complete-modal-col">
           <div class="button-container-modal">
             <span><i class="fi fi-tr-add button-icon-modal"></i></span>
@@ -86,7 +88,6 @@
             </b-button>
           </div>
         </b-col>
-
         <b-col id="btn-cancel-modal-col-details">
           <div class="button-container-modal">
             <span><i class="fi fi-tr-circle-xmark button-icon-modal"></i></span>
@@ -101,6 +102,9 @@
             </b-button>
           </div>
         </b-col>
+      </b-row>
+      <b-row v-else class="d-flex justify-content-center align-items-center">
+        <b-spinner label="Loading..." small></b-spinner>
       </b-row>
     </div>
   </b-modal>
@@ -123,21 +127,16 @@ export default Vue.extend({
 
   data() {
     return {
-      // Selected mission data
       missionDetails: this.mission as Mission,
-
-      // Loading status
       isLoading: false as boolean,
     };
   },
 
   methods: {
-    // Function to change loading status to the opposite value
     changeLoadingStatus() {
       this.isLoading = !this.isLoading;
     },
 
-    // Function to set loading status to a specific value
     setLoadingStatus(status: boolean) {
       this.isLoading = status;
     },
@@ -155,44 +154,64 @@ export default Vue.extend({
       }
     },
 
-    // Function to cancel a pending mission
     async cancelMission() {
-      this.changeLoadingStatus();
+      const result = await this.$swal({
+        title: "Are you sure?",
+        text: "Do you really want to cancel this mission?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, cancel it!",
+        cancelButtonText: "No, keep it",
+      });
 
-      const requestBody = {
-        id_mission: this.missionDetails.id_mission,
-        id_user: getUserId(),
-      };
-      try {
-        const response = await missionService.cancelMission(requestBody);
-
-        if (response.status !== 200) {
-          // TODO: Manage correct swal style
-          this.$swal(
-            "Error",
-            "An error occurred while canceling the mission. Try again later.",
-            "error"
-          );
-          return;
-        }
-
-        // TODO: Manage correct swal style
-        this.$swal(
-          "Success",
-          "The mission has been cancelled successfully.",
-          "success"
-        );
-        this.missionDetails.status = "cancelled";
-        this.$emit("statusChanged", this.missionDetails.status);
-      } catch (error) {
-        console.error("Error cancelling mission:", error);
-      } finally {
+      if (result.isConfirmed) {
         this.changeLoadingStatus();
+        const requestBody = {
+          id_mission: this.missionDetails.id_mission,
+          id_user: getUserId(),
+        };
+        try {
+          const response = await missionService.cancelMission(requestBody);
+
+          if (response.status !== 200) {
+            this.$swal(
+              "Error",
+              "An error occurred while canceling the mission. Try again later.",
+              "error"
+            );
+            return;
+          }
+
+          this.$swal(
+            "Success",
+            "The mission has been cancelled successfully.",
+            "success"
+          );
+          this.missionDetails.status = "cancelled";
+          this.$emit("statusChanged", this.missionDetails.status);
+          this.$bvModal.hide("missionDetailsModal");
+        } catch (error) {
+          console.error("Error cancelling mission:", error);
+        } finally {
+          this.changeLoadingStatus();
+        }
+      } else {
+        this.$swal("Cancelled", "The mission is safe!", "info");
+        this.$bvModal.hide("missionDetailsModal");
       }
     },
 
-    // Function to mark a pending mission as completed
     async completeMission() {
+      const result = await this.$swal({
+        title: "Are you sure?",
+        text: "Do you really want to complete this mission?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, cancel it!",
+        cancelButtonText: "No, keep it",
+      });
+      if (result.isConfirmed) {
+
       this.changeLoadingStatus();
 
       const requestBody = {
@@ -203,10 +222,9 @@ export default Vue.extend({
         const response = await missionService.completeMission(requestBody);
 
         if (response.status !== 200) {
-          // TODO: Manage correct swal style
           this.$swal(
             "Error",
-            "An error occurred while canceling the mission. Try again later.",
+            "An error occurred while completing the mission. Try again later.",
             "error"
           );
           return;
@@ -224,14 +242,18 @@ export default Vue.extend({
 
         this.missionDetails.status = "completed";
         this.$emit("statusChanged", this.missionDetails.status);
+        this.$bvModal.hide("missionDetailsModal");
       } catch (error) {
         console.error("Error completing mission:", error);
       } finally {
         this.changeLoadingStatus();
       }
+    } else {
+      this.$swal("Cancelled", "The mission is safe!", "info");
+      this.$bvModal.hide("missionDetailsModal");
+    }
     },
 
-    // Function to calculate the remaining time for the mission
     calculateRemainingTime() {
       const dueDate = new Date(this.missionDetails.due_date);
       const currentDate = new Date();
@@ -255,7 +277,6 @@ export default Vue.extend({
   },
 
   watch: {
-    // watcher for the mission prop
     mission: {
       handler() {
         this.missionDetails = this.mission;
@@ -263,8 +284,6 @@ export default Vue.extend({
       immediate: true,
     },
   },
-
-  mounted() {},
 });
 </script>
 

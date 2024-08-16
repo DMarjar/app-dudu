@@ -41,7 +41,7 @@ axiosUsersApiInstance.interceptors.request.use(
 // DELETE USER PROFILE API
 const axiosDeleteUserApiInstance = axios.create({
   baseURL: "https://3tpdypq2mc.execute-api.us-east-2.amazonaws.com/Prod",
-  timeout: 10000,
+  timeout: 11000,
   headers: {
     'Content-Type': 'application/json',
   },

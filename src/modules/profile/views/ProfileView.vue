@@ -9,7 +9,11 @@
     />
     <Sidebar ref="sidebar" @toggle="onSidebarToggle" />
     <div class="profile-container">
-      <ProfileCard @level-updated="updateMageImage" @show-delete-modal="showDeleteModal" />
+      <ProfileCard
+        :profile="userProfile"
+        @level-updated="updateMageImage"
+        @show-delete-modal="showDeleteModal"
+      />
       <img :src="mageImageSrc" class="mage-image" alt="Mage Image" />
     </div>
     <ConfirmDeleteModal
@@ -36,11 +40,24 @@ export default defineComponent({
   },
   data() {
     return {
+      userProfile: {
+       level: '',
+       current_xp: 0,
+       gender: '',
+       username: '',
+       email: '',
+     },
       isSidebarOpen: false,
       showDelete: false,
       mageImageSrc: "",
     };
   },
+  async mounted() {
+   const response = await profileService.getProfile();
+   if (response.status === 200) {
+     this.userProfile = response.data.profile;
+   }
+ },
   methods: {
     toggleSidebar() {
       (this.$refs.sidebar as any).toggleSidebar();
@@ -61,14 +78,33 @@ export default defineComponent({
       try {
         await profileService.deleteUserProfile();
         console.log("Profile successfully deleted");
-        this.$router.push("/");
+
+        if (typeof localStorage !== "undefined") {
+          if (localStorage.getItem("id_token")) {
+            localStorage.removeItem("id_token");
+          }
+          if (localStorage.getItem("access_token")) {
+            localStorage.removeItem("access_token");
+          }
+        } else {
+          console.error("Alert de que no tiene credenciales");
+        }
+
+        if (this.$router) {
+          this.$router.push("/");
+        } else {
+          console.error("Alert error.");
+        }
       } catch (error) {
         console.error("Error deleting profile: ", error);
-        this.$router.push("/");
+        if (this.$router) {
+          this.$router.push("/");
+        }
       } finally {
         this.showDelete = false;
       }
     },
+
     updateMageImage(level: number, gender: string) {
       const folder = gender.toLowerCase() === "m" ? "m" : "f";
       const levelSegment = Math.floor((level - 1) / 5) * 5 + 1;
@@ -76,11 +112,11 @@ export default defineComponent({
       try {
         this.mageImageSrc = require(`@/assets/wizards/${folder}/wizard_lvl_${adjustedLevelSegment}.png`);
       } catch (error) {
-        console.error('Error loading mage image:', error);
-        this.mageImageSrc = require('@/assets/magician.png');
+        console.error("Error loading mage image:", error);
+        this.mageImageSrc = require("@/assets/magician.png");
       }
-    }
-  }
+    },
+  },
 });
 </script>
 

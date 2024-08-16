@@ -203,6 +203,7 @@ export default {
           this.form.username = "";
           this.form.password = "";
           localStorage.setItem("id_token", response.data.id_token);
+          localStorage.setItem("access_token", response.data.access_token);
           this.redirectUser();
         })
         .catch((error) => {
@@ -227,7 +228,7 @@ export default {
       this.showRepeatPassword = !this.showRepeatPassword;
     },
     redirectUser() {
-      this.$router.push("/blocked");
+      this.$router.push("/missions");
     },
   },
   mounted() {

@@ -21,9 +21,9 @@ const deleteUserProfile = async () => {
             id_user: sub,  //id_user es el mismo que sub
         };
         const response = await axiosDeleteUserApiInstance.delete("/delete_user_profile", {
-            data: requestBody
-        });
-        return response.data;
+        data: requestBody
+         });
+        return response;
     } catch (error) {
         console.error("Error deleting profile: ", error);
         throw new Error("Error deleting profile: " + error);

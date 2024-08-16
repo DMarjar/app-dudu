@@ -227,7 +227,7 @@ export default {
       this.showRepeatPassword = !this.showRepeatPassword;
     },
     redirectUser() {
-      this.$router.push("/blocked");
+      this.$router.push("/missions");
     },
   },
   mounted() {

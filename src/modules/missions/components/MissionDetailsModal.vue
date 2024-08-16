@@ -156,8 +156,8 @@ export default Vue.extend({
 
     async cancelMission() {
       const result = await this.$swal({
-        title: "Are you sure?",
-        text: "Do you really want to cancel this mission?",
+        title: "Are you certain, Apprentice?",
+        text: "Do you truly wish to abandon this quest, young mage? Such decisions weigh heavy on the path to mastery.",
         icon: "warning",
         showCancelButton: true,
         confirmButtonText: "Yes, cancel it!",
@@ -196,83 +196,77 @@ export default Vue.extend({
           this.changeLoadingStatus();
         }
       } else {
-        this.$swal("Cancelled", "The mission is safe!", "info");
+        this.$swal(
+          "The mission remains intact, brave apprentice!",
+          "Your choice has safeguarded its fate, and the realm still awaits your magic.",
+          "info"
+        );
         this.$bvModal.hide("missionDetailsModal");
       }
     },
 
     async completeMission() {
       const result = await this.$swal({
-        title: "Are you sure?",
-        text: "Do you really want to complete this mission?",
+        title: "Proceed with caution, apprentice.",
+        text: "The path ahead is fraught with danger.",
         icon: "warning",
         showCancelButton: true,
-        confirmButtonText: "Yes, cancel it!",
-        cancelButtonText: "No, keep it",
+        confirmButtonText: "Continue",
+        cancelButtonText: "Turn back",
       });
       if (result.isConfirmed) {
-
-      this.changeLoadingStatus();
-
-      const requestBody = {
-        id_mission: this.missionDetails.id_mission,
-        id_user: getUserId(),
-      };
-      try {
-        const response = await missionService.completeMission(requestBody);
-
-        if (response.status !== 200) {
-          this.$swal(
-            "Error",
-            "An error occurred while completing the mission. Try again later.",
-            "error"
-          );
-          return;
-        }
-
-        const { level, level_up, xp } = response.data;
-
-        let message = `The mission has been completed successfully! You earned ${xp} XP.`;
-
-        if (level_up) {
-          message += ` You leveled up to level ${level}!`;
-        }
-
-        this.$swal("Success", message, "success");
-
-        this.missionDetails.status = "completed";
-        this.$emit("statusChanged", this.missionDetails.status);
-        this.$bvModal.hide("missionDetailsModal");
-      } catch (error) {
-        console.error("Error completing mission:", error);
-      } finally {
         this.changeLoadingStatus();
+
+        const requestBody = {
+          id_mission: this.missionDetails.id_mission,
+          id_user: getUserId(),
+        };
+        try {
+          const response = await missionService.completeMission(requestBody);
+
+          if (response.status !== 200) {
+            this.$swal(
+              "Error",
+              "An error occurred while completing the mission. Try again later.",
+              "error"
+            );
+            return;
+          }
+
+          const { level, level_up, xp } = response.data;
+
+          let message = `The mission has been completed successfully! You earned ${xp} XP.`;
+
+          if (level_up) {
+            message += ` You leveled up to level ${level}!`;
+          }
+
+          this.$swal("Success", message, "success");
+
+          this.missionDetails.status = "completed";
+          this.$emit("statusChanged", this.missionDetails.status);
+          this.$bvModal.hide("missionDetailsModal");
+        } catch (error) {
+          console.error("Error completing mission:", error);
+        } finally {
+          this.changeLoadingStatus();
+        }
+      } else {
+        this.$swal(
+          "This missions remains unafected!",
+          "It will be waiting for you.",
+          "info"
+        );
+        this.$bvModal.hide("missionDetailsModal");
       }
-    } else {
-      this.$swal("Cancelled", "The mission is safe!", "info");
-      this.$bvModal.hide("missionDetailsModal");
-    }
     },
 
     calculateRemainingTime() {
       const dueDate = new Date(this.missionDetails.due_date);
-      const currentDate = new Date();
-      const timeDifference = dueDate.getTime() - currentDate.getTime();
-      const remainingDays = Math.floor(timeDifference / (1000 * 3600 * 24));
-      const remainingHours = Math.floor(
-        (timeDifference % (1000 * 3600 * 24)) / (1000 * 3600)
-      );
-      const remainingMinutes = Math.floor(
-        (timeDifference % (1000 * 3600)) / (1000 * 60)
-      );
-
-      if (remainingDays > 0) {
-        return `${remainingDays} days, ${remainingHours} hours`;
-      } else if (remainingHours > 0) {
-        return `${remainingHours} hours, ${remainingMinutes} minutes`;
-      } else {
-        return `${remainingMinutes} minutes`;
-      }
+      const now = new Date();
+      const diffTime = dueDate.getTime() - now.getTime();
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      return `${diffDays} days left`;
     },
   },
 

@@ -1,5 +1,5 @@
 <template>
-  <b-modal v-model="showModal" title="Edit Profile" @ok="updateProfile" @hide="emitClose" dialog-class="custom-modal">
+  <b-modal v-model="showModal" title="Edit Profile" @hide="emitClose" dialog-class="custom-modal">
     <div class="form-group">
       <label for="gender">Gender</label>
       <select v-model="profile.gender" class="form-input" id="gender">
@@ -11,15 +11,20 @@
       <label for="email">Email</label>
       <input type="email" v-model="profile.email" class="form-input" id="email" />
     </div>
-    <template #modal-footer="{ ok, cancel }">
+    <template #modal-footer="{ cancel }">
+      <div v-if="!isLoading" class="row">
       <button @click="cancel" class="cancel-button">
         Cancel
         <i class="fi fi-tr-circle-xmark"></i>
       </button>
-      <button @click="ok" class="confirm-button">
+      <button @click="updateProfile" class="confirm-button">
         Save Changes
         <i class="fi fi-tr-vote-yea"></i>
       </button>
+    </div>
+    <div v-else class="d-flex justify-content-center align-items-center">
+      <b-spinner label="Loading..." small></b-spinner>
+    </div>
     </template>
   </b-modal>
 </template>
@@ -27,11 +32,19 @@
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
 import { BModal } from 'bootstrap-vue';
+import profileService from '../services/profileService';
+import { getUserId } from '@/utils/getTokenInformation';
+import { is } from 'vee-validate/dist/rules';
 
 export default defineComponent({
   name: 'EditProfileModal',
   components: {
     BModal
+  },
+  data() {
+    return {
+      isLoading: false
+    }
   },
   props: {
     profile: {
@@ -44,8 +57,62 @@ export default defineComponent({
     }
   },
   methods: {
-    updateProfile() {
-      this.$emit('update-profile', this.profile);
+    validateForm(){
+      return !(
+        this.profile.email === '' ||
+        this.profile.gender === ''
+      )
+    },
+    async updateProfile() {
+      if (!this.validateForm()) {
+        this.$swal(
+          "Error",
+          "Please fill all the fields.",
+          "error"
+        );
+        return;
+      }
+      const result = await this.$swal({
+        title: "Are you sure?",
+        text: "You are about to update your profile.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, update it!",
+        cancelButtonText: "No, cancel!",
+      });
+      if (result.isConfirmed){
+        this.isLoading = true;
+        try {
+        const requestBody = {
+          id_user: getUserId(),
+          sub: getUserId(),
+          email: this.profile.email,
+          gender: this.profile.gender.substring(0, 1)
+        };
+        const response = await profileService.updateProfile(requestBody);
+        if (response.status !== 200) {
+            this.$swal(
+              "Error",
+              "An error occurred while creating the mission. Try again later.",
+              "error"
+            );
+            return;
+          }
+          this.$swal(
+            "Success",
+            "The mission has been created successfully.",
+            "success"
+          );
+          this.$emit('update-profile', this.profile);
+          this.emitClose(); // Cerrar el modal después de una respuesta exitosa
+      } catch (error) {
+        console.error(error);
+      } finally {
+        this.isLoading = false;
+      }        
+      } else {
+        this.$swal("Cancelled", "The mission is safe!", "info");
+      }
     },
     emitClose() {
       this.$emit('close');
@@ -53,6 +120,7 @@ export default defineComponent({
   }
 });
 </script>
+
 
 <style scoped>
 @import "~@flaticon/flaticon-uicons/css/all/all";

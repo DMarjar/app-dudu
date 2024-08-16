@@ -2,7 +2,7 @@
   <div class="profile-card glass">
     <div class="profile-container">
       <div class="avatar-container">
-        <img :src="avatarSrc" alt="Avatar" class="avatar"/>
+        <img :src="avatarSrc" alt="Avatar" class="avatar" />
         <span class="username">{{ username }}</span>
         <span class="gender">{{ genderToText }}</span>
       </div>
@@ -16,8 +16,13 @@
           <span>{{ userDetails.level }}</span>
           <div class="level-container">
             <div class="level-bar">
-              <div class="level-progress" :style="{ width: xpPercentage + '%' }"></div>
-              <span class="level-text">{{ userDetails.current_xp }} / {{ userDetails.xp_limit }}</span>
+              <div
+                class="level-progress"
+                :style="{ width: xpPercentage + '%' }"
+              ></div>
+              <span class="level-text"
+                >{{ userDetails.current_xp }} / {{ userDetails.xp_limit }}</span
+              >
             </div>
           </div>
         </div>
@@ -34,57 +39,59 @@
       </div>
     </div>
     <EditProfileModal
-        :profile="profile"
-        :showModal="showModal"
-        @close="showModal = false"
-        @update-profile="updateProfile"
+      :profile="profile"
+      :showModal="showModal"
+      @close="showModal = false"
+      @update-profile="updateProfile"
     />
   </div>
 </template>
 
 <script lang="ts">
-import {defineComponent, computed, ref, onMounted} from 'vue';
-import avatar from '@/assets/magician-profile.png';
-import EditProfileModal from './EditProfileModal.vue';
-import {getUserId, getUserEmail, getUsername} from '@/utils/getTokenInformation';
+import { defineComponent, computed, ref, onMounted } from "vue";
+import avatar from "@/assets/magician-profile.png";
+import EditProfileModal from "./EditProfileModal.vue";
+import {
+  getUserId,
+  getUserEmail,
+  getUsername,
+} from "@/utils/getTokenInformation";
 import profileService from "@/modules/profile/services/profileService";
 
-
 export default defineComponent({
-  name: 'ProfileCard',
+  name: "ProfileCard",
   components: {
-    EditProfileModal
+    EditProfileModal,
   },
   props: {
     profile: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
-  setup(props, {emit}) {
-    const username = ref('');
-    const email = ref('');
-    const userId = ref('');
+  setup(props, { emit }) {
+    const username = ref("");
+    const email = ref("");
+    const userId = ref("");
 
     const userDetails = ref({
-      level: '',
+      level: "",
       current_xp: 0,
-      gender: '',
-      id_reward: '',
-      unlock_level: '',
-      wizard_title: '',
-      xp_limit: 0
+      gender: "",
+      id_reward: "",
+      unlock_level: "",
+      wizard_title: "",
+      xp_limit: 0,
     });
 
     const profile = computed(() => ({
       username: username.value,
       email: email.value,
-      gender: genderToText.value
+      gender: genderToText.value,
     }));
 
-    const xpPercentage = computed(() => {
-      return (userDetails.value.current_xp / userDetails.value.xp_limit) * 100;
-    });
+    const xpPercentage = computed(() => (userDetails.value.current_xp / userDetails.value.xp_limit) * 100);
+
 
     const showModal = ref(false);
 
@@ -93,28 +100,29 @@ export default defineComponent({
     };
 
     const updateProfile = (updatedProfile: any) => {
-      console.log('Profile updated', updatedProfile);
+      console.log("Profile updated", updatedProfile);
     };
 
     const genderToText = computed(() => {
-      const gender = userDetails.value.gender.toLowerCase();
-      return gender === 'm' ? 'Male' : gender === 'f' ? 'Female' : 'Unknown';
+      return userDetails.value.gender.toLowerCase() === "m" ? "Male" : "Female";
     });
 
     onMounted(async () => {
-      username.value = getUsername() || '';
-      email.value = getUserEmail() || '';
-      userId.value = getUserId() || '';
+      username.value = getUsername() || "";
+      email.value = getUserEmail() || "";
+      userId.value = getUserId() || "";
       //se puede llamar aquí a otras funciones para obtener más datos usando el userId
       const response = await profileService.getProfile();
 
       if (response.status !== 200) {
-        console.error('Error getting profile information');
+        console.error("Error getting profile information");
         return;
       }
-
       userDetails.value = response.data.profile;
-      emit('level-updated', userDetails.value.level); // Emitir evento con el nivel
+      console.log("Level:", userDetails.value.level);
+      console.log("Gender:", userDetails.value.gender);
+
+      emit("level-updated", userDetails.value.level, userDetails.value.gender);
     });
 
     return {
@@ -128,9 +136,9 @@ export default defineComponent({
       showEditModal,
       updateProfile,
       avatarSrc: avatar,
-      profile
+      profile,
     };
-  }
+  },
 });
 </script>
 
@@ -142,9 +150,9 @@ export default defineComponent({
   color: white;
   border-radius: 15px;
   background: linear-gradient(
-      135deg,
-      rgba(255, 255, 255, 0.1),
-      rgba(255, 255, 255, 0)
+    135deg,
+    rgba(255, 255, 255, 0.1),
+    rgba(255, 255, 255, 0)
   );
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.5);
@@ -159,7 +167,7 @@ export default defineComponent({
 
 .title {
   margin-bottom: 20px;
-  font-family: 'Playfair Display', serif;
+  font-family: "Playfair Display", serif;
   font-size: 1.2rem;
 }
 
@@ -186,9 +194,10 @@ export default defineComponent({
   margin-bottom: 10px;
 }
 
-.username, .gender {
-  font-size: 1.0rem;
-  font-family: 'Playfair Display', serif;
+.username,
+.gender {
+  font-size: 1rem;
+  font-family: "Playfair Display", serif;
   margin-bottom: 5px;
 }
 
@@ -200,7 +209,7 @@ export default defineComponent({
 .profile-detail {
   margin-bottom: 15px;
   font-size: 1rem;
-  font-family: 'Playfair Display', serif;
+  font-family: "Playfair Display", serif;
 }
 
 .profile-detail label {
@@ -210,7 +219,7 @@ export default defineComponent({
 
 .profile-detail span {
   font-size: 1rem;
-  font-family: 'Playfair Display', serif;
+  font-family: "Playfair Display", serif;
   word-break: break-word;
 }
 
@@ -254,14 +263,15 @@ export default defineComponent({
   margin-top: 20px;
 }
 
-.edit-button, .delete-button {
+.edit-button,
+.delete-button {
   padding: 10px 20px;
   font-size: 16px;
   color: white;
   border: none;
   border-radius: 13px;
   cursor: pointer;
-  font-family: 'Open Sans', sans-serif;
+  font-family: "Open Sans", sans-serif;
   display: flex;
   align-items: center;
 }
@@ -281,7 +291,7 @@ export default defineComponent({
 }
 
 .delete-button {
-  background-color: #BB2B31;
+  background-color: #bb2b31;
 }
 
 .delete-button i {
@@ -290,7 +300,7 @@ export default defineComponent({
 }
 
 .delete-button:hover {
-  background-color: #99222B;
+  background-color: #99222b;
 }
 
 @keyframes fade-up {
@@ -331,7 +341,8 @@ export default defineComponent({
     height: 80px;
   }
 
-  .username, .gender {
+  .username,
+  .gender {
     font-size: 1rem;
   }
 
@@ -348,7 +359,8 @@ export default defineComponent({
     align-items: flex-start;
   }
 
-  .edit-button, .delete-button {
+  .edit-button,
+  .delete-button {
     font-size: 14px;
     padding: 8px 15px;
   }
@@ -379,7 +391,8 @@ export default defineComponent({
     height: 60px;
   }
 
-  .username, .gender {
+  .username,
+  .gender {
     font-size: 0.9rem;
   }
 
@@ -396,7 +409,8 @@ export default defineComponent({
     align-items: flex-start;
   }
 
-  .edit-button, .delete-button {
+  .edit-button,
+  .delete-button {
     font-size: 12px;
     padding: 5px 10px;
   }

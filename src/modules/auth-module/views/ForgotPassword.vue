@@ -13,16 +13,19 @@
               label-for="input-1"
               style="margin-bottom: 15px"
             >
-              <ValidationProvider rules="required" v-slot="{ errors }">
+              <ValidationProvider
+                rules="required|max:20|min:3|no_invalid_chars"
+                v-slot="{ errors }"
+              >
                 <div class="form-input">
-                  <span><i class="fi fi-tr-circle-envelope icon"></i></span>
+                  <span><i class="fi fi-ts-hat-wizard icon"></i></span>
                   <b-form-input
                     id="input-1"
                     class="input"
                     v-model="form.username"
                   ></b-form-input>
                 </div>
-                <span class="errors">{{ errors[0] }}</span>
+                <span class="errors open-sans">{{ errors[0] }}</span>
               </ValidationProvider>
             </b-form-group>
             <br />
@@ -58,12 +61,33 @@
 
 <script>
 import { extend } from "vee-validate";
-import { required } from "vee-validate/dist/rules";
+import { required, max, min } from "vee-validate/dist/rules";
 import axios from "axios";
 
 extend("required", {
   ...required,
   message: "This field is required",
+});
+
+extend("max", {
+  ...max,
+  params: ["length"],
+  message: "This field cannot be longer than {length} characters",
+});
+
+extend("min", {
+  ...min,
+  params: ["length"],
+  message: "This field cannot be shorter than {length} characters",
+});
+
+extend("no_invalid_chars", {
+  validate: (value) => {
+    const invalidChars = /[\{\}\[\];<>"'`]/;
+    return !invalidChars.test(value);
+  },
+  message:
+    "Username cannot contain the following characters: { } [ ] ; < > \" '",
 });
 
 export default {

@@ -11,7 +11,10 @@
               label-for="input-1"
               style="margin-bottom: 15px"
             >
-              <ValidationProvider rules="required" v-slot="{ errors }">
+              <ValidationProvider
+                rules="required|max:20|min:3|no_invalid_chars"
+                v-slot="{ errors }"
+              >
                 <div class="form-input">
                   <span><i class="fi fi-ts-hat-wizard icon"></i></span>
                   <b-form-input
@@ -20,7 +23,7 @@
                     v-model="form.username"
                   ></b-form-input>
                 </div>
-                <span class="errors">{{ errors[0] }}</span>
+                <span class="errors open-sans">{{ errors[0] }}</span>
               </ValidationProvider>
             </b-form-group>
 
@@ -30,7 +33,10 @@
               label-for="input-2"
               style="margin-bottom: 15px"
             >
-              <ValidationProvider rules="required|email" v-slot="{ errors }">
+              <ValidationProvider
+                rules="required|email-format"
+                v-slot="{ errors }"
+              >
                 <div class="form-input">
                   <span><i class="fi fi-tr-circle-envelope icon"></i></span>
                   <b-form-input
@@ -39,7 +45,7 @@
                     v-model="form.email"
                   ></b-form-input>
                 </div>
-                <span class="errors">{{ errors[0] }}</span>
+                <span class="errors open-sans">{{ errors[0] }}</span>
               </ValidationProvider>
             </b-form-group>
 
@@ -60,7 +66,7 @@
                     :options="genderOptions"
                   ></b-form-select>
                 </div>
-                <span class="errors">{{ errors[0] }}</span>
+                <span class="errors open-sans">{{ errors[0] }}</span>
               </ValidationProvider>
             </b-form-group>
             <br />
@@ -96,7 +102,7 @@
 
 <script>
 import { extend } from "vee-validate";
-import { required, email, image } from "vee-validate/dist/rules";
+import { required, max, min } from "vee-validate/dist/rules";
 import axios from "axios";
 
 extend("required", {
@@ -104,9 +110,34 @@ extend("required", {
   message: "This field is required",
 });
 
-extend("email", {
-  ...email,
-  message: "The email is not valid",
+extend("max", {
+  ...max,
+  params: ["length"],
+  message: "This field cannot be longer than {length} characters",
+});
+
+extend("min", {
+  ...min,
+  params: ["length"],
+  message: "This field cannot be shorter than {length} characters",
+});
+
+extend("no_invalid_chars", {
+  validate: (value) => {
+    const invalidChars = /[\{\}\[\];<>"'`]/;
+    return !invalidChars.test(value);
+  },
+  message:
+    "Username cannot contain the following characters: { } [ ] ; < > \" '",
+});
+
+extend("email-format", {
+  validate: (value) => {
+    const regex = /^[a-zA-Z0-9._%+-]{1,40}@[a-zA-Z0-9.-]{1,40}\.[a-zA-Z]{2,}$/;
+    return regex.test(value);
+  },
+  message:
+    "The email address must be in a valid format (e.g., example@domain.com)",
 });
 
 export default {

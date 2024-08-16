@@ -15,7 +15,10 @@
                   label-for="input-1"
                   style="margin-bottom: 15px"
                 >
-                  <ValidationProvider rules="required" v-slot="{ errors }">
+                  <ValidationProvider
+                    rules="required|max:20|min:3|no_invalid_chars"
+                    v-slot="{ errors }"
+                  >
                     <div class="form-input">
                       <span><i class="fi fi-ts-hat-wizard icon"></i></span>
                       <b-form-input
@@ -24,7 +27,7 @@
                         v-model="form.username"
                       ></b-form-input>
                     </div>
-                    <span class="errors">{{ errors[0] }}</span>
+                    <span class="errors open-sans">{{ errors[0] }}</span>
                   </ValidationProvider>
                 </b-form-group>
               </div>
@@ -40,7 +43,7 @@
                       <span><i class="fi fi-ts-lock-hashtag icon"></i></span>
                       <b-form-input
                         id="input-2"
-                        class="input"
+                        class="input-type-password"
                         v-model="form.password"
                         :type="showTempPassword ? 'text' : 'password'"
                       ></b-form-input>
@@ -51,7 +54,7 @@
                         id="eye-icon"
                       ></b-icon>
                     </div>
-                    <span class="errors">{{ errors[0] }}</span>
+                    <span class="errors open-sans">{{ errors[0] }}</span>
                   </ValidationProvider>
                 </b-form-group>
               </div>
@@ -63,14 +66,14 @@
                   class="input-with-icon"
                 >
                   <ValidationProvider
-                    rules="required|password:@confirm"
+                    rules="required|password:@confirm|password-regex|max:20"
                     v-slot="{ errors }"
                   >
                     <div class="form-input">
                       <span><i class="fi fi-ts-lock-hashtag icon"></i></span>
                       <b-form-input
                         id="input-4"
-                        class="input"
+                        class="input-type-password"
                         v-model="form.new_password"
                         :type="showPassword ? 'text' : 'password'"
                       ></b-form-input>
@@ -81,7 +84,7 @@
                         id="eye-icon"
                       ></b-icon>
                     </div>
-                    <span class="errors">{{ errors[0] }}</span>
+                    <span class="errors open-sans">{{ errors[0] }}</span>
                   </ValidationProvider>
                 </b-form-group>
               </div>
@@ -93,7 +96,7 @@
                   class="input-with-icon"
                 >
                   <ValidationProvider
-                    rules="required"
+                    rules="required|password-regex|max:20"
                     name="confirm"
                     v-slot="{ errors }"
                   >
@@ -101,7 +104,7 @@
                       <span><i class="fi fi-ts-lock-hashtag icon"></i></span>
                       <b-form-input
                         id="input-3"
-                        class="input"
+                        class="input-type-password"
                         v-model="confirmation"
                         :type="showRepeatPassword ? 'text' : 'password'"
                       ></b-form-input>
@@ -112,7 +115,7 @@
                         id="eye-icon"
                       ></b-icon>
                     </div>
-                    <span class="errors">{{ errors[0] }}</span>
+                    <span class="errors open-sans">{{ errors[0] }}</span>
                   </ValidationProvider>
                 </b-form-group>
               </div>
@@ -151,12 +154,43 @@
 
 <script>
 import { extend } from "vee-validate";
-import { required } from "vee-validate/dist/rules";
+import { required, max, min } from "vee-validate/dist/rules";
 import axios from "axios";
 
 extend("required", {
   ...required,
   message: "This field is required",
+});
+
+extend("password-regex", {
+  validate: (value) => {
+    const passwordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#_])[A-Za-z\d@$!%*?&#_]{8,}$/;
+    return passwordRegex.test(value);
+  },
+  message:
+    "Password must be at least 8 characters long, include at least one lowercase letter, one uppercase letter, one number, and one special character (@$!%*?&#_)",
+});
+
+extend("max", {
+  ...max,
+  params: ["length"],
+  message: "This field cannot be longer than {length} characters",
+});
+
+extend("min", {
+  ...min,
+  params: ["length"],
+  message: "This field cannot be shorter than {length} characters",
+});
+
+extend("no_invalid_chars", {
+  validate: (value) => {
+    const invalidChars = /[\{\}\[\];<>"'`]/;
+    return !invalidChars.test(value);
+  },
+  message:
+    "Username cannot contain the following characters: { } [ ] ; < > \" '",
 });
 
 extend("password", {

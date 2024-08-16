@@ -2,22 +2,24 @@
   <div class="view-body">
     <div class="form-login glass">
       <div class="login-container alice-regular">
-        <h1 class="title playfair-display">Please enter your email</h1>
+        <h1 class="title playfair-display">
+          Please enter your account's username
+        </h1>
         <ValidationObserver v-slot="{ handleSubmit }">
           <b-form @submit.prevent="handleSubmit(forgotPassword)">
             <b-form-group
               id="input-group-1"
-              label="Email:"
+              label="Username:"
               label-for="input-1"
               style="margin-bottom: 15px"
             >
-              <ValidationProvider rules="required|email" v-slot="{ errors }">
+              <ValidationProvider rules="required" v-slot="{ errors }">
                 <div class="form-input">
                   <span><i class="fi fi-tr-circle-envelope icon"></i></span>
                   <b-form-input
                     id="input-1"
                     class="input"
-                    v-model="form.email"
+                    v-model="form.username"
                   ></b-form-input>
                 </div>
                 <span class="errors">{{ errors[0] }}</span>
@@ -56,13 +58,8 @@
 
 <script>
 import { extend } from "vee-validate";
-import { required, email } from "vee-validate/dist/rules";
+import { required } from "vee-validate/dist/rules";
 import axios from "axios";
-
-extend("email", {
-  ...email,
-  message: "The email is not valid",
-});
 
 extend("required", {
   ...required,
@@ -74,7 +71,7 @@ export default {
   data() {
     return {
       form: {
-        email: "",
+        username: "",
       },
       loading: false,
     };
@@ -86,11 +83,11 @@ export default {
         .post(
           "https://3tpdypq2mc.execute-api.us-east-2.amazonaws.com/Prod/recover_password",
           {
-            username: this.form.email,
+            username: this.form.username,
           }
         )
         .then((response) => {
-          this.form.email = "";
+          this.form.username = "";
           this.redirectUser();
         })
         .catch((error) => {

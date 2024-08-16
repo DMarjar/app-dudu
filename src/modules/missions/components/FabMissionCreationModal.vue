@@ -85,7 +85,7 @@
             </div>
           </div>
 
-          <div class="text-center" id="btn-modal-container">
+          <div class="text-center btn-modal-container">
             <div class="row" id="btn-modal-row">
               <div class="col-6" id="btn-create-modal-col">
                 <div class="button-container-modal">

@@ -2,10 +2,13 @@
   <div class="view-home">
     <div class="name-xp-container">
       <div>
-        <h3 class="playfair-display wizard-name">WizardGuy123</h3>
-        <div class="xp-bar open-sans">
+        <h3 class="playfair-display wizard-name">{{ username }}</h3>
+        <div class="xp-bar open-sans" v-if="!isLoading && profile">
           <div class="xp-fill" :style="{ width: xpPercentage + '%' }"></div>
           <span class="xp-number">{{ currentXp }}/{{ xpLimit }}</span>
+        </div>
+        <div v-if="isLoading">
+          <b-spinner class="player-level-loader" label="Loading..."></b-spinner>
         </div>
       </div>
       <div class="fab-top">
@@ -13,19 +16,23 @@
       </div>
     </div>
 
-    <div class="player-img-container">
-      <img :src="getPlayerImage()" class="player-image" alt="Player image"/>
+    <div class="player-img-container" v-if="!isLoading && profile">
+      <img :src="getPlayerImage()" class="player-image" alt="Player image" />
+    </div>
+
+    <div v-if="isLoading">
+      <b-spinner class="player-img-loader" label="Loading..."></b-spinner>
     </div>
 
     <img
-        src="@/assets/icon-sidebar.png"
-        class="sidebar-toggle"
-        :class="{ hidden: isSidebarOpen }"
-        @click="toggleSidebar"
-        alt="Menu Icon"
+      src="@/assets/icon-sidebar.png"
+      class="sidebar-toggle"
+      :class="{ hidden: isSidebarOpen }"
+      @click="toggleSidebar"
+      alt="Menu Icon"
     />
 
-    <Sidebar ref="sidebar" @toggle="onSidebarToggle"/>
+    <Sidebar ref="sidebar" @toggle="onSidebarToggle" />
 
     <div class="home-mission-filter-container">
       <b-row>
@@ -34,25 +41,25 @@
           <div class="home-only-mission-container">
             <b-row no-gutters>
               <b-col
-                  cols="6"
-                  v-for="mission in missions"
-                  :key="mission.id_mission"
-                  class="mission-col-card"
+                cols="6"
+                v-for="mission in missions"
+                :key="mission.id_mission"
+                class="mission-col-card"
               >
                 <b-card
-                    class="glass-card"
-                    @click="selectMission(mission)"
-                    v-b-modal.missionDetailsModal
+                  class="glass-card"
+                  @click="selectMission(mission)"
+                  v-b-modal.missionDetailsModal
                 >
                   <template>
                     <div class="top-part-card">
                       <span class="open-sans mission-number"
-                      >#{{ mission.id_mission }}</span
+                        >#{{ mission.id_mission }}</span
                       >
                       <b-badge class="pending-badge badge"
-                      ><span class="alice-regular">
+                        ><span class="alice-regular">
                           {{ mission.status }}</span
-                      ></b-badge
+                        ></b-badge
                       >
                     </div>
                   </template>
@@ -74,87 +81,108 @@
         </b-col>
 
         <b-col cols="8" v-else class="no-mission-col-card">
-          <b-card class="glass-card">
-            <p class="alice-regular">
-              No missions {{ searchRequest.status }} yet.
-            </p>
+          <b-card
+            class="glass-card no-missions"
+            v-if="!isLoadingSearchMission && missions.length <= 0"
+          >
+            <p class="alice-regular">No missions were found.</p>
+          </b-card>
+
+          <b-card
+            v-if="isLoadingSearchMission"
+            style="
+              display: flex;
+              align-items: center;
+              height: 100%;
+              background-color: transparent;
+              border: none;
+            "
+          >
+            <div class="loader">
+              <div class="head-loader"></div>
+
+              <div class="flames">
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+              </div>
+
+              <div class="eye"></div>
+            </div>
           </b-card>
         </b-col>
 
         <!-- Filters -->
         <b-col cols="4" class="filters-card">
           <b-card
-              title="Filters"
-              class="filters-card-container playfair-display"
+            title="Filters"
+            class="filters-card-container playfair-display"
           >
             <b-form-group label="Search">
               <div class="form-input">
                 <span><i class="fi fi-tr-issue-loupe icon"></i></span>
                 <b-form-input
-                    id="input-1"
-                    class="input"
-                    @keydown.enter="searchMissions"
-                    v-model="searchRequest.search_query"
+                  id="input-1"
+                  class="input"
+                  @keydown.enter="searchMissions"
+                  v-model="searchRequest.search_query"
                 ></b-form-input>
               </div>
             </b-form-group>
 
             <b-form-group label="Order by">
               <b-form-select
-                  class="input-no-icon"
-                  v-model="searchRequest.order_by"
-                  @change="searchMissions"
+                class="input-no-icon"
+                v-model="searchRequest.order_by"
+                @change="searchMissions"
               >
                 <b-form-select-option value="creation_date"
-                >Creation date
-                </b-form-select-option
-                >
+                  >Creation date
+                </b-form-select-option>
                 <b-form-select-option value="due_date"
-                >Due date
-                </b-form-select-option
-                >
+                  >Due date
+                </b-form-select-option>
               </b-form-select>
             </b-form-group>
 
             <b-form-group label="Order">
               <b-form-select
-                  class="input-no-icon"
-                  v-model="searchRequest.order"
-                  @change="searchMissions"
+                class="input-no-icon"
+                v-model="searchRequest.order"
+                @change="searchMissions"
               >
                 <b-form-select-option value="ASC"
-                >Ascending
-                </b-form-select-option
-                >
+                  >Ascending
+                </b-form-select-option>
                 <b-form-select-option value="DESC"
-                >Descending
-                </b-form-select-option
-                >
+                  >Descending
+                </b-form-select-option>
               </b-form-select>
             </b-form-group>
 
             <b-form-group label="Status">
               <b-form-select
-                  class="input-no-icon"
-                  v-model="searchRequest.status"
-                  @change="searchMissions"
+                class="input-no-icon"
+                v-model="searchRequest.status"
+                @change="searchMissions"
               >
                 <b-form-select-option value="pending"
-                >Pending
-                </b-form-select-option
-                >
+                  >Pending
+                </b-form-select-option>
                 <b-form-select-option value="completed"
-                >Completed
-                </b-form-select-option
-                >
+                  >Completed
+                </b-form-select-option>
                 <b-form-select-option value="failed"
-                >Failed
-                </b-form-select-option
-                >
+                  >Failed
+                </b-form-select-option>
                 <b-form-select-option value="cancelled"
-                >Cancelled
-                </b-form-select-option
-                >
+                  >Cancelled
+                </b-form-select-option>
               </b-form-select>
             </b-form-group>
           </b-card>
@@ -162,18 +190,18 @@
       </b-row>
       <div style="width: 66%; display: flex; justify-content: center">
         <b-pagination
-            v-model="currentPage"
-            :total-rows="totalMissions"
-            :per-page="missionsPerPage"
-            @change="changePage"
+          v-model="currentPage"
+          :total-rows="totalMissions"
+          :per-page="missionsPerPage"
+          @change="changePage"
         ></b-pagination>
       </div>
     </div>
 
-    <FabMissionCreationModal @mission-created="searchMissions()"/>
+    <FabMissionCreationModal @mission-created="searchMissions()" />
     <MissionDetailsModal
-        @statusChanged="handleStatusChange"
-        :mission="selectedMission"
+      @statusChanged="handleStatusChange"
+      :mission="selectedMission"
     />
   </div>
 </template>
@@ -182,19 +210,19 @@
 import Vue from "vue";
 import missionService from "@/modules/missions/services/missionService";
 import profileService from "@/modules/profile/services/profileService";
-import {SearchRequest} from "../types/SearchRequest";
-import {Mission} from "@/modules/missions/types/Mission";
-import {Profile} from "../../profile/types/Profile";
-import {getUserId, getUsername} from "@/utils/getTokenInformation";
+import { SearchRequest } from "../types/SearchRequest";
+import { Mission } from "@/modules/missions/types/Mission";
+import { Profile } from "../../profile/types/Profile";
+import { getUserId, getUsername } from "@/utils/getTokenInformation";
 import Sidebar from "../../profile/components/Sidebar.vue";
 
 export default Vue.extend({
   name: "MissionsPage",
   components: {
     FabMissionCreationModal: () =>
-        import("@/modules/missions/components/FabMissionCreationModal.vue"),
+      import("@/modules/missions/components/FabMissionCreationModal.vue"),
     MissionDetailsModal: () =>
-        import("@/modules/missions/components/MissionDetailsModal.vue"),
+      import("@/modules/missions/components/MissionDetailsModal.vue"),
     Sidebar,
   },
   data() {
@@ -229,6 +257,8 @@ export default Vue.extend({
 
       // Loading
       isLoading: false,
+      isLoadingSearchMission: false,
+      username: "",
     };
   },
   computed: {
@@ -238,12 +268,11 @@ export default Vue.extend({
   },
 
   methods: {
-    getUsername,
-    // Function to change loading status to the opposite value
-    changeLoadingStatus() {
-      this.isLoading = !this.isLoading;
+    getUsername() {
+      const storedUsername = localStorage.getItem("username");
+      this.username = storedUsername !== null ? storedUsername : "";
     },
-
+    // Function to change loading status to the opposite value
     toggleSidebar() {
       (this.$refs.sidebar as any).toggleSidebar();
     },
@@ -264,6 +293,10 @@ export default Vue.extend({
       this.isLoading = status;
     },
 
+    setLoadingSearchMissionStatus(status: boolean) {
+      this.isLoadingSearchMission = status;
+    },
+
     // Function to handle the paginator change page event
     changePage(page: number) {
       this.currentPage = page;
@@ -277,25 +310,24 @@ export default Vue.extend({
 
     // Function to get the user profile information
     async getProfileInformation() {
+      this.setLoadingStatus(true);
       try {
         const response = await profileService.getProfile();
-
-        // If the response status is not 200, show an error message
         if (response.status !== 200) {
           this.$swal(
-              "Error",
-              "An error occurred while retrieving the profile information. Try again later.",
-              "error"
+            "Error",
+            "An error occurred while retrieving the profile information. Try again later.",
+            "error"
           );
           return;
         }
-
         this.profile = response.data.profile;
         this.currentXp = this.profile.current_xp;
         this.xpLimit = this.profile.xp_limit;
       } catch (error) {
         console.error(error);
       } finally {
+        this.setLoadingStatus(false);
       }
     },
 
@@ -303,20 +335,19 @@ export default Vue.extend({
     async searchMissions() {
       // TODO: Add the loading spinner
       this.missions = [];
-      this.changeLoadingStatus();
+      this.setLoadingSearchMissionStatus(true);
       try {
         this.searchRequest.page = this.currentPage;
         const response = await missionService.searchMissions(
-            this.searchRequest
+          this.searchRequest
         );
 
         // If the response status is not 200, show an error message
         if (response.status !== 200) {
-          // TODO: Manage correct swal style
           this.$swal(
-              "Error",
-              "An error occurred while searching the missions. Try again later.",
-              "error"
+            "Error",
+            "An error occurred while searching the missions. Try again later.",
+            "error"
           );
           return;
         }
@@ -327,7 +358,7 @@ export default Vue.extend({
       } catch (error) {
         console.error(error);
       } finally {
-        this.changeLoadingStatus();
+        this.setLoadingSearchMissionStatus(false);
       }
     },
 
@@ -364,7 +395,7 @@ export default Vue.extend({
       }
       // Return the correct image based on the level and gender
       return require(`@/assets/wizards/${this.profile.gender.toLowerCase()}/wizard_lvl_${
-          this.profile.level
+        this.profile.level
       }.png`);
     },
 
@@ -386,6 +417,7 @@ export default Vue.extend({
     this.searchRequest.id_user = getUserId();
     // Search missions
     this.searchMissions();
+    this.getUsername();
   },
 });
 </script>

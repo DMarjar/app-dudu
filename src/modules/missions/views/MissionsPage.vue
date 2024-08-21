@@ -5,7 +5,7 @@
         <h3 class="playfair-display wizard-name">WizardGuy123</h3>
         <div class="xp-bar open-sans">
           <div class="xp-fill" :style="{ width: xpPercentage + '%' }"></div>
-          <span class="xp-number">{{ currentXp }}/{{ xpLimit }}</span>
+          <span class="xp-number">{{ currentXp }}/{{ xpLimit }} LVL {{profile.level}}</span>
         </div>
       </div>
       <div class="fab-top">
@@ -236,7 +236,6 @@ export default Vue.extend({
   },
 
   methods: {
-    getUsername,
     // Function to change loading status to the opposite value
     changeLoadingStatus() {
       this.isLoading = !this.isLoading;
@@ -362,7 +361,7 @@ export default Vue.extend({
       }
       // Return the correct image based on the level and gender
       return require(`@/assets/wizards/${this.profile.gender.toLowerCase()}/wizard_lvl_${
-          this.profile.level
+        this.profile.id_reward
       }.png`);
     },
 
@@ -384,6 +383,7 @@ export default Vue.extend({
     this.searchRequest.id_user = getUserId();
     // Search missions
     this.searchMissions();
+    getUsername();
   },
 });
 </script>
